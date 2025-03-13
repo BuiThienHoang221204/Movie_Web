@@ -4,10 +4,6 @@ const movieSchema = new mongoose.Schema({
     _id: {
         type: mongoose.Schema.Types.ObjectId,
     },
-    adult: {
-        type: Boolean,
-        required: true,
-    },
     backdrop_path: {
         type: String,
         required: true,
@@ -21,10 +17,6 @@ const movieSchema = new mongoose.Schema({
         required: true,
     },
     original_language: {
-        type: String,
-        required: true,
-    },
-    original_title: {
         type: String,
         required: true,
     },
@@ -44,9 +36,6 @@ const movieSchema = new mongoose.Schema({
     title: {
         type: String,
         required: true,
-    },
-    video: {
-        type: Boolean,
     },
     vote_average: {
         type: Number,
