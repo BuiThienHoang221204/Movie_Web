@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaGoogle, FaFacebook, FaHome, FaEye, FaEyeSlash } from 'react-icons/fa';
+import { motion, AnimatePresence } from 'framer-motion';
+import axios from 'axios';
 import images from '../../assets/img';
+import { server } from '../../config';
 
 const Signup = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -12,6 +16,17 @@ const Signup = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  // Check authentication status when component mounts
+  useEffect(() => {
+    const currentUrl = window.location.href;
+    
+    // Check if we're on Google or Facebook account pages
+    if (currentUrl.includes('/auth/google/account') || currentUrl.includes('/auth/facebook/account')) {
+      // Redirect to home page
+      navigate('/');
+    }
+  }, [navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -32,49 +47,22 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:5000/auth/signup', {
-        method: 'POST',
+      const response = await axios.post(`${server}/auth/signup`, formData, {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
-        credentials: 'include'
+        withCredentials: true
       });
-      const data = await response.json();
-      if (response.ok) {
-        // Handle successful signup
-        console.log('Signup successful:', data);
-      } else {
-        // Handle signup error
-        console.error('Signup failed:', data.message);
+      if (response.status === 200) {  
+        console.log('Signup successful:', response.data);
       }
     } catch (error) {
       console.error('Signup error:', error);
     }
   };
 
-  const handleGoogleSignup = async () => {
-    try {
-      const response = await fetch('http://localhost:5000/auth/google/url');
-      const data = await response.json();
-      if (data.url) {
-        window.location.href = data.url;
-      }
-    } catch (error) {
-      console.error('Google signup error:', error);
-    }
-  };
-
-  const handleFacebookSignup = async () => {
-    try {
-      const response = await fetch('http://localhost:5000/auth/facebook/url');
-      const data = await response.json();
-      if (data.url) {
-        window.location.href = data.url;
-      }
-    } catch (error) {
-      console.error('Facebook signup error:', error);
-    }
+  const handleLoginWithProvider = async (provider) => {
+    window.location.href = `${server}/auth/${provider}`;
   };
 
   return (
@@ -95,49 +83,84 @@ const Signup = () => {
       <div className="container relative z-10">
         <div className="row justify-content-center">
           <div className="col-md-6 col-lg-5">
-            <Link 
-              to="/" 
-              className="block mb-2 text-white hover:text-gray-200 font-medium transition-all duration-300 no-underline group flex items-center gap-2 text-base"
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
             >
-              <span className="transform group-hover:-translate-x-1 transition-transform duration-300">←</span>
-              <span className="transform group-hover:translate-x-1 transition-transform duration-300">Back to Home</span>
-            </Link>
-            <div className="bg-black/40 backdrop-blur-md rounded-3xl p-8 shadow-2xl border border-white/5 relative overflow-hidden">
+              <Link 
+                to="/" 
+                className="block mb-2 text-white hover:text-gray-200 font-medium transition-all duration-700 no-underline group flex items-center gap-2 text-base"
+              >
+                <span className="transform group-hover:-translate-x-1 transition-transform duration-300">←</span>
+                <span className="transform group-hover:translate-x-1 transition-transform duration-300">Back to Home</span>
+              </Link>
+            </motion.div>
+
+            <motion.div 
+              initial={{ opacity: 0, y: 20, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ delay: 0.3, duration: 0.5, ease: "easeOut" }}
+              className="bg-black/40 backdrop-blur-md rounded-3xl p-8 shadow-2xl border border-white/5 relative overflow-hidden"
+            >
               {/* Glass effect overlay */}
               <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent opacity-30"></div>
               <div className="absolute inset-0 bg-gradient-to-r from-primary-500/5 via-transparent to-primary-500/5"></div>
               
               <div className="relative">
-                <div className="text-center mb-8">
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4, duration: 0.5 }}
+                  className="text-center mb-8"
+                >
                   <h2 className="text-4xl font-bold text-white mb-3 drop-shadow-lg tracking-wide">Create Account</h2>
-                  <p className="text-gray-300 text-lg">Join us to explore amazing movies</p>
-                </div>
+                  <p className="text-gray-300 text-lg">Join us to start watching movies</p>
+                </motion.div>
 
                 {/* Social Signup Buttons */}
-                <div className="grid grid-cols-2 gap-3 mb-6">
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5, duration: 0.5 }}
+                  className="grid grid-cols-2 gap-3 mb-6"
+                >
                   <button 
-                    onClick={handleGoogleSignup}
-                    className="flex items-center justify-center gap-2 py-2.5 px-4 bg-dark-300/80 hover:bg-dark-400/80 text-white rounded-xl transition-all duration-300 shadow-dark border border-dark-400/30 hover:border-primary-600/50 hover:shadow-dark-lg group text-base"
+                    type="button"
+                    onClick={() => handleLoginWithProvider('google')}
+                    className="flex items-center justify-center gap-2 py-2.5 px-4 bg-dark-300/80 hover:bg-dark-400/80 text-white rounded-xl transition-all duration-300 shadow-dark border border-dark-400/30 hover:border-primary-600/50 hover:shadow-dark-lg group text-base hover:-translate-y-0.5 active:translate-y-0"
                   >
                     <FaGoogle className="text-primary-500 group-hover:text-primary-400 transition-colors text-xl" />
                     <span>Google</span>
                   </button>
                   <button 
-                    onClick={handleFacebookSignup}
-                    className="flex items-center justify-center gap-2 py-2.5 px-4 bg-dark-300/80 hover:bg-dark-400/80 text-white rounded-xl transition-all duration-300 shadow-dark border border-dark-400/30 hover:border-primary-600/50 hover:shadow-dark-lg group text-base"
+                    type="button"
+                    onClick={() => handleLoginWithProvider('facebook')}
+                    className="flex items-center justify-center gap-2 py-2.5 px-4 bg-dark-300/80 hover:bg-dark-400/80 text-white rounded-xl transition-all duration-300 shadow-dark border border-dark-400/30 hover:border-primary-600/50 hover:shadow-dark-lg group text-base hover:-translate-y-0.5 active:translate-y-0"
                   >
                     <FaFacebook className="text-blue-500 group-hover:text-blue-400 transition-colors text-xl" />
                     <span>Facebook</span>
                   </button>
-                </div>
+                </motion.div>
 
-                <div className="flex items-center gap-4 mb-6">
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.6, duration: 0.5 }}
+                  className="flex items-center gap-4 mb-6"
+                >
                   <div className="flex-1 border-t border-dark-400/50"></div>
                   <span className="text-gray-500 text-sm font-medium px-4">or continue with</span>
                   <div className="flex-1 border-t border-dark-400/50"></div>
-                </div>
+                </motion.div>
 
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <motion.form 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.7, duration: 0.5 }}
+                  onSubmit={handleSubmit} 
+                  className="space-y-5"
+                >
                   <div className="form-group">
                     <input
                       type="text"
@@ -225,18 +248,23 @@ const Signup = () => {
                   >
                     Create Account
                   </button>
-                </form>
+                </motion.form>
 
-                <div className="text-center mt-6">
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.8, duration: 0.5 }}
+                  className="text-center mt-6"
+                >
                   <p className="text-gray-400 text-base">
                     Already have an account?{' '}
-                    <Link to="/login" className="text-primary-400 hover:text-primary-300 font-medium transition-colors no-underline">
+                    <Link to="/login" className="text-primary-400 hover:text-primary-300 font-medium transition-colors no-underline hover:underline">
                       Sign in
                     </Link>
                   </p>
-                </div>
+                </motion.div>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </div>
