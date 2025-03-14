@@ -85,12 +85,21 @@ function Banner() {
                 <h1>{movie.title}</h1>
                 <p className="movie-info">{movie.year} | {movie.duration} | {movie.genres}</p>
                 <p className="movie-description">{movie.description}</p>
+                {/* Phần buttons chứa các nút hành động - căn chỉnh ngang */}
                 <div className="buttons">
+                    {/* Nút Watch Now - Sử dụng flex và align-items để căn chỉnh icon và text thẳng hàng ngang */}
                     <button className="btn btn-danger">
-                        <FaPlay className="btn-icon" /> Watch Now
+                        <div className="btn-content">
+                            <FaPlay className="btn-icon" /> 
+                            <span className="btn-text">Watch Now</span>
+                        </div>
                     </button>
+                    {/* Nút Add to My List - Sử dụng flex và align-items để căn chỉnh icon và text thẳng hàng ngang */}
                     <button className="btn btn-secondary">
-                        <FaPlus className="btn-icon" /> Add to My List
+                        <div className="btn-content">
+                            <FaPlus className="btn-icon" /> 
+                            <span className="btn-text">Add to My List</span>
+                        </div>
                     </button>
                 </div>
             </div>

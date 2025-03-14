@@ -104,12 +104,33 @@
   letter-spacing: 1px; /* khoảng cách giữa các chữ cái */
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: center; /* Căn chỉnh các phần tử theo chiều dọc */
+  justify-content: center; /* Căn chỉnh các phần tử theo chiều ngang */
 }
 
+/* Container cho nội dung button để căn chỉnh ngang */
+.btn-content {
+  display: flex;
+  align-items: center; /* Căn chỉnh các phần tử theo chiều dọc */
+  justify-content: center; /* Căn chỉnh các phần tử theo chiều ngang */
+  width: 100%; /* Đảm bảo container chiếm toàn bộ chiều rộng của button */
+}
+
+/* Icon trong button */
 .btn-icon {
   margin-right: 8px;
+  display: flex; /* Đảm bảo icon hiển thị đúng */
+  align-items: center; /* Căn chỉnh icon theo chiều dọc */
+  font-size: 1rem; /* Kích thước icon phù hợp với text */
+  line-height: 1; /* Đảm bảo chiều cao dòng đồng nhất */
+}
+
+/* Text trong button */
+.btn-text {
+  display: inline-block; /* Đảm bảo text hiển thị đúng */
+  line-height: 1; /* Chiều cao dòng phù hợp để căn chỉnh với icon */
+  vertical-align: middle; /* Căn chỉnh text theo chiều dọc */
+  padding: 10px 5px;
 }
 
 .btn-danger {
