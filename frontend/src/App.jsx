@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import DefaultLayout from './layout/DefaultLayout/DefaultLayout'
 import routes from './routes'
 import 'bootstrap/dist/css/bootstrap.min.css';
+
 function App() {
   return (
     <Router>

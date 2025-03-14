@@ -1,7 +1,8 @@
 import config from '../config';
 import Home from '../pages/Home/Home';
 import Login from '../pages/Login/Login';
-import EmtyLayout from '../layout/EmtyLayout/EmtyLayout';
+import Signup from '../pages/Signup/Signup';
+import LoginLayout from '../layout/LoginLayout/LoginLayout';
 
 const routes = [
     {
@@ -9,9 +10,15 @@ const routes = [
         component: Home,
     },
     {
-        path : config.login,
+        path: '/login',
         component: Login,
-        layout: EmtyLayout, // Sử dụng EmtyLayout khi không có layout 
+        layout: LoginLayout,
     },
+    {
+        path: '/signup',
+        component: Signup,
+        layout: LoginLayout,
+    }
 ];
+
 export default routes;
