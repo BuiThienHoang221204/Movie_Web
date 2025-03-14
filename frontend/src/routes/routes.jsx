@@ -12,6 +12,6 @@ const routes = [
         path : config.login,
         component: Login,
         layout: EmtyLayout, // Sử dụng EmtyLayout khi không có layout 
-    }
+    },
 ];
 export default routes;
