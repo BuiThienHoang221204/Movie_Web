@@ -34,7 +34,7 @@ const generateRefreshToken = (props) => {
         { ...props },
         privateKey,
         {
-            algorithm: "RS256",
+            algorithm: "RS384",
         }
     );
 };
