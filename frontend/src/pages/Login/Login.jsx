@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FaGoogle, FaFacebook, FaHome } from 'react-icons/fa';
+import { FaGoogle, FaFacebook, FaHome, FaEye, FaEyeSlash, FaEnvelope, FaLock } from 'react-icons/fa';
 import images from '../../assets/img';
 
 const Login = () => {
@@ -8,6 +8,7 @@ const Login = () => {
     email: '',
     password: '',
   });
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -15,6 +16,10 @@ const Login = () => {
       ...prev,
       [name]: value
     }));
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   const handleSubmit = (e) => {
@@ -31,9 +36,9 @@ const Login = () => {
           backgroundImage: `url(${images.banner3})`
         }}
       >
-        {/* Netflix-style gradient overlay */}
-        <div className="absolute inset-0 bg-black/50"></div>
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/90"></div>
+        {/* Very light gradient overlay */}
+        <div className="absolute inset-0 bg-black/10"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/40"></div>
       </div>
 
       {/* Content */}
@@ -42,7 +47,7 @@ const Login = () => {
           <div className="col-md-6 col-lg-5">
             <Link 
               to="/" 
-              className="block mb-2 text-red-500 hover:text-red-400 font-medium transition-all duration-300 no-underline group flex items-center gap-2 text-base"
+              className="block mb-2 text-white hover:text-gray-200 font-medium transition-all duration-300 no-underline group flex items-center gap-2 text-base"
             >
               <span className="transform group-hover:-translate-x-1 transition-transform duration-300">←</span>
               <span className="transform group-hover:translate-x-1 transition-transform duration-300">Back to Home</span>
@@ -83,28 +88,41 @@ const Login = () => {
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-5">
-                  <div className="form-group">
+                  <div className="form-group relative">
                     <input
                       type="email"
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
-                      className="w-full px-5 py-3 text-base rounded-xl bg-dark-400/50 border border-dark-500/50 text-white placeholder-gray-400 focus:outline-none focus:border-primary-500/70 focus:ring-2 focus:ring-primary-500/20 transition-all duration-300 focus:scale-[1.02] focus:shadow-lg"
+                      className="w-full px-5 py-3 text-base rounded-xl bg-dark-400/50 border border-dark-500/50 text-white placeholder-gray-400 focus:outline-none focus:border-primary-500/70 focus:ring-2 focus:ring-primary-500/20 transition-all duration-300 focus:scale-[1.02] focus:shadow-lg pl-12"
                       placeholder="Email address"
                       required
                     />
+                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                      <FaEnvelope size={20} />
+                    </div>
                   </div>
 
-                  <div className="form-group">
+                  <div className="form-group relative">
                     <input
-                      type="password"
+                      type={showPassword ? "text" : "password"}
                       name="password"
                       value={formData.password}
                       onChange={handleChange}
-                      className="w-full px-5 py-3 text-base rounded-xl bg-dark-400/50 border border-dark-500/50 text-white placeholder-gray-400 focus:outline-none focus:border-primary-500/70 focus:ring-2 focus:ring-primary-500/20 transition-all duration-300 focus:scale-[1.02] focus:shadow-lg"
+                      className="w-full px-5 py-3 text-base rounded-xl bg-dark-400/50 border border-dark-500/50 text-white placeholder-gray-400 focus:outline-none focus:border-primary-500/70 focus:ring-2 focus:ring-primary-500/20 transition-all duration-300 focus:scale-[1.02] focus:shadow-lg pl-12 pr-12"
                       placeholder="Password"
                       required
                     />
+                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                      <FaLock size={20} />
+                    </div>
+                    <button
+                      type="button"
+                      onClick={togglePasswordVisibility}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-300 transition-colors"
+                    >
+                      {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+                    </button>
                   </div>
 
                   <div className="flex items-center justify-between mb-5">

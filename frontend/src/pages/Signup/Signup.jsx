@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FaGoogle, FaFacebook, FaHome } from 'react-icons/fa';
+import { FaGoogle, FaFacebook, FaHome, FaEye, FaEyeSlash } from 'react-icons/fa';
 import images from '../../assets/img';
 
 const Signup = () => {
@@ -10,6 +10,8 @@ const Signup = () => {
     password: '',
     confirmPassword: '',
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -17,6 +19,14 @@ const Signup = () => {
       ...prev,
       [name]: value
     }));
+  };
+
+  const togglePasswordVisibility = (field) => {
+    if (field === 'password') {
+      setShowPassword(!showPassword);
+    } else {
+      setShowConfirmPassword(!showConfirmPassword);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -76,9 +86,9 @@ const Signup = () => {
           backgroundImage: `url(${images.banner3})`
         }}
       >
-        {/* Netflix-style gradient overlay */}
-        <div className="absolute inset-0 bg-black/50"></div>
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/90"></div>
+        {/* Very light gradient overlay */}
+        <div className="absolute inset-0 bg-black/10"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/40"></div>
       </div>
 
       {/* Content */}
@@ -87,7 +97,7 @@ const Signup = () => {
           <div className="col-md-6 col-lg-5">
             <Link 
               to="/" 
-              className="block mb-2 text-red-500 hover:text-red-400 font-medium transition-all duration-300 no-underline group flex items-center gap-2 text-base"
+              className="block mb-2 text-white hover:text-gray-200 font-medium transition-all duration-300 no-underline group flex items-center gap-2 text-base"
             >
               <span className="transform group-hover:-translate-x-1 transition-transform duration-300">←</span>
               <span className="transform group-hover:translate-x-1 transition-transform duration-300">Back to Home</span>
@@ -152,28 +162,42 @@ const Signup = () => {
                     />
                   </div>
 
-                  <div className="form-group">
+                  <div className="form-group relative">
                     <input
-                      type="password"
+                      type={showPassword ? "text" : "password"}
                       name="password"
                       value={formData.password}
                       onChange={handleChange}
-                      className="w-full px-4 py-2.5 text-base rounded-xl bg-dark-400/50 border border-dark-500/50 text-white placeholder-gray-400 focus:outline-none focus:border-primary-500/70 focus:ring-2 focus:ring-primary-500/20 transition-all duration-300 focus:scale-[1.02] focus:shadow-lg"
+                      className="w-full px-4 py-2.5 text-base rounded-xl bg-dark-400/50 border border-dark-500/50 text-white placeholder-gray-400 focus:outline-none focus:border-primary-500/70 focus:ring-2 focus:ring-primary-500/20 transition-all duration-300 focus:scale-[1.02] focus:shadow-lg pr-12"
                       placeholder="Password"
                       required
                     />
+                    <button
+                      type="button"
+                      onClick={() => togglePasswordVisibility('password')}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-300 transition-colors"
+                    >
+                      {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+                    </button>
                   </div>
 
-                  <div className="form-group">
+                  <div className="form-group relative">
                     <input
-                      type="password"
+                      type={showConfirmPassword ? "text" : "password"}
                       name="confirmPassword"
                       value={formData.confirmPassword}
                       onChange={handleChange}
-                      className="w-full px-4 py-2.5 text-base rounded-xl bg-dark-400/50 border border-dark-500/50 text-white placeholder-gray-400 focus:outline-none focus:border-primary-500/70 focus:ring-2 focus:ring-primary-500/20 transition-all duration-300 focus:scale-[1.02] focus:shadow-lg"
+                      className="w-full px-4 py-2.5 text-base rounded-xl bg-dark-400/50 border border-dark-500/50 text-white placeholder-gray-400 focus:outline-none focus:border-primary-500/70 focus:ring-2 focus:ring-primary-500/20 transition-all duration-300 focus:scale-[1.02] focus:shadow-lg pr-12"
                       placeholder="Confirm Password"
                       required
                     />
+                    <button
+                      type="button"
+                      onClick={() => togglePasswordVisibility('confirm')}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-300 transition-colors"
+                    >
+                      {showConfirmPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+                    </button>
                   </div>
 
                   <div className="flex items-center mb-4 group">
