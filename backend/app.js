@@ -1,11 +1,12 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
-const routes = require('./routes');
+const express = require('express');//tạo server
+const mongoose = require('mongoose');//tạo database
+const cors = require('cors');//cho phép các nguồn khác nhau truy cập vào server
+const routes = require('./routes');//tạo các route cho server
 
 const app = express();
 
 // Middleware
+<<<<<<< Updated upstream
 app.use(cors({
     origin: process.env.CLIENT_URL,
     credentials: true,
@@ -13,9 +14,13 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use(express.json());
+=======
+app.use(cors()); //nhận yêu cầu từ các nguồn khác nhau (frontend, backend khác)
+app.use(express.json()); //xử lý dữ liệu JSON (để gửi và nhận dữ liệu dạng JSON)
+>>>>>>> Stashed changes
 
 // Routes
-app.use('/', routes);
+app.use('/', routes); //sử dụng các route được định nghĩa trong file routes.js
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -31,7 +36,8 @@ mongoose.connect('mongodb://localhost:27017/movie_db')
     .then(() => console.log('Connected to MongoDB'))
     .catch(err => console.error('MongoDB connection error:', err));
 
+//tạo port cho server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
+app.listen(PORT, () => {//lắng nghe các yêu cầu từ port đã tạo và khởi chạy server
     console.log(`Server is running on port ${PORT}`);
 }); 
