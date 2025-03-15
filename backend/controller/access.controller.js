@@ -3,7 +3,7 @@ const User = require("../module/user.module")
 const { generateAccessToken, generateRefreshToken } = require("../utils/generates")
 const ROLES = require("../config/role.config")
 
-const signin = async (req, res) => {
+const signup = async (req, res) => {
     try {
         const { name, password, email } = req.body
 
@@ -28,18 +28,7 @@ const signin = async (req, res) => {
             }
         })
 
-        const accessToken = generateAccessToken({name, email, role})
-        const refreshToken = generateRefreshToken({name, email, role})
-
-        res.cookie("refreshToken", refreshToken, {
-            sameSite: "Strict",
-            maxAge: 10 * 60 * 1000,
-            secure: true,
-            httpOnly: true
-        })
-
         res.status(201).json({
-            message: "User registered successfully",
             accessToken,
             user: {
                 id: newUser._id,
@@ -54,4 +43,4 @@ const signin = async (req, res) => {
     }
 }
 
-module.exports = { signin }
+module.exports = { signup }
