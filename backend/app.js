@@ -13,8 +13,6 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use(express.json());
-app.use(cors()); //nhận yêu cầu từ các nguồn khác nhau (frontend, backend khác)
-app.use(express.json()); //xử lý dữ liệu JSON (để gửi và nhận dữ liệu dạng JSON)
 
 // Routes
 app.use('/', routes); //sử dụng các route được định nghĩa trong file routes.js
