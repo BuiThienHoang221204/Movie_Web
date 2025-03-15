@@ -1,28 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaGoogle, FaFacebook, FaHome, FaEye, FaEyeSlash, FaEnvelope, FaLock } from 'react-icons/fa';
+import { FaGoogle, FaFacebook, FaHome, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
 import images from '../../assets/img';
 import { server } from '../../config';
 
-const Login = () => {
+const Signup = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
+    name: '',
     email: '',
     password: '',
+    confirmPassword: '',
   });
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // Check authentication status when component mounts
   useEffect(() => {
     const currentUrl = window.location.href;
-    const urlParams = new URLSearchParams(window.location.search);
-    const accessToken = urlParams.get('accessToken');
     
-    if (accessToken) {
-      // Store the access token (e.g., in localStorage or your state management solution)
-      localStorage.setItem('accessToken', accessToken);
+    // Check if we're on Google or Facebook account pages
+    if (currentUrl.includes('/auth/google/account') || currentUrl.includes('/auth/facebook/account')) {
       // Redirect to home page
       navigate('/');
     }
@@ -36,13 +36,29 @@ const Login = () => {
     }));
   };
 
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
+  const togglePasswordVisibility = (field) => {
+    if (field === 'password') {
+      setShowPassword(!showPassword);
+    } else {
+      setShowConfirmPassword(!showConfirmPassword);
+    }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Login data:', formData);
+    try {
+      const response = await axios.post(`${server}/auth/signup`, formData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true
+      });
+      if (response.status === 200) {  
+        console.log('Signup successful:', response.data);
+      }
+    } catch (error) {
+      console.error('Signup error:', error);
+    }
   };
 
   const handleLoginWithProvider = async (provider) => {
@@ -91,11 +107,11 @@ const Login = () => {
                   transition={{ delay: 0.4, duration: 0.5 }}
                   className="text-center mb-8"
                 >
-                  <h2 className="text-7xl font-bold text-red-500 mb-4 drop-shadow-lg tracking-wide">Welcome</h2>
-                  <p className="text-gray-300 text-xl">Sign in to continue watching movies</p>
+                  <h2 className="text-5xl font-bold text-red-500 mb-4 drop-shadow-lg tracking-wide">Create Account</h2>
+                  <p className="text-gray-300 text-xl">Join us to start watching movies</p>
                 </motion.div>
 
-                {/* Social Login Buttons */}
+                {/* Social Signup Buttons */}
                 <motion.div 
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -138,19 +154,28 @@ const Login = () => {
                   onSubmit={handleSubmit} 
                   className="space-y-5"
                 >
-                  <div className="form-group relative">
+                  <div className="form-group">
+                    <input
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      className="w-full px-5 py-3 text-base rounded-xl bg-dark-400/50 border border-dark-500/50 text-white placeholder-gray-400 focus:outline-none focus:border-primary-500/70 focus:ring-2 focus:ring-primary-500/20 transition-all duration-300 focus:scale-[1.02] focus:shadow-lg"
+                      placeholder="Full Name"
+                      required
+                    />
+                  </div>
+
+                  <div className="form-group">
                     <input
                       type="email"
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
-                      className="w-full px-5 py-3 text-base rounded-xl bg-dark-400/50 border border-dark-500/50 text-white placeholder-gray-400 focus:outline-none focus:border-primary-500/70 focus:ring-2 focus:ring-primary-500/20 transition-all duration-300 focus:scale-[1.02] focus:shadow-lg pl-12"
+                      className="w-full px-5 py-3 text-base rounded-xl bg-dark-400/50 border border-dark-500/50 text-white placeholder-gray-400 focus:outline-none focus:border-primary-500/70 focus:ring-2 focus:ring-primary-500/20 transition-all duration-300 focus:scale-[1.02] focus:shadow-lg"
                       placeholder="Email address"
                       required
                     />
-                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
-                      <FaEnvelope size={20} />
-                    </div>
                   </div>
 
                   <div className="form-group relative">
@@ -159,43 +184,62 @@ const Login = () => {
                       name="password"
                       value={formData.password}
                       onChange={handleChange}
-                      className="w-full px-5 py-3 text-base rounded-xl bg-dark-400/50 border border-dark-500/50 text-white placeholder-gray-400 focus:outline-none focus:border-primary-500/70 focus:ring-2 focus:ring-primary-500/20 transition-all duration-300 focus:scale-[1.02] focus:shadow-lg pl-12 pr-12"
+                      className="w-full px-5 py-3 text-base rounded-xl bg-dark-400/50 border border-dark-500/50 text-white placeholder-gray-400 focus:outline-none focus:border-primary-500/70 focus:ring-2 focus:ring-primary-500/20 transition-all duration-300 focus:scale-[1.02] focus:shadow-lg pr-12"
                       placeholder="Password"
                       required
                     />
-                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
-                      <FaLock size={20} />
-                    </div>
                     <button
                       type="button"
-                      onClick={togglePasswordVisibility}
+                      onClick={() => togglePasswordVisibility('password')}
                       className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-300 transition-colors"
                     >
                       {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
                     </button>
                   </div>
 
-                  <div className="flex items-center justify-between mb-5">
-                    <div className="flex items-center group">
-                      <input
-                        type="checkbox"
-                        id="remember"
-                        className="w-5 h-5 rounded border-dark-400 text-primary-600 focus:ring-4 focus:ring-primary-500/30 bg-dark-300 cursor-pointer transition-all duration-300 focus:scale-110 checked:scale-105"
-                      />
-                      <label htmlFor="remember" className="ml-2 text-base text-gray-300">
-                        Remember me
-                      </label>
-                    </div>
-                    <a href="#" className="text-base text-primary-400 hover:text-primary-300 transition-colors no-underline">
-                      Forgot password?
-                    </a>
+                  <div className="form-group relative">
+                    <input
+                      type={showConfirmPassword ? "text" : "password"}
+                      name="confirmPassword"
+                      value={formData.confirmPassword}
+                      onChange={handleChange}
+                      className="w-full px-5 py-3 text-base rounded-xl bg-dark-400/50 border border-dark-500/50 text-white placeholder-gray-400 focus:outline-none focus:border-primary-500/70 focus:ring-2 focus:ring-primary-500/20 transition-all duration-300 focus:scale-[1.02] focus:shadow-lg pr-12"
+                      placeholder="Confirm Password"
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => togglePasswordVisibility('confirm')}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-300 transition-colors"
+                    >
+                      {showConfirmPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+                    </button>
+                  </div>
+
+                  <div className="flex items-center mb-4 group">
+                    <input
+                      type="checkbox"
+                      id="terms"
+                      className="w-5 h-5 rounded border-dark-400 text-primary-600 focus:ring-4 focus:ring-primary-500/30 bg-dark-300 cursor-pointer transition-all duration-300 focus:scale-110 checked:scale-105"
+                      required
+                    />
+                    <label htmlFor="terms" className="ml-2 text-base text-gray-300">
+                      I agree to the{' '}
+                      <a href="#" className="text-primary-400 hover:text-primary-300 transition-colors no-underline">
+                        Terms of Service
+                      </a>{' '}
+                      and{' '}
+                      <a href="#" className="text-primary-400 hover:text-primary-300 transition-colors no-underline">
+                        Privacy Policy
+                      </a>
+                    </label>
                   </div>
 
                   <button
                     type="submit"
                     className="w-full py-3 px-5 text-base bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-500 hover:to-primary-600 text-white rounded-xl transition-all duration-300 shadow-dark hover:shadow-dark-lg font-medium transform hover:-translate-y-0.5"
                   >
-                    Sign In
+                    Create Account
                   </button>
                 </motion.form>
 
@@ -206,9 +250,9 @@ const Login = () => {
                   className="text-center mt-6"
                 >
                   <p className="text-gray-400 text-lg">
-                    Don't have an account?{' '}
-                    <Link to="/signup" className="text-primary-400 hover:text-primary-300 font-medium transition-colors no-underline hover:underline">
-                      Sign up
+                    Already have an account?{' '}
+                    <Link to="/login" className="text-primary-400 hover:text-primary-300 font-medium transition-colors no-underline hover:underline">
+                      Sign in
                     </Link>
                   </p>
                 </motion.div>
@@ -221,4 +265,4 @@ const Login = () => {
   );
 };
 
-export default Login; 
+export default Signup; 

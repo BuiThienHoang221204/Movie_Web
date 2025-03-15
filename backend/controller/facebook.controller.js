@@ -19,16 +19,22 @@ const facebookAuthController = {
             sameSite: "Strict",
             maxAge: 10 * 60 * 1000,
             secure: true,
-            httpOnly: true
+            httpOnly: true,
+            path: "/"
+        })
+
+        res.cookie("accessToken", accessToken, {
+            sameSite: "Strict",
+            maxAge: 10 * 60 * 1000,
+            secure: true,
+            httpOnly: true,
+            path: "/"
         })
         
-        res.status(200).json({
-            user: req.user,
-            accessToken: accessToken
-        })
+        res.redirect(`${process.env.CLIENT_URL}`);
     },
 
-    failureRedirect: passport.authenticate("facebook", { failureRedirect: "/" })
+    failureRedirect: passport.authenticate("facebook", { failureRedirect: `${process.env.CLIENT_URL}/login` })
 }
 
 module.exports = facebookAuthController

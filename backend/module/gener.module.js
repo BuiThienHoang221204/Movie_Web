@@ -4,7 +4,7 @@ const genreSchema = new mongoose.Schema({
     _id: {
         type: mongoose.Schema.Types.ObjectId,
     },
-    genre_id: {
+    id: {
         type: Number,
         required: true,
     },

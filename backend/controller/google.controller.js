@@ -19,16 +19,22 @@ const googleAuthController = {
             sameSite: "Strict",
             maxAge: 10 * 60 * 1000,
             secure: true,
-            httpOnly: true
+            httpOnly: true,
+            path: "/"
         })
 
-        res.status(200).json({
-            user: req.user,
-            accessToken: accessToken
+        res.cookie("accessToken", accessToken, {
+            sameSite: "Strict",
+            maxAge: 10 * 60 * 1000,
+            secure: true,
+            httpOnly: true,
+            path: "/"
         })
+        
+        res.redirect(`${process.env.CLIENT_URL}`);
     },
 
-    failureRedirect: passport.authenticate("google", { failureRedirect: "/" })
+    failureRedirect: passport.authenticate("google", { failureRedirect: `${process.env.CLIENT_URL}/login` })
 }
 
 module.exports = googleAuthController
