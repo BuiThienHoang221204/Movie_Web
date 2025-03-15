@@ -13,5 +13,5 @@ router.get("/auth/google/account", googleAuthController.failureRedirect, googleA
 router.get("/auth/facebook", facebookAuthController.login)
 router.get("/auth/facebook/account", facebookAuthController.failureRedirect, facebookAuthController.callback)
 
-router.post("/signup", signup)
+router.post("/auth/signup", signup)
 module.exports = router

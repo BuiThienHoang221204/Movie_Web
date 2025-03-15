@@ -64,8 +64,8 @@ const Login = () => {
       </div>
 
       {/* Logo */}
-      <Link to="/" className="absolute top-8 left-16 z-20 no-underline">
-        <div className="text-4xl font-bold text-red-500 cursor-pointer hover:text-red-400 transition-colors duration-300" style={{ textShadow: '0 0 10px rgba(229, 9, 20, 0.5)' }}>
+      <Link to="/" className="absolute top-8 left-8 md:left-16 z-20 no-underline">
+        <div className="text-3xl md:text-4xl font-bold text-red-500 cursor-pointer hover:text-red-400 transition-colors duration-300" style={{ textShadow: '0 0 10px rgba(229, 9, 20, 0.5)' }}>
           CINEMA
         </div>
       </Link>
@@ -73,12 +73,12 @@ const Login = () => {
       {/* Content */}
       <div className="container relative z-10">
         <div className="row justify-content-end">
-          <div className="col-md-7 col-lg-6 offset-lg-1">
+          <div className="col-12 col-md-8 col-lg-6 offset-lg-1 px-4 md:px-6">
             <motion.div 
               initial={{ opacity: 0, y: 20, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ delay: 0.3, duration: 0.5, ease: "easeOut" }}
-              className="bg-black/40 backdrop-blur-md rounded-3xl p-8 shadow-2xl border border-white/5 relative overflow-hidden"
+              className="bg-black/40 backdrop-blur-md rounded-3xl p-6 md:p-8 shadow-2xl border border-white/5 relative overflow-hidden"
             >
               {/* Glass effect overlay */}
               <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent opacity-30"></div>
@@ -91,8 +91,8 @@ const Login = () => {
                   transition={{ delay: 0.4, duration: 0.5 }}
                   className="text-center mb-8"
                 >
-                  <h2 className="text-7xl font-bold text-red-500 mb-4 drop-shadow-lg tracking-wide">Welcome</h2>
-                  <p className="text-gray-300 text-xl">Sign in to continue watching movies</p>
+                  <h2 className="text-5xl md:text-7xl font-bold text-red-500 mb-4 drop-shadow-lg tracking-wide">Welcome</h2>
+                  <p className="text-gray-300 text-lg md:text-xl">Sign in to continue watching movies</p>
                 </motion.div>
 
                 {/* Social Login Buttons */}
@@ -100,12 +100,12 @@ const Login = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5, duration: 0.5 }}
-                  className="grid grid-cols-2 gap-3 mb-6"
+                  className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6"
                 >
                   <button 
                     type="button"
                     onClick={() => handleLoginWithProvider('google')}
-                    className="flex items-center justify-center gap-3 py-3 px-5 bg-dark-300/80 hover:bg-dark-400/80 text-white rounded-xl transition-all duration-300 shadow-dark border border-dark-400/30 hover:border-primary-600/50 hover:shadow-dark-lg group text-lg hover:-translate-y-0.5 active:translate-y-0"
+                    className="flex items-center justify-center gap-2 md:gap-3 py-2.5 md:py-3 px-4 md:px-5 bg-dark-300/80 hover:bg-dark-400/80 text-white rounded-xl transition-all duration-300 shadow-dark border border-dark-400/30 hover:border-primary-600/50 hover:shadow-dark-lg group text-base md:text-lg hover:-translate-y-0.5 active:translate-y-0"
                   >
                     <FaGoogle className="text-primary-500 group-hover:text-primary-400 transition-colors text-2xl" />
                     <span>Google</span>
@@ -113,7 +113,7 @@ const Login = () => {
                   <button 
                     type="button"
                     onClick={() => handleLoginWithProvider('facebook')}
-                    className="flex items-center justify-center gap-3 py-3 px-5 bg-dark-300/80 hover:bg-dark-400/80 text-white rounded-xl transition-all duration-300 shadow-dark border border-dark-400/30 hover:border-primary-600/50 hover:shadow-dark-lg group text-lg hover:-translate-y-0.5 active:translate-y-0"
+                    className="flex items-center justify-center gap-2 md:gap-3 py-2.5 md:py-3 px-4 md:px-5 bg-dark-300/80 hover:bg-dark-400/80 text-white rounded-xl transition-all duration-300 shadow-dark border border-dark-400/30 hover:border-primary-600/50 hover:shadow-dark-lg group text-base md:text-lg hover:-translate-y-0.5 active:translate-y-0"
                   >
                     <FaFacebook className="text-blue-500 group-hover:text-blue-400 transition-colors text-2xl" />
                     <span>Facebook</span>
