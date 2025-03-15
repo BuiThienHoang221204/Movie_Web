@@ -1,8 +1,11 @@
 import React from 'react'
+import { RecommentMovie } from '../component'
 
 function Home() {
   return (
-    <div>Home</div>
+    <div>
+      <RecommentMovie/>
+    </div>
   )
 }
 export default Home

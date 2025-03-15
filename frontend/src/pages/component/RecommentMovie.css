@@ -1,0 +1,152 @@
+.container {
+    position: relative;
+
+    /* chỉnh tiêu đề */
+  .section-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #ffffff;
+    background: linear-gradient(135deg, #ffffff 0%, #e50914 100%);
+    -webkit-background-clip: text; 
+    -webkit-text-fill-color: transparent;
+  }
+  
+  /* chỉnh đường viền */
+  .section-title::after {
+    content: '';
+    display: block;
+    width: 200px;
+    height: 3px;
+    background: linear-gradient(to right, #e50914, rgba(229, 9, 20, 0.3));
+    margin: 10px 0;
+    border-radius: 3px;
+  }
+}
+
+/* chỉnh phần phim */
+.section-movie {
+    padding: 20px 0;
+    overflow: hidden;
+
+    .movie-track {
+        display: flex;
+        gap: 20px;
+       
+    }
+}
+.movie-item {
+    flex: 0 0 24%;
+    position: relative;
+
+}
+
+.movie-image{
+    height: 400px;
+    object-fit: cover;
+    width: 100%;
+}
+
+.movie-info{
+    padding: 10px;
+    position: absolute;
+    bottom: -100%;
+    left: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    font-size: 1.2rem;
+    text-align: center;
+    transition: bottom 0.3s ease-in-out;
+    opacity: 0;
+}
+/* Style các thành phần trong movie-info */
+.movie-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.movie-genre {
+    font-size: 14px;
+    font-style: italic;
+    margin-bottom: 5px;
+}
+
+.movie-match {
+    font-size: 14px;
+    font-weight: bold;
+    color: #4CAF50; /* Màu xanh lá để thể hiện mức độ phù hợp */
+    margin-bottom: 5px;
+}
+
+.movie-rating {
+    font-size: 14px;
+    font-weight: bold;
+    color: #FFD700; /* Màu vàng để thể hiện rating */
+}
+
+/* hiệu ứng hover cho movie-info và play-icon-2 */
+.movie-item:hover .movie-info, .movie-item:hover .play-icon-2{
+    transition: bottom 0.8s ease-in-out;
+    bottom: -20px;
+    opacity: 1;
+}
+
+/* chỉnh icon play */
+.play-icon-2{
+    position: absolute;
+    top: 40%;
+    left: 43%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    font-size: 50px;
+    color: white;
+    background: linear-gradient(135deg, #e50914 0%, #ff3b30 100%);
+    border-radius: 50%;
+    padding: 15px;
+    box-shadow: 0 0 25px rgba(229, 9, 20, 0.8);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transform: scale(1.3);
+
+    &:hover{
+        transform: scale(1.4);
+        box-shadow: 0 0 35px rgba(229, 9, 20, 0.9), 0 0 15px rgba(255, 255, 255, 0.5);
+    }
+}
+
+
+/* chỉnh nút trước và sau */
+.prev {
+    position: absolute;
+    top: 43%;
+    left: -40px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    transform: translateY(50%);
+    border-radius: 50%;
+    font-size: 20px;
+    opacity: 0.5;
+    padding: 10px 15px;
+}
+
+.prev:hover, .next:hover {
+    background-color:#e50914;
+    opacity: 1;
+}
+
+.next {
+    position: absolute;
+    top: 43%;
+    right: -40px;
+    background-color: rgba(0, 0, 0, 0.5);
+    transform: translateY(50%);
+    color: white;
+    border-radius: 50%;
+    font-size: 20px;
+    opacity: 0.5;
+    padding: 10px 15px;
+}
+
+
+
