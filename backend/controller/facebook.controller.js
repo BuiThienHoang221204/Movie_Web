@@ -19,14 +19,16 @@ const facebookAuthController = {
             sameSite: "Strict",
             maxAge: 10 * 60 * 1000,
             secure: true,
-            httpOnly: true
+            httpOnly: true,
+            path: "/"
         })
 
         res.cookie("accessToken", accessToken, {
             sameSite: "Strict",
             maxAge: 10 * 60 * 1000,
             secure: true,
-            httpOnly: true
+            httpOnly: true,
+            path: "/"
         })
         
         res.redirect(`${process.env.CLIENT_URL}`);

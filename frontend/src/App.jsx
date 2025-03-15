@@ -17,6 +17,10 @@ function App() {
 
     if (accessToken) {
       dispatch(setAccessToken(accessToken));
+      console.log(accessToken);
+    }
+    else {
+      console.log("No access token found");
     }
   }, [dispatch]);
 
