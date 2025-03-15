@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './Header.css';
 import { Link } from 'react-router-dom';
 import config from '../../config';
-import Banner from '../../pages/component/Banner';
+import { Banner } from '../../pages/component';
 import { useSelector } from 'react-redux';
 
 function Header() {
