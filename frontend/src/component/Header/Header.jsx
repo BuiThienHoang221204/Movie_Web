@@ -1,10 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './Header.css';
 import { Link } from 'react-router-dom';
 import config from '../../config';
 import Banner from '../../pages/component/Banner';
+import { useSelector } from 'react-redux';
 
 function Header() {
+  const accessToken = useSelector((state) => state.auth.accessToken);
+
+  useEffect(() => {
+    if (accessToken) {
+      console.log(accessToken);
+    }
+  }, [accessToken]);
   return (
     <>
       <header className="header">
