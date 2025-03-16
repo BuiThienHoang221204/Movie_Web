@@ -2,17 +2,23 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaGoogle, FaFacebook, FaHome, FaEye, FaEyeSlash, FaEnvelope, FaLock } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
-import axios from 'axios';
+import axiosInstance from '../../config/axios';
 import images from '../../assets/img';
 import { server } from '../../config';
+import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+import { setAccessToken, setUser } from '../../redux/authSlice';
 
 const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState({});
 
   // Check authentication status when component mounts
   useEffect(() => {
@@ -34,15 +40,72 @@ const Login = () => {
       ...prev,
       [name]: value
     }));
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: ''
+      }));
+    }
   };
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = (e) => {
+  // Validate form
+  const validateForm = () => {
+    const newErrors = {};
+    
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = 'Email is invalid';
+    }
+
+    if (!formData.password) {
+      newErrors.password = 'Password is required';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Login data:', formData);
+    
+    if (!validateForm()) {
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const response = await axiosInstance.post('/auth/login', formData);
+
+      if (response.status === 200) {
+        const { accessToken, user } = response.data;
+        
+        // Update Redux store
+        dispatch(setAccessToken(accessToken));
+        dispatch(setUser(user));
+        
+        toast.success('Login successful!');
+        navigate('/');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      const errorMessage = error.response?.data?.message || 'Something went wrong. Please try again.';
+      toast.error(errorMessage);
+      
+      if (error.response?.status === 401) {
+        setErrors({ 
+          email: 'Invalid email or password',
+          password: 'Invalid email or password'
+        });
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleLoginWithProvider = async (provider) => {
@@ -85,7 +148,7 @@ const Login = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-primary-500/5 via-transparent to-primary-500/5"></div>
               
               <div className="relative">
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.4, duration: 0.5 }}
@@ -193,9 +256,12 @@ const Login = () => {
 
                   <button
                     type="submit"
-                    className="w-full py-3 px-5 text-base bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-500 hover:to-primary-600 text-white rounded-xl transition-all duration-300 shadow-dark hover:shadow-dark-lg font-medium transform hover:-translate-y-0.5"
+                    disabled={isLoading}
+                    className={`w-full py-3 px-5 text-base bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-500 hover:to-primary-600 text-white rounded-xl transition-all duration-300 shadow-dark hover:shadow-dark-lg font-medium transform hover:-translate-y-0.5 ${
+                      isLoading ? 'opacity-75 cursor-not-allowed' : ''
+                    }`}
                   >
-                    Sign In
+                    {isLoading ? 'Signing in...' : 'Sign In'}
                   </button>
                 </motion.form>
 
