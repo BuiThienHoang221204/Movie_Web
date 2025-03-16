@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaGoogle, FaFacebook, FaHome, FaEye, FaEyeSlash } from 'react-icons/fa';
-import { motion, AnimatePresence } from 'framer-motion';
+import { FaGoogle, FaFacebook, FaEye, FaEyeSlash } from 'react-icons/fa';
+import { motion } from 'framer-motion';
 import axiosInstance from '../../config/axios';
 import images from '../../assets/img';
 import { server } from '../../config';
@@ -86,11 +86,14 @@ const Signup = () => {
 
     setIsLoading(true);
     try {
-      const response = await axiosInstance.post('/auth/signup', {
-        name: formData.name,
-        email: formData.email,
+      // Format the request data
+      const signupData = {
+        name: formData.name.trim(),
+        email: formData.email.trim().toLowerCase(),
         password: formData.password
-      });
+      };
+      
+      const response = await axiosInstance.post('/auth/signup', signupData);
 
       if (response.status === 201) {
         toast.success('Sign up successful! Please login.');
@@ -99,11 +102,21 @@ const Signup = () => {
     } catch (error) {
       console.error('Signup error:', error);
       const errorMessage = error.response?.data?.message || 'Something went wrong. Please try again.';
+      const errorDetails = error.response?.data?.details;
+      
       toast.error(errorMessage);
       
       // Handle specific errors
       if (error.response?.status === 400) {
-        if (error.response.data.message.includes('exists')) {
+        if (errorDetails) {
+          setErrors(prev => ({
+            ...prev,
+            ...Object.entries(errorDetails).reduce((acc, [key, value]) => {
+              if (value) acc[key] = value;
+              return acc;
+            }, {})
+          }));
+        } else if (errorMessage.includes('exists')) {
           setErrors({ email: 'Email already exists' });
         }
       }
