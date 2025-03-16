@@ -80,7 +80,7 @@ const Login = () => {
 
     setIsLoading(true);
     try {
-      const response = await axiosInstance.post('/auth/login', formData);
+      const response = await axiosInstance.post(`${server}/auth/login`, formData);
 
       if (response.status === 200) {
         const { accessToken, user } = response.data;

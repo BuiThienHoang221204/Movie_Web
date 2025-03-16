@@ -16,7 +16,7 @@ app.use(cors({
     origin: process.env.CLIENT_URL,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept']
 })) //cho phép các nguồn khác nhau truy cập vào server
 app.use(morgan('tiny')) //tạo logger để theo dõi các yêu cầu HTTP
 connectDB() //kết nối đến database
