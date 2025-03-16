@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require("mongoose");//tạo schema cho movie
 
 const movieSchema = new mongoose.Schema({
     _id: {
@@ -55,6 +55,6 @@ const movieSchema = new mongoose.Schema({
     }
 })
 
-const movies = mongoose.model("movies", movieSchema);
+const movies = mongoose.model("movies", movieSchema);//tạo model cho movie
 
-module.exports = movies;
+module.exports = movies;//export model cho movie
