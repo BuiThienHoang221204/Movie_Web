@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import images from '../../assets/img'
 import './RecommentMovie.css'
-import { FaPlay } from 'react-icons/fa';
+import { FaPlay, FaArrowRight } from 'react-icons/fa';
 function RecommentMovie() {
 
   const RecommentMovies = [
@@ -42,8 +42,8 @@ function RecommentMovie() {
     },
   ];
 
-  const [movies, setMovies] = useState(RecommentMovies);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [showAllMovies, setShowAllMovies] = useState(false);
   const itemMovie = 4;
   const maxIndex = RecommentMovies.length - itemMovie;
 
@@ -55,42 +55,74 @@ function RecommentMovie() {
     setCurrentIndex((prev) => prev === 0 ? maxIndex : prev - 1);
   }
 
+  const toggleShowAllMovies = () => {
+    setShowAllMovies(!showAllMovies);
+  }
+
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex(prev => prev === maxIndex ? 0 : prev + 1);
-    }, 3000);
-    return () => clearInterval(interval);
-  }, [itemMovie.length, maxIndex]);
+    if (!showAllMovies) {
+      const interval = setInterval(() => {
+        setCurrentIndex(prev => prev === maxIndex ? 0 : prev + 1);
+      }, 3000);
+      return () => clearInterval(interval);
+    }
+  }, [showAllMovies, maxIndex]);
 
   return (
     <div className='container'>
-      <h1 className='section-title'>Phim đề xuất</h1>
-      <div className='section-movie'>
-        <div className='movie-track'
-          style={{
-            transform: `translateX(-${currentIndex * (100 / itemMovie)}%)`,
-            transition: 'transform 0.3s ease-in-out'
-          }}>
-          {movies.map(movie => (
-            <div key={movie.id} className='movie-item'>
-              <img src={movie.image} alt={movie.title} className='movie-image' />
-              <FaPlay className="play-icon-2" />
-              <div className='movie-info'>
-                <h3 className='movie-title'>{movie.title}</h3>
-                <p className='movie-genre'>Thể loại: {movie.genre}</p>
-                <p className='movie-match'>Phù hợp: {movie.match}%</p>
-                <p className='movie-rating'>Điểm: {movie.rating}/10</p>
-              </div>
-            </div>
-          ))}
-        </div>
+      <div className='title-container'>
+        <h1 className='section-title'>Phim đề xuất</h1>
+        <button className='view-all-btn' onClick={toggleShowAllMovies}>
+          {showAllMovies ? 'Thu gọn' : 'Xem tất cả'}
+          <FaArrowRight className='arrow-icon' />
+        </button>
       </div>
-      <button className="prev" onClick={handlePrev}>
-        &#10094;
-      </button>
-      <button className="next" onClick={handleNext}>
-        &#10095;
-      </button>
+
+      {!showAllMovies ? (
+        <div className='section-movie'>
+          <div className='movie-track'
+            style={{
+              transform: `translateX(-${currentIndex * (100 / itemMovie)}%)`,
+              transition: 'transform 0.3s ease-in-out'
+            }}>
+            {RecommentMovies.map(movie => (
+              <div key={movie.id} className='movie-item'>
+                <img src={movie.image} alt={movie.title} className='movie-image' />
+                <FaPlay className="play-icon-2" />
+                <div className='movie-info'>
+                  <h3 className='movie-title'>{movie.title}</h3>
+                  <p className='movie-genre'>Thể loại: {movie.genre}</p>
+                  <p className='movie-match'>Phù hợp: {movie.match}%</p>
+                  <p className='movie-rating'>Điểm: {movie.rating}/10</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          <button className="prev" onClick={handlePrev}>
+            &#10094;
+          </button>
+          <button className="next" onClick={handleNext}>
+            &#10095;
+          </button>
+        </div>
+      ) : (
+        <div className='all-movies-section'>
+          <div className='all-movies-grid'>
+            {RecommentMovies.map(movie => (
+              <div key={movie.id} className='movie-item'>
+                <img src={movie.image} alt={movie.title} className='movie-image' />
+                <FaPlay className="play-icon-2" />
+                <div className='movie-info'>
+                  <h3 className='movie-title'>{movie.title}</h3>
+                  <p className='movie-genre'>Thể loại: {movie.genre}</p>
+                  <p className='movie-match'>Phù hợp: {movie.match}%</p>
+                  <p className='movie-rating'>Điểm: {movie.rating}/10</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   )
 }
