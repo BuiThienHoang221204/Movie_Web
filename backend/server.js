@@ -12,7 +12,12 @@ const port = process.env.PORT
 
 //cấu hình middleware
 app.use(express.json()) //xử lý dữ liệu JSON
-app.use(cors()) //cho phép các nguồn khác nhau truy cập vào server
+app.use(cors({
+    origin: process.env.CLIENT_URL,
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+})) //cho phép các nguồn khác nhau truy cập vào server
 app.use(morgan('tiny')) //tạo logger để theo dõi các yêu cầu HTTP
 connectDB() //kết nối đến database
 app.use(router) //sử dụng các route được định nghĩa trong file routes.js
