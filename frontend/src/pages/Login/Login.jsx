@@ -75,12 +75,13 @@ const Login = () => {
     e.preventDefault();
     
     if (!validateForm()) {
+      toast.error('Please check your input and try again.');
       return;
     }
 
     setIsLoading(true);
     try {
-      const response = await axiosInstance.post(`${server}/auth/login`, formData);
+      const response = await axiosInstance.post('/auth/login', formData);
 
       if (response.status === 200) {
         const { accessToken, user } = response.data;
@@ -89,19 +90,27 @@ const Login = () => {
         dispatch(setAccessToken(accessToken));
         dispatch(setUser(user));
         
-        toast.success('Login successful!');
+        toast.success('Welcome! Login successful.');
         navigate('/');
       }
     } catch (error) {
       console.error('Login error:', error);
       const errorMessage = error.response?.data?.message || 'Something went wrong. Please try again.';
+      
+      // Show toast notification for all errors
       toast.error(errorMessage);
       
-      if (error.response?.status === 401) {
-        setErrors({ 
-          email: 'Invalid email or password',
-          password: 'Invalid email or password'
-        });
+      // Set form errors for authentication issues
+      if (error.response?.status === 401 || error.response?.status === 400) {
+        setErrors({}); // Clear any existing errors instead of setting them
+      }
+      
+      // Special handling for provider-specific errors
+      if (error.response?.data?.message?.includes('authentication')) {
+        const provider = error.response.data.message.match(/with (\w+)/)?.[1];
+        if (provider) {
+          toast.info(`Please use ${provider} to login to this account.`);
+        }
       }
     } finally {
       setIsLoading(false);
@@ -109,7 +118,13 @@ const Login = () => {
   };
 
   const handleLoginWithProvider = async (provider) => {
-    window.location.href = `${server}/auth/${provider}`;
+    try {
+      toast.info(`Redirecting to ${provider} login...`);
+      window.location.href = `${server}/auth/${provider}`;
+    } catch (error) {
+      console.error(`${provider} login error:`, error);
+      toast.error(`Unable to login with ${provider}. Please try again.`);
+    }
   };
 
   return (
@@ -207,7 +222,7 @@ const Login = () => {
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
-                      className="w-full px-5 py-3 text-base rounded-xl bg-dark-400/50 border border-dark-500/50 text-white placeholder-gray-400 focus:outline-none focus:border-primary-500/70 focus:ring-2 focus:ring-primary-500/20 transition-all duration-300 focus:scale-[1.02] focus:shadow-lg pl-12"
+                      className={`w-full px-5 py-3 text-base rounded-xl bg-dark-400/50 border border-dark-500/50 text-white placeholder-gray-400 focus:outline-none focus:border-primary-500/70 focus:ring-2 focus:ring-primary-500/20 transition-all duration-300 focus:scale-[1.02] focus:shadow-lg pl-12`}
                       placeholder="Email address"
                       required
                     />
@@ -222,7 +237,7 @@ const Login = () => {
                       name="password"
                       value={formData.password}
                       onChange={handleChange}
-                      className="w-full px-5 py-3 text-base rounded-xl bg-dark-400/50 border border-dark-500/50 text-white placeholder-gray-400 focus:outline-none focus:border-primary-500/70 focus:ring-2 focus:ring-primary-500/20 transition-all duration-300 focus:scale-[1.02] focus:shadow-lg pl-12 pr-12"
+                      className={`w-full px-5 py-3 text-base rounded-xl bg-dark-400/50 border border-dark-500/50 text-white placeholder-gray-400 focus:outline-none focus:border-primary-500/70 focus:ring-2 focus:ring-primary-500/20 transition-all duration-300 focus:scale-[1.02] focus:shadow-lg pl-12 pr-12`}
                       placeholder="Password"
                       required
                     />

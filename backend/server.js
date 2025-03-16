@@ -5,21 +5,42 @@ const morgan = require('morgan') //tạo logger để theo dõi các yêu cầu 
 
 const express = require('express')
 const cors = require('cors')
+const cookieParser = require('cookie-parser')
 const router = require('./index')
 
 const app = express()
-const port = process.env.PORT
+const port = process.env.PORT || 5000
 
-//cấu hình middleware
-app.use(express.json()) //xử lý dữ liệu JSON
+// Connect to database first
+connectDB()
+
+// Middleware order is important
+app.use(morgan('tiny')) // Logging first
+app.use(express.json()) // Parse JSON before cookies
+app.use(cookieParser()) // Parse cookies
+
+// CORS configuration
 app.use(cors({
-    origin: process.env.CLIENT_URL,
+    origin: process.env.CLIENT_URL || 'http://localhost:5173',
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Accept']
-})) //cho phép các nguồn khác nhau truy cập vào server
-app.use(morgan('tiny')) //tạo logger để theo dõi các yêu cầu HTTP
-connectDB() //kết nối đến database
-app.use(router) //sử dụng các route được định nghĩa trong file routes.js
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Cookie'],
+    exposedHeaders: ['Set-Cookie'],
+}))
 
-app.listen(port, () => console.log(`Server running on http://localhost:${port}`))//lắng nghe các yêu cầu từ port đã tạo và khởi chạy server 
+// Routes
+app.use(router)
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error('Error:', err);
+    res.status(500).json({ 
+        message: "Internal Server Error",
+        error: process.env.NODE_ENV === 'development' ? err.message : undefined
+    });
+});
+
+app.listen(port, () => {
+    console.log(`Server running on http://localhost:${port}`);
+    console.log('CORS origin:', process.env.CLIENT_URL || 'http://localhost:5173');
+}) 

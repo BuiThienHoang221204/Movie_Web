@@ -81,6 +81,7 @@ const Signup = () => {
     e.preventDefault();
     
     if (!validateForm()) {
+      toast.error('Please check your input and try again.');
       return;
     }
 
@@ -96,15 +97,16 @@ const Signup = () => {
       const response = await axiosInstance.post('/auth/signup', signupData);
 
       if (response.status === 201) {
-        toast.success('Sign up successful! Please login.');
-        navigate('/login');
+        toast.success('Account created successfully! Please login to continue.');
+        setTimeout(() => {
+          navigate('/login');
+        }, 2000); // Give user time to read the success message
       }
     } catch (error) {
       console.error('Signup error:', error);
       const errorMessage = error.response?.data?.message || 'Something went wrong. Please try again.';
       const errorDetails = error.response?.data?.details;
-      
-      toast.error(errorMessage);
+
       
       // Handle specific errors
       if (error.response?.status === 400) {
@@ -117,7 +119,8 @@ const Signup = () => {
             }, {})
           }));
         } else if (errorMessage.includes('exists')) {
-          setErrors({ email: 'Email already exists' });
+          setErrors({ email: 'This email is already registered. Please login instead.' });
+          toast.error(errorMessage);
         }
       }
     } finally {
@@ -126,7 +129,13 @@ const Signup = () => {
   };
 
   const handleLoginWithProvider = async (provider) => {
-    window.location.href = `${server}/auth/${provider}`;
+    try {
+      toast.info(`Redirecting to ${provider} signup...`);
+      window.location.href = `${server}/auth/${provider}`;
+    } catch (error) {
+      console.error(`${provider} signup error:`, error);
+      toast.error(`Unable to signup with ${provider}. Please try again.`);
+    }
   };
 
   return (

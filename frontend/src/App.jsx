@@ -1,30 +1,37 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import './App.css'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import DefaultLayout from './layout/DefaultLayout/DefaultLayout'
 import routes from './routes'
 import 'bootstrap/dist/css/bootstrap.min.css';
-// import { useEffect } from 'react';
-// import { useDispatch } from 'react-redux';
-// import { setAccessToken } from './redux/authSlice';
-// import Cookies from 'js-cookie';
+import { useDispatch } from 'react-redux';
+import { setAccessToken, setUser } from './redux/authSlice';
+import axiosInstance from './config/axios';
+import { server } from './config';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 function App() {
+  const dispatch = useDispatch();
 
-  // const dispatch = useDispatch();
+  useEffect(() => {
+    const checkAuthStatus = async () => {
+      try {
+        const response = await axiosInstance.get(`${server}/auth/status`);
+        if (response.data.user) {
+          dispatch(setUser(response.data.user));
+          dispatch(setAccessToken(response.data.accessToken));
+        }
+      } catch (error) {
+        console.error('Auth check failed:', error);
+      }
+    };
 
-  // useEffect(() => {
-  //   const accessToken = Cookies.get('accessToken');
-
-  //   if (accessToken) {
-  //     dispatch(setAccessToken(accessToken));
-  //     console.log(accessToken);
-  //   }
-  //   else {
-  //     console.log("No access token found");
-  //   }
-  // }, [dispatch]);
+    checkAuthStatus();
+  }, [dispatch]);
 
   return (
+    <>
       <Router>
         <Routes>
           {routes.map((route, index) => {
@@ -40,6 +47,19 @@ function App() {
           })}
         </Routes>
       </Router>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
+    </>
   )
 }
 

@@ -1,7 +1,7 @@
 const express = require("express")
 const googleAuthController = require("../controller/google.controller")
 const facebookAuthController = require("../controller/facebook.controller")
-const {signup, login} = require("../controller/access.controller")
+const {signup, login, getAuthStatus} = require("../controller/access.controller")
 const passport = require("../config/passport.config")
 const router = express()
 
@@ -15,5 +15,6 @@ router.get("/auth/facebook/account", facebookAuthController.failureRedirect, fac
 
 router.post("/auth/signup", signup)
 router.post("/auth/login", login)
+router.get("/auth/status", getAuthStatus)
 
 module.exports = router
