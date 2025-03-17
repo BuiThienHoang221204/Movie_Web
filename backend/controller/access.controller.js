@@ -3,6 +3,7 @@ const User = require("../module/user.module")
 const { generateAccessToken, generateRefreshToken, publicKey } = require("../utils/generates")
 const jwt = require('jsonwebtoken')
 const ROLES = require("../config/role.config")
+const cookieOptions = require("../config/cookie")
 
 const signup = async (req, res) => {
     try {
@@ -97,14 +98,6 @@ const login = async (req, res) => {
         const accessToken = generateAccessToken(tokenData);
         const refreshToken = generateRefreshToken(tokenData);
 
-        // Set cookie options
-        const cookieOptions = {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
-            path: "/",
-        };
-
         // Set cookies with appropriate expiry
         res.cookie("accessToken", accessToken, {
             ...cookieOptions,
@@ -120,15 +113,13 @@ const login = async (req, res) => {
         return res.status(200).json({
             accessToken,
             user: {
-                id: user._id,
                 name: user.name,
                 email: user.email,
-                role: user.role,
                 avatar: user.avatar
             }
         });
     } catch (error) {
-        if (error.name === 'MongoServerError' && error.code === 11000) {
+        if (error.name === 'MongoServerError') {
             return res.status(400).json({ 
                 message: "Email already exists",
                 details: error.message
