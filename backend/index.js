@@ -1,5 +1,5 @@
 const express = require('express')
-const routes = require('./routes/routes')
+const routes = require('./routes/routes') //tạo các route cho server
 
 const router = express()
 
