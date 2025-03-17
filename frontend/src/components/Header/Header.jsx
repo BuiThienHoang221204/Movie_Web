@@ -2,18 +2,18 @@ import React, { useEffect, useState } from 'react';
 import './Header.css';
 import { Link } from 'react-router-dom';
 import config from '../../config';
-import { Banner } from '../../pages/component';
+import { Banner } from '../../pages/components';
 import { useSelector } from 'react-redux';
-
 function Header() {
-  const accessToken = useSelector((state) => state.auth.accessToken);
   const [scrolled, setScrolled] = useState(false);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    if (accessToken) {
-      console.log(accessToken);
-    }
-  }, [accessToken]);
+    // setUser(useSelector((state) => state.auth.user));
+    // if (user) {
+    //   console.log(user);
+    // }
+  }, []);
 
   // Thêm effect để theo dõi sự kiện cuộn
   useEffect(() => {

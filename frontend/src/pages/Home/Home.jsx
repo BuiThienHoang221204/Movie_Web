@@ -1,6 +1,6 @@
 import React from 'react'
-import { RecommentMovie } from '../component'
-import MoiveUpdate from '../component/MoiveUpdate'
+import { RecommentMovie } from '../components'
+import MoiveUpdate from '../components/MovieUpdate'
 function Home() {
   return (
     <div>

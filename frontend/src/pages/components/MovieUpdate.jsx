@@ -3,22 +3,24 @@ import images from '../../assets/img'
 import { FaPlay } from 'react-icons/fa';
 import movieService from '../../services/movieService';
 
-function MoiveUpdate() {
+function MovieUpdate() {
     const [moviesUpdate, setMoviesUpdate] = useState([]);
-    useEffect(() => {
-        const fetchMovieUpdate = async () => {
-            try{
-                const data = await movieService.getNewMovies();
-                if(data && data.length > 0){
-                    setMoviesUpdate(data);
-                }else{
-                    setMoviesUpdate(fallbackMoviesUpdate);
-                }
-            }catch(err){
-                console.error('Lỗi khi lấy phim mới cập nhật:', err);
+    
+    const fetchMovieUpdate = async () => {
+        try {
+            const data = await movieService.getNewMovies();
+            if (data && data.length > 0) {
+                setMoviesUpdate(data);
+            } else {
                 setMoviesUpdate(fallbackMoviesUpdate);
             }
+        } catch (err) {
+            console.error('Lỗi khi lấy phim mới cập nhật:', err);
+            setMoviesUpdate(fallbackMoviesUpdate);
         }
+    }
+
+    useEffect(() => {
         fetchMovieUpdate();
     }, []);
 
@@ -64,4 +66,4 @@ function MoiveUpdate() {
     )
 }
 
-export default MoiveUpdate
+export default MovieUpdate
