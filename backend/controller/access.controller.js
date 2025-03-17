@@ -157,16 +157,11 @@ const getAuthStatus = async (req, res) => {
             
             // Find user in database
             const user = await User.findOne({ email: decoded.email });
-            
-            if (!user) {
-                return res.status(401).json({ message: "User not found" });
-            }
 
             // Send response
             return res.status(200).json({
                 accessToken,
                 user: {
-                    id: user._id,
                     name: user.name,
                     email: user.email,
                     role: user.role,
