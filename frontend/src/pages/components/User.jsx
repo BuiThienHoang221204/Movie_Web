@@ -1,17 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaUser, FaCog, FaSignOutAlt, FaUserCircle } from 'react-icons/fa';
 import { clearAccessToken } from '../../redux/authSlice';
-import config from '../../config';
-import axiosInstance from '../../config/axios';
 
 const User = () => {
   const [isOpen, setIsOpen] = useState(false);
   const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const dropdownRef = useRef(null);
 
   // Đóng dropdown khi click ra ngoài
@@ -26,25 +23,8 @@ const User = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleLogout = async () => {
-    try {
-      await axiosInstance.post('/auth/logout');
-      
-      // Xóa state trong Redux
-      dispatch(clearAccessToken());
-      
-      // Chuyển hướng về trang chủ
-      navigate('/');
-      
-      // Đóng dropdown
-      setIsOpen(false);
-    } catch (error) {
-      console.error('Logout error:', error);
-      // Vẫn xóa state ngay cả khi API call thất bại
-      dispatch(clearAccessToken());
-      navigate('/');
-      setIsOpen(false);
-    }
+  const handleLogout = () => {
+    dispatch(clearAccessToken());
   };
 
   const menuItems = [
@@ -76,7 +56,7 @@ const User = () => {
         </div>
         <span className="text-white font-medium hidden md:block">{user?.name}</span>
         <motion.div
-          animate={{ rotate: isOpen ? 0 : 90 }}
+          animate={{ rotate: isOpen ? 180 : 0 }}
           transition={{ duration: 0.2 }}
           className="text-white"
         >

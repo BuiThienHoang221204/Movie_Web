@@ -122,7 +122,6 @@ const Login = () => {
       toast.info(`Redirecting to ${provider} login...`);
       window.location.href = `${server}/auth/${provider}`;
     } catch (error) {
-      console.error(`${provider} login error:`, error);
       toast.error(`Unable to login with ${provider}. Please try again.`);
     }
   };
