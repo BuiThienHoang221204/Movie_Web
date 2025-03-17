@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import './Banner.css';
 import images from '../../assets/img';
 import { FaPlay, FaPlus, FaStar, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
-
+import { Link } from 'react-router-dom';
+import configs from '../../config';
 function Banner() {
     // Dữ liệu slideshow
     const movies = [
@@ -91,7 +92,7 @@ function Banner() {
                     <button className="btn btn-danger">
                         <div className="btn-content">
                             <FaPlay className="btn-icon" />
-                            <span className="btn-text">Watch Now</span>
+                            <Link to={configs.home} className="btn-text">Watch Now</Link>
                         </div>
                     </button>
                     {/* Nút Add to My List - Sử dụng flex và align-items để căn chỉnh icon và text thẳng hàng ngang */}

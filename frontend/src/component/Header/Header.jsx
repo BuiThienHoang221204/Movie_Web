@@ -40,7 +40,7 @@ function Header() {
       <header className={`header ${scrolled ? 'scrolled' : ''}`}>
         <div className="logo">CINEMA</div>
         <nav className="nav-links">
-          <Link to={config.home}>Schedule</Link>
+          <Link to={config.home}>Home</Link>
           <Link to={config.home}>Trend</Link>
           <Link to={config.home}>Blog</Link>
         </nav>
