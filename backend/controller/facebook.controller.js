@@ -15,21 +15,24 @@ const facebookAuthController = {
         const accessToken = generateAccessToken({name, email, role})
         const refreshToken = generateRefreshToken({name, email, role})
 
-        res.cookie("refreshToken", refreshToken, {
-            sameSite: "Strict",
-            maxAge: 10 * 60 * 1000,
-            secure: true,
+        // Set cookie options
+        const cookieOptions = {
             httpOnly: true,
-            path: "/"
-        })
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
+            path: "/",
+        };
 
+        // Set cookies with appropriate expiry
         res.cookie("accessToken", accessToken, {
-            sameSite: "Strict",
-            maxAge: 10 * 60 * 1000,
-            secure: true,
-            httpOnly: true,
-            path: "/"
-        })
+            ...cookieOptions,
+            maxAge: 10 * 60 * 1000 // 10 minutes
+        });
+
+        res.cookie("refreshToken", refreshToken, {
+            ...cookieOptions,
+            maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+        });
         
         res.redirect(`${process.env.CLIENT_URL}`);
     },

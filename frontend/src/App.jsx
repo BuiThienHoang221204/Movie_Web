@@ -7,26 +7,39 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { useDispatch } from 'react-redux';
 import { setAccessToken, setUser } from './redux/authSlice';
 import axiosInstance from './config/axios';
-import { server } from './config';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
 
 function App() {
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    const checkAuthStatus = async () => {
-      try {
-        const response = await axiosInstance.get(`${server}/auth/status`);
-        if (response.data.user) {
-          dispatch(setUser(response.data.user));
-          dispatch(setAccessToken(response.data.accessToken));
-        }
-      } catch (error) {
-        console.error('Auth check failed:', error);
+  const checkAuthStatus = async () => {
+    try {
+      const response = await axiosInstance.get('auth/status');
+      if (response.data.user) {
+        dispatch(setUser(response.data.user));
+        dispatch(setAccessToken(response.data.accessToken));
       }
-    };
+    } catch (error) {
+      if (error.response.status === 401) {
+        dispatch(setUser(null));
+        dispatch(setAccessToken(null));
+      }
 
+      const errorMessage = error.response?.data?.message || 'Something went wrong. Please try again.';
+      
+      // Show toast notification for all errors
+      toast.error(errorMessage);
+      
+      // Set form errors for authentication issues
+      if (error.response?.status === 401 || error.response?.status === 400) {
+        setErrors({}); // Clear any existing errors instead of setting them
+      }
+    }
+  };
+
+  useEffect(() => {
     checkAuthStatus();
   }, [dispatch]);
 
