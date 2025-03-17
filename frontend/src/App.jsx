@@ -1,11 +1,10 @@
 import React, { useEffect } from 'react'
-import './App.css'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import DefaultLayout from './layout/DefaultLayout/DefaultLayout'
 import routes from './routes'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useDispatch } from 'react-redux';
-import { setAccessToken, setUser } from './redux/authSlice';
+import { setAccessToken, setUser, clearAccessToken } from './redux/authSlice';
 import axiosInstance from './config/axios';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -20,13 +19,10 @@ function App() {
       if (response.status === 200) {
         dispatch(setUser(response.data.user));
         dispatch(setAccessToken(response.data.accessToken));
-        console.log(response.data.user);
       }
-
     } catch (error) {
-      if (error.response.status === 401) {
-        dispatch(setUser(null));
-        dispatch(setAccessToken(null));
+      if (error.response?.status === 401) {
+        dispatch(clearAccessToken());
       }
     }
   };

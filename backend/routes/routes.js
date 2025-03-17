@@ -1,7 +1,7 @@
 const express = require("express")
 const googleAuthController = require("../controller/google.controller")
 const facebookAuthController = require("../controller/facebook.controller")
-const {signup, login, getAuthStatus} = require("../controller/access.controller")
+const {signup, login, getAuthStatus, logout} = require("../controller/access.controller")
 const passport = require("../config/passport.config")
 const router = express()
 
@@ -15,6 +15,7 @@ router.get("/auth/facebook/account", facebookAuthController.failureRedirect, fac
 
 router.post("/auth/signup", signup)
 router.post("/auth/login", login)
+router.post("/auth/logout", logout)
 router.get("/auth/status", getAuthStatus)
 
 // const filmRoutes = require('./film.routes');
