@@ -9,7 +9,6 @@ import { setAccessToken, setUser } from './redux/authSlice';
 import axiosInstance from './config/axios';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { toast } from 'react-toastify';
 
 function App() {
   const dispatch = useDispatch();
@@ -17,20 +16,17 @@ function App() {
   const checkAuthStatus = async () => {
     try {
       const response = await axiosInstance.get('auth/status');
-      if (response.data.user) {
+
+      if (response.status === 200) {
         dispatch(setUser(response.data.user));
         dispatch(setAccessToken(response.data.accessToken));
+        console.log(response.data.user);
       }
 
     } catch (error) {
       if (error.response.status === 401) {
         dispatch(setUser(null));
         dispatch(setAccessToken(null));
-      }
-
-      // Set form errors for authentication issues
-      if (error.response?.status === 401 || error.response?.status === 400) {
-        setErrors({}); // Clear any existing errors instead of setting them
       }
     }
   };

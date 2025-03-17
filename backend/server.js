@@ -1,5 +1,5 @@
 require('dotenv').config() //tạo biến môi trường từ file .env
-const connectDB = require('./config/db/mongoAtlas.config') //tạo kết nối đến database
+require('./config/db/mongoAtlas.config') // kết nối đến database
 const morgan = require('morgan') //tạo logger để theo dõi các yêu cầu HTTP
 //Morgan là một middleware, xử lý mỗi request trước khi nó đi đến route handler
 
@@ -11,8 +11,7 @@ const router = require('./index')
 const app = express()
 const port = process.env.PORT || 5000
 
-// Connect to database first
-connectDB()
+
 
 // Middleware order is important
 app.use(morgan('tiny')) // Logging first
