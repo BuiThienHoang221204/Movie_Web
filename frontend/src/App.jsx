@@ -21,17 +21,13 @@ function App() {
         dispatch(setUser(response.data.user));
         dispatch(setAccessToken(response.data.accessToken));
       }
+
     } catch (error) {
       if (error.response.status === 401) {
         dispatch(setUser(null));
         dispatch(setAccessToken(null));
       }
 
-      const errorMessage = error.response?.data?.message || 'Something went wrong. Please try again.';
-      
-      // Show toast notification for all errors
-      toast.error(errorMessage);
-      
       // Set form errors for authentication issues
       if (error.response?.status === 401 || error.response?.status === 400) {
         setErrors({}); // Clear any existing errors instead of setting them
