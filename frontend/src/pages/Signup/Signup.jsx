@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaGoogle, FaFacebook, FaHome, FaEye, FaEyeSlash } from 'react-icons/fa';
-import { motion, AnimatePresence } from 'framer-motion';
+import { FaGoogle, FaFacebook, FaEye, FaEyeSlash } from 'react-icons/fa';
+import { motion } from 'framer-motion';
 import axiosInstance from '../../config/axios';
 import images from '../../assets/img';
 import { server } from '../../config';
@@ -81,30 +81,46 @@ const Signup = () => {
     e.preventDefault();
     
     if (!validateForm()) {
+      toast.error('Please check your input and try again.');
       return;
     }
 
     setIsLoading(true);
     try {
-      const response = await axiosInstance.post('/auth/signup', {
-        name: formData.name,
-        email: formData.email,
+      // Format the request data
+      const signupData = {
+        name: formData.name.trim(),
+        email: formData.email.trim().toLowerCase(),
         password: formData.password
-      });
+      };
+      
+      const response = await axiosInstance.post('/auth/signup', signupData);
 
       if (response.status === 201) {
-        toast.success('Sign up successful! Please login.');
-        navigate('/login');
+        toast.success('Account created successfully! Please login to continue.');
+        setTimeout(() => {
+          navigate('/login');
+        }, 2000); // Give user time to read the success message
       }
     } catch (error) {
       console.error('Signup error:', error);
       const errorMessage = error.response?.data?.message || 'Something went wrong. Please try again.';
-      toast.error(errorMessage);
+      const errorDetails = error.response?.data?.details;
+
       
       // Handle specific errors
       if (error.response?.status === 400) {
-        if (error.response.data.message.includes('exists')) {
-          setErrors({ email: 'Email already exists' });
+        if (errorDetails) {
+          setErrors(prev => ({
+            ...prev,
+            ...Object.entries(errorDetails).reduce((acc, [key, value]) => {
+              if (value) acc[key] = value;
+              return acc;
+            }, {})
+          }));
+        } else if (errorMessage.includes('exists')) {
+          setErrors({ email: 'This email is already registered. Please login instead.' });
+          toast.error(errorMessage);
         }
       }
     } finally {
@@ -113,7 +129,13 @@ const Signup = () => {
   };
 
   const handleLoginWithProvider = async (provider) => {
-    window.location.href = `${server}/auth/${provider}`;
+    try {
+      toast.info(`Redirecting to ${provider} signup...`);
+      window.location.href = `${server}/auth/${provider}`;
+    } catch (error) {
+      console.error(`${provider} signup error:`, error);
+      toast.error(`Unable to signup with ${provider}. Please try again.`);
+    }
   };
 
   return (

@@ -2,17 +2,23 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaGoogle, FaFacebook, FaHome, FaEye, FaEyeSlash, FaEnvelope, FaLock } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
-import axios from 'axios';
+import axiosInstance from '../../config/axios';
 import images from '../../assets/img';
 import { server } from '../../config';
+import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+import { setAccessToken, setUser } from '../../redux/authSlice';
 
 const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState({});
 
   // Check authentication status when component mounts
   useEffect(() => {
@@ -34,19 +40,91 @@ const Login = () => {
       ...prev,
       [name]: value
     }));
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: ''
+      }));
+    }
   };
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = (e) => {
+  // Validate form
+  const validateForm = () => {
+    const newErrors = {};
+    
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = 'Email is invalid';
+    }
+
+    if (!formData.password) {
+      newErrors.password = 'Password is required';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Login data:', formData);
+    
+    if (!validateForm()) {
+      toast.error('Please check your input and try again.');
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const response = await axiosInstance.post('/auth/login', formData);
+
+      if (response.status === 200) {
+        const { accessToken, user } = response.data;
+        
+        // Update Redux store
+        dispatch(setAccessToken(accessToken));
+        dispatch(setUser(user));
+        
+        toast.success('Welcome! Login successful.');
+        navigate('/');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      const errorMessage = error.response?.data?.message || 'Something went wrong. Please try again.';
+      
+      // Show toast notification for all errors
+      toast.error(errorMessage);
+      
+      // Set form errors for authentication issues
+      if (error.response?.status === 401 || error.response?.status === 400) {
+        setErrors({}); // Clear any existing errors instead of setting them
+      }
+      
+      // Special handling for provider-specific errors
+      if (error.response?.data?.message?.includes('authentication')) {
+        const provider = error.response.data.message.match(/with (\w+)/)?.[1];
+        if (provider) {
+          toast.info(`Please use ${provider} to login to this account.`);
+        }
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleLoginWithProvider = async (provider) => {
-    window.location.href = `${server}/auth/${provider}`;
+    try {
+      toast.info(`Redirecting to ${provider} login...`);
+      window.location.href = `${server}/auth/${provider}`;
+    } catch (error) {
+      console.error(`${provider} login error:`, error);
+      toast.error(`Unable to login with ${provider}. Please try again.`);
+    }
   };
 
   return (
@@ -85,7 +163,7 @@ const Login = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-primary-500/5 via-transparent to-primary-500/5"></div>
               
               <div className="relative">
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.4, duration: 0.5 }}
@@ -144,7 +222,7 @@ const Login = () => {
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
-                      className="w-full px-5 py-3 text-base rounded-xl bg-dark-400/50 border border-dark-500/50 text-white placeholder-gray-400 focus:outline-none focus:border-primary-500/70 focus:ring-2 focus:ring-primary-500/20 transition-all duration-300 focus:scale-[1.02] focus:shadow-lg pl-12"
+                      className={`w-full px-5 py-3 text-base rounded-xl bg-dark-400/50 border border-dark-500/50 text-white placeholder-gray-400 focus:outline-none focus:border-primary-500/70 focus:ring-2 focus:ring-primary-500/20 transition-all duration-300 focus:scale-[1.02] focus:shadow-lg pl-12`}
                       placeholder="Email address"
                       required
                     />
@@ -159,7 +237,7 @@ const Login = () => {
                       name="password"
                       value={formData.password}
                       onChange={handleChange}
-                      className="w-full px-5 py-3 text-base rounded-xl bg-dark-400/50 border border-dark-500/50 text-white placeholder-gray-400 focus:outline-none focus:border-primary-500/70 focus:ring-2 focus:ring-primary-500/20 transition-all duration-300 focus:scale-[1.02] focus:shadow-lg pl-12 pr-12"
+                      className={`w-full px-5 py-3 text-base rounded-xl bg-dark-400/50 border border-dark-500/50 text-white placeholder-gray-400 focus:outline-none focus:border-primary-500/70 focus:ring-2 focus:ring-primary-500/20 transition-all duration-300 focus:scale-[1.02] focus:shadow-lg pl-12 pr-12`}
                       placeholder="Password"
                       required
                     />
@@ -193,9 +271,12 @@ const Login = () => {
 
                   <button
                     type="submit"
-                    className="w-full py-3 px-5 text-base bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-500 hover:to-primary-600 text-white rounded-xl transition-all duration-300 shadow-dark hover:shadow-dark-lg font-medium transform hover:-translate-y-0.5"
+                    disabled={isLoading}
+                    className={`w-full py-3 px-5 text-base bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-500 hover:to-primary-600 text-white rounded-xl transition-all duration-300 shadow-dark hover:shadow-dark-lg font-medium transform hover:-translate-y-0.5 ${
+                      isLoading ? 'opacity-75 cursor-not-allowed' : ''
+                    }`}
                   >
-                    Sign In
+                    {isLoading ? 'Signing in...' : 'Sign In'}
                   </button>
                 </motion.form>
 
