@@ -143,6 +143,16 @@ const login = async (req, res) => {
     }
 };
 
+const logout = async (req, res) => {
+    try {
+        res.clearCookie("accessToken");
+        res.clearCookie("refreshToken");
+        return res.status(200).json({ message: "Logged out successfully" });
+    } catch (error) {
+        return res.status(500).json({ message: "Internal Server Error", error: error.message });
+    }
+}
+
 const getAuthStatus = async (req, res) => {
     try {
         const accessToken = req.cookies.accessToken;
@@ -185,4 +195,4 @@ const getAuthStatus = async (req, res) => {
     }
 };
 
-module.exports = { signup, login, getAuthStatus }
+module.exports = { signup, login, logout, getAuthStatus }

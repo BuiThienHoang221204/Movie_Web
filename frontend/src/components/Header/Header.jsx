@@ -4,16 +4,11 @@ import { Link } from 'react-router-dom';
 import config from '../../config';
 import { Banner } from '../../pages/components';
 import { useSelector } from 'react-redux';
+import User from '../User/User';
+
 function Header() {
   const [scrolled, setScrolled] = useState(false);
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    // setUser(useSelector((state) => state.auth.user));
-    // if (user) {
-    //   console.log(user);
-    // }
-  }, []);
+  const user = useSelector((state) => state.auth.user);
 
   // Thêm effect để theo dõi sự kiện cuộn
   useEffect(() => {
@@ -46,7 +41,11 @@ function Header() {
         </nav>
         <div className="search-signin">
           <input type="text" placeholder="Search" className="search-bar" />
-          <Link className="signin-btn" to={config.login}>Sign In</Link>
+          {!user ? (
+            <Link className="signin-btn" to={config.login}>Sign In</Link>
+          ) : (
+            <User />
+          )}
         </div>
       </header>
       <Banner />
