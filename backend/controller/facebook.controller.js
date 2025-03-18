@@ -1,6 +1,7 @@
 const passport = require("../config/auth/facebook.config")
 const { generateAccessToken, generateRefreshToken } = require("../utils/generates")
 const User = require("../module/user.module")
+const cookieOptions = require("../config/cookie")
 
 const facebookAuthController = {
     login: passport.authenticate("facebook", {
@@ -9,25 +10,27 @@ const facebookAuthController = {
         prompt: "consent"
     }),
 
-    callback: (req, res) => {
-        const {name, email, role} = req.user
+    callback: async (req, res) => {
+        const user = req.user
 
-        const accessToken = generateAccessToken({name, email, role})
-        const refreshToken = generateRefreshToken({name, email, role})
+        if(!await User.findOne({email: user.email})){
+            const newUser = new User(user)
+            await newUser.save()
+        }
+
+        const accessToken = generateAccessToken({name: user.name, email: user.email, role: user.role})
+        const refreshToken = generateRefreshToken({name: user.name, email: user.email, role: user.role})
+
+        // Set cookies with appropriate expiry
+        res.cookie("accessToken", accessToken, {
+            ...cookieOptions,
+            maxAge: 10 * 60 * 1000 // 10 minutes
+        });
 
         res.cookie("refreshToken", refreshToken, {
-            sameSite: "Strict",
-            maxAge: 10 * 60 * 1000,
-            secure: true,
-            httpOnly: true
-        })
-
-        res.cookie("accessToken", accessToken, {
-            sameSite: "Strict",
-            maxAge: 10 * 60 * 1000,
-            secure: true,
-            httpOnly: true
-        })
+            ...cookieOptions,
+            maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+        });
         
         res.redirect(`${process.env.CLIENT_URL}`);
     },

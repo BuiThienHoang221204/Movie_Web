@@ -1,26 +1,38 @@
-import React from 'react'
-import './App.css'
+import React, { useEffect } from 'react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import DefaultLayout from './layout/DefaultLayout/DefaultLayout'
 import routes from './routes'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { setAccessToken } from './redux/authSlice';
-import Cookies from 'js-cookie';
-function App() {
+import { setAccessToken, setUser, clearAccessToken } from './redux/authSlice';
+import axiosInstance from './config/axios';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
+function App() {
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    const accessToken = Cookies.get('accessToken');
+  const checkAuthStatus = async () => {
+    try {
+      const response = await axiosInstance.get('auth/status');
 
-    if (accessToken) {
-      dispatch(setAccessToken(accessToken));
+      if (response.status === 200) {
+        dispatch(setUser(response.data.user));
+        dispatch(setAccessToken(response.data.accessToken));
+      }
+    } catch (error) {
+      if (error.response?.status === 401) {
+        dispatch(clearAccessToken());
+      }
     }
+  };
+
+  useEffect(() => {
+    checkAuthStatus();
   }, [dispatch]);
 
   return (
+    <>
       <Router>
         <Routes>
           {routes.map((route, index) => {
@@ -36,6 +48,19 @@ function App() {
           })}
         </Routes>
       </Router>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
+    </>
   )
 }
 
