@@ -1,85 +1,138 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchMovieById, fetchAllGenres } from '../../redux/movieSlice';
+import movieService from '../../services/movieService';
 import './WatchMovie.css';
+import { FaStar, FaCalendarAlt, FaUsers, FaPlayCircle } from 'react-icons/fa';
+import images from '../../assets/img';
 
 function WatchMovie() {
   const { id } = useParams();
-  const dispatch = useDispatch();
-  const { currentMovie, genres, loading, error } = useSelector((state) => state.movies);
+  const [movie, setMovie] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    dispatch(fetchMovieById(id));
-    dispatch(fetchAllGenres());
-  }, [dispatch, id]);
+    const fetchMovieDetail = async () => {
+      try {
+        setLoading(true);
+        const data = await movieService.getMovieDetail(id);
+        setMovie(data);
+        setLoading(false);
+      } catch (err) {
+        console.error('Lỗi khi lấy chi tiết phim:', err);
+        setError('Không thể tải thông tin phim. Vui lòng thử lại sau.');
+        setLoading(false);
+      }
+    };
 
-  if (loading) return <div className="loading">Đang tải...</div>;
-  if (error) return <div className="error">Lỗi: {error}</div>;
-  if (!currentMovie) return <div className="not-found">Không tìm thấy phim</div>;
+    fetchMovieDetail();
+  }, [id]);
 
-  // Lấy tên thể loại từ ID
-  const getGenreNames = () => {
-    if (!genres.length || !currentMovie.genre_ids.length) return 'Chưa phân loại';
-    
-    return currentMovie.genre_ids
-      .map(genreId => {
-        const genre = genres.find(g => g.id === genreId);
-        return genre ? genre.name : null;
-      })
-      .filter(Boolean)
-      .join(', ');
-  };
+  if (loading) {
+    return (
+      <div className="loading">
+        <div className="loading-spinner"></div>
+        <p>Đang tải phim...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return <div className="error">{error}</div>;
+  }
+
+  if (!movie) {
+    return <div className="not-found">Không tìm thấy phim</div>;
+  }
+
+
 
   return (
     <div className="watch-movie-container">
-      <div className="movie-backdrop" style={{ backgroundImage: `url(https://image.tmdb.org/t/p/original${currentMovie.backdrop_path})` }}>
-        <div className="backdrop-overlay"></div>
-      </div>
-      
       <div className="movie-content">
-        <div className="movie-header">
-          <div className="movie-poster-container">
-            <img 
-              src={`https://image.tmdb.org/t/p/w500${currentMovie.poster_path}`} 
-              alt={currentMovie.title} 
-              className="movie-poster"
-            />
+        {/* Phần thông tin phim */}
+        <div className="movie-info-section">
+          <div className="movie-header">
+            <h1 className="movie-title">{movie.title}</h1>
+            <div className="movie-badges">
+              <span className="movie-badge quality-badge">HD</span>
+              <span className="movie-badge year-badge">{movie.release_date?.split('-')[0]}</span>
+            </div>
           </div>
-          
-          <div className="movie-details">
-            <h1 className="movie-title">{currentMovie.title}</h1>
-            
-            <div className="movie-meta">
-              <span className="movie-release-date">Ngày phát hành: {currentMovie.release_date}</span>
-              <span className="movie-rating">⭐ {currentMovie.vote_average.toFixed(1)}</span>
-              <span className="movie-votes">({currentMovie.vote_count} đánh giá)</span>
+
+          {/* Container cho hình ảnh và thông tin */}
+          <div className="movie-details-container">
+            <div className="movie-poster-wrapper">
+              <img 
+                src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} 
+                alt={movie.title} 
+                className="movie-poster"
+                onError={(e) => { e.target.src = images.ImgMovie; }}
+              />
+             
             </div>
-            
-            <div className="movie-genres">
-              <span>Thể loại: {getGenreNames()}</span>
-            </div>
-            
-            <div className="movie-overview">
-              <h3>Tóm tắt</h3>
-              <p>{currentMovie.overview}</p>
+
+            <div className="movie-details">
+              <div className="movie-meta-info">
+                <div className="meta-item">
+                  <FaCalendarAlt className="meta-icon" />
+                  <span>Ngày phát hành: {movie.release_date}</span>
+                </div>
+                <div className="meta-item">
+                  <FaStar className="meta-icon star-icon" />
+                  <span>Đánh giá: {movie.vote_average?.toFixed(1)}/10</span>
+                </div>
+                <div className="meta-item">
+                  <FaUsers className="meta-icon" />
+                  <span>{movie.vote_count} lượt đánh giá</span>
+                </div>
+              </div>
+
+              <div className="movie-genres">
+                <h3>Thể loại:</h3>
+                <div className="genre-tags">
+                  {movie.genre_ids?.map((genre, index) => (
+                    <span key={index} className="genre-tag">{genre}</span>
+                  )) || <span className="genre-tag">Chưa phân loại</span>}
+                </div>
+              </div>
+
+              <div className="movie-description">
+                <h3>Tóm tắt phim:</h3>
+                <p>{movie.overview || 'Chưa có mô tả cho phim này.'}</p>
+              </div>
             </div>
           </div>
         </div>
-        
+
+        {/* Phần xem phim */}
         <div className="movie-player-section">
-          <h2>Xem phim</h2>
+          <div className="section-header">
+            <h2>Xem Phim</h2>
+            <div className="player-quality">
+              <span className="quality-label">Chất lượng:</span>
+              <select className="quality-select">
+                <option value="1080p">1080p</option>
+                <option value="720p">720p</option>
+                <option value="480p">480p</option>
+              </select>
+            </div>
+          </div>
+
           <div className="movie-player">
-            {currentMovie.video_url ? (
+            {movie.video_url ? (
               <iframe
-                src={currentMovie.video_url.replace('youtu.be/', 'youtube.com/embed/').replace('watch?v=', 'embed/')}
-                title={currentMovie.title}
+                src={movie.video_url.replace('youtu.be/', 'youtube.com/embed/').replace('watch?v=', 'embed/')}
+                title={movie.title}
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
               ></iframe>
             ) : (
-              <div className="no-video">Không có video cho phim này</div>
+              <div className="no-video">
+                <FaPlayCircle className="no-video-icon" />
+                <p>Không có video cho phim này</p>
+              </div>
             )}
           </div>
         </div>

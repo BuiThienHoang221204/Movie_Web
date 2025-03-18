@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react'
 import images from '../../assets/img'
 import { FaPlay } from 'react-icons/fa';
 import movieService from '../../services/movieService';
+import { useNavigate } from 'react-router-dom';
 
 function MovieUpdate() {
     const [moviesUpdate, setMoviesUpdate] = useState([]);
+    const navigate = useNavigate();
     
     const fetchMovieUpdate = async () => {
         try {
@@ -45,12 +47,18 @@ function MovieUpdate() {
             image: images.ImgMovie
         },
     ];
+
+    // Hàm để chuyển hướng đến trang WatchMovie
+    const handleWatchMovie = (movieId) => {
+        navigate(`/watch/${movieId}`);
+    };
+
     return (
         <div className='all-movies-section container'>
             <h1 className='section-title'>Phim mới cập nhật</h1>
             <div className='all-movies-grid my-5'>
                 {moviesUpdate.map(movie => (
-                    <div key={movie.id} className='movie-item'>
+                    <div key={movie.id} className='movie-item' onClick={() => handleWatchMovie(movie.id)}>
                         <img src={movie.image} alt={movie.title} className='movie-image' />
                         <FaPlay className="play-icon-2" />
                         <div className='movie-info'>

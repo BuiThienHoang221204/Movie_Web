@@ -3,8 +3,11 @@ import images from '../../assets/img'
 import './RecommentMovie.css'
 import { FaPlay, FaArrowRight } from 'react-icons/fa';
 import movieService from '../../services/movieService';
+import { useNavigate } from 'react-router-dom';
+
 function RecommentMovie() {
   const [RecommentMovies, setRecommentMovies] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchRecommentMovies = async () => {
@@ -75,6 +78,11 @@ function RecommentMovie() {
   const play = () => setAutoPlay(true);
   const pause = () => setAutoPlay(false);
 
+  // Hàm để chuyển hướng đến trang WatchMovie
+  const handleWatchMovie = (movieId) => {
+    navigate(`/watch/${movieId}`);
+  };
+
   // Nếu không có dữ liệu và đang tải, hiển thị "Đang tải..."
   if (RecommentMovies.length === 0) {
     return (
@@ -105,7 +113,7 @@ function RecommentMovie() {
               transition: 'transform 0.3s ease-in-out'
             }}>
             {RecommentMovies.map(movie => (
-              <div key={movie.id} className='movie-item'>
+              <div key={movie.id} className='movie-item' onClick={() => handleWatchMovie(movie.id)}>
                 <img
                   src={movie.image}
                   alt={movie.title}
@@ -133,7 +141,7 @@ function RecommentMovie() {
         <div className='all-movies-section'>
           <div className='all-movies-grid'>
             {RecommentMovies.map(movie => (
-              <div key={movie.id} className='movie-item'>
+              <div key={movie.id} className='movie-item' onClick={() => handleWatchMovie(movie.id)}>
                 <img
                   src={movie.image}
                   alt={movie.title}
