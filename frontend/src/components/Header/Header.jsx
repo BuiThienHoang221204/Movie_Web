@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './Header.css';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import config from '../../config';
 import { Banner } from '../../pages/components';
 import { useSelector } from 'react-redux';
@@ -9,6 +9,8 @@ import User from '../User/User';
 function Header() {
   const [scrolled, setScrolled] = useState(false);
   const user = useSelector((state) => state.auth.user);
+  const location = useLocation();
+  const isHomePage = location.pathname === '/' || location.pathname === '/home';
 
   // Thêm effect để theo dõi sự kiện cuộn
   useEffect(() => {
@@ -48,7 +50,7 @@ function Header() {
           )}
         </div>
       </header>
-      <Banner />
+      {isHomePage && <Banner />}
     </>
   );
 }
