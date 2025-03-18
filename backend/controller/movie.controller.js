@@ -22,7 +22,7 @@ const getAllMoviesRecommend = async (req, res) => {
             title: movie.title,
             year: movie.release_date ? movie.release_date.substring(0, 4) : null, //lấy năm phát hành
             genre: movie.genre_ids.join(", "),
-            rating: movie.vote_average, //chia 2 để đưa về thang điểm 5
+            rating: movie.vote_average,
             match: Math.round((movie.vote_average / 10) * 100), //tính toán phần trăm khớp
             image: `https://image.tmdb.org/t/p/w500${movie.poster_path}` //lấy ảnh phim
 
@@ -42,7 +42,7 @@ const getAllMoviesUpdate = async (req, res) => {
             release_date: { $gte: "2024-10-01" } // Lấy phim từ tháng 10/2024 trở đi
         })
             .sort({ release_date: 1 }) // Sắp xếp theo ngày phát hành tăng dần (ra mắt sớm trước)
-            .limit(12)
+            .limit(10)
             
         console.log("Số lượng phim mới tìm thấy:", newMovies.length);
             
@@ -55,7 +55,7 @@ const getAllMoviesUpdate = async (req, res) => {
         const formatMoviesUpdate = newMovies.map(movie => ({
             id: movie.id,
             title: movie.title,
-            year: movie.release_date ? movie.release_date.substring(0, 4) : null, //lấy năm phát hành
+            year: movie.release_date,//lấy năm phát hành
             genre: movie.genre_ids.join(", "),
             rating: movie.vote_average, //chia 2 để đưa về thang điểm 5
             match: Math.round((movie.vote_average / 10) * 100), //tính toán phần trăm khớp
