@@ -5,7 +5,7 @@ const MovieList = (props) => {
     const filteredMovies = props.filteredMovies;
   return (
     <div className='list-movie'>
-        {filteredMovies.length === 0 ? <h3>No results</h3> : filteredMovies.map((movie) => (
+        {filteredMovies.length === 0 ? <h3 className='d-inline-block text-white'>Loading, please wait...</h3> : filteredMovies.map((movie) => (
             <MovieCard key={movie.id} movie={movie} />
         ))}
     </div>
