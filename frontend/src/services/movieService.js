@@ -28,6 +28,15 @@ const movieService = {
             console.error(`Lỗi khi lấy chi tiết phim với id ${id}:`, error);
             throw error;
         }
+    },
+    getGenres: async () => {//lấy danh sách thể loại
+        try {
+            const response = await apiClient.get('/genres');//sửa lại endpoint cho đúng
+            return response.data; //trả về dữ liệu từ API
+        } catch (error) {
+            console.error('Lỗi khi lấy danh sách thể loại:', error);
+            throw error;
+        }
     }
 }
 

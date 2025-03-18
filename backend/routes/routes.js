@@ -37,6 +37,7 @@ const API_VERSION = '/api/v1';//định nghĩa phiên bản API
 // Sửa lại route để phù hợp với đường dẫn frontend đang gọi
 router.get(`${API_VERSION}/movies/recommend`, movieController.getAllMoviesRecommend)
 router.get(`${API_VERSION}/movies/new`, movieController.getAllMoviesUpdate)
+router.get(`${API_VERSION}/genres`, movieController.getAllGenres)
 router.get(`${API_VERSION}/movies/:id`, movieController.getMovieDetail)
 
 module.exports = router
