@@ -1,31 +1,41 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import movieService from '../../services/movieService';
-import './WatchMovie.css';
-import { FaStar, FaCalendarAlt, FaUsers, FaPlayCircle } from 'react-icons/fa';
-import images from '../../assets/img';
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import movieService from "../../services/movieService";
+import "./WatchMovie.css";
+import { FaStar, FaCalendarAlt, FaUsers, FaPlayCircle } from "react-icons/fa";
+import images from "../../assets/img";
 
 function WatchMovie() {
   const { id } = useParams();
   const [movie, setMovie] = useState(null);
+  const [genres, setGenres] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const getGenreName = (genreId) => {
+    const genre = genres.find(g => g.id === genreId);
+    return genre ? genre.name : "Không xác định";
+  };
+
   useEffect(() => {
-    const fetchMovieDetail = async () => {
+    const fetchData = async () => {
       try {
         setLoading(true);
-        const data = await movieService.getMovieDetail(id);
-        setMovie(data);
+        const [movieData, genresData] = await Promise.all([
+          movieService.getMovieDetail(id),
+          movieService.getGenres()
+        ]);
+        setMovie(movieData);
+        setGenres(genresData);
         setLoading(false);
       } catch (err) {
-        console.error('Lỗi khi lấy chi tiết phim:', err);
-        setError('Không thể tải thông tin phim. Vui lòng thử lại sau.');
+        console.error("Lỗi khi lấy dữ liệu:", err);
+        setError("Không thể tải thông tin phim. Vui lòng thử lại sau.");
         setLoading(false);
       }
     };
 
-    fetchMovieDetail();
+    fetchData();
   }, [id]);
 
   if (loading) {
@@ -45,35 +55,35 @@ function WatchMovie() {
     return <div className="not-found">Không tìm thấy phim</div>;
   }
 
-
-
   return (
     <div className="watch-movie-container">
       <div className="movie-content">
         {/* Phần thông tin phim */}
         <div className="movie-info-section">
-          <div className="movie-header">
-            <h1 className="movie-title">{movie.title}</h1>
-            <div className="movie-badges">
-              <span className="movie-badge quality-badge">HD</span>
-              <span className="movie-badge year-badge">{movie.release_date?.split('-')[0]}</span>
-            </div>
-          </div>
-
           {/* Container cho hình ảnh và thông tin */}
           <div className="movie-details-container">
             <div className="movie-poster-wrapper">
-              <img 
-                src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} 
-                alt={movie.title} 
+              <img
+                src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                alt={movie.title}
                 className="movie-poster"
-                onError={(e) => { e.target.src = images.ImgMovie; }}
+                onError={(e) => {
+                  e.target.src = images.ImgMovie;
+                }}
               />
-             
             </div>
 
             <div className="movie-details">
               <div className="movie-meta-info">
+                <h1 className="movie-title">{movie.title}</h1>
+
+                <span
+                  className="movie-badge quality-badge"
+                  style={{ width: "50px" }}
+                >
+                  HD
+                </span>
+
                 <div className="meta-item">
                   <FaCalendarAlt className="meta-icon" />
                   <span>Ngày phát hành: {movie.release_date}</span>
@@ -88,18 +98,30 @@ function WatchMovie() {
                 </div>
               </div>
 
-              <div className="movie-genres">
-                <h3>Thể loại:</h3>
-                <div className="genre-tags">
-                  {movie.genre_ids?.map((genre, index) => (
-                    <span key={index} className="genre-tag">{genre}</span>
-                  )) || <span className="genre-tag">Chưa phân loại</span>}
+              {/* Chỉ hiển thị phần thể loại khi có genre_ids và có ít nhất một thể loại tồn tại */}
+              {movie.genre_ids && movie.genre_ids.length > 0 && (
+                <div className="movie-genres">
+                  <h3>Thể loại:</h3>
+                  <div className="genre-tags">
+                    {movie.genre_ids.map((genreId, index) => {
+                      const genreName = getGenreName(genreId);
+                      // Chỉ hiển thị thể loại nếu tìm thấy tên
+                      if (genreName !== "Không xác định") {
+                        return (
+                          <span key={index} className="genre-tag">
+                            {genreName}
+                          </span>
+                        );
+                      }
+                      return null;
+                    }).filter(Boolean)} {/* Lọc bỏ các giá trị null */}
+                  </div>
                 </div>
-              </div>
+              )}
 
               <div className="movie-description">
                 <h3>Tóm tắt phim:</h3>
-                <p>{movie.overview || 'Chưa có mô tả cho phim này.'}</p>
+                <p>{movie.overview || "Chưa có mô tả cho phim này."}</p>
               </div>
             </div>
           </div>
@@ -109,20 +131,14 @@ function WatchMovie() {
         <div className="movie-player-section">
           <div className="section-header">
             <h2>Xem Phim</h2>
-            <div className="player-quality">
-              <span className="quality-label">Chất lượng:</span>
-              <select className="quality-select">
-                <option value="1080p">1080p</option>
-                <option value="720p">720p</option>
-                <option value="480p">480p</option>
-              </select>
-            </div>
           </div>
 
           <div className="movie-player">
             {movie.video_url ? (
               <iframe
-                src={movie.video_url.replace('youtu.be/', 'youtube.com/embed/').replace('watch?v=', 'embed/')}
+                src={movie.video_url
+                  .replace("youtu.be/", "youtube.com/embed/")
+                  .replace("watch?v=", "embed/")}
                 title={movie.title}
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

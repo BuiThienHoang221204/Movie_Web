@@ -1,5 +1,6 @@
 const movies = require('../module/movie.module') //import model movie
 const mongoose = require('mongoose') // giúp tương tác với database
+const genres = require('../module/genre.module.js') // import model genre
 
 // lấy tất cả phim đề xuất
 const getAllMoviesRecommend = async (req, res) => {
@@ -83,8 +84,33 @@ const getMovieDetail = async (req, res) => {
         res.status(500).json({message: "Lỗi server", error: err.message})
     }
 }
+
+// lấy tất cả thể loại phim
+const getAllGenres = async (req, res) => {
+    try {
+        const allGenres = await genres.find();
+        console.log("Dữ liệu thể loại:", allGenres); // log để debug
+        
+        if (!allGenres || allGenres.length === 0) {
+            return res.status(404).json({ message: "Không tìm thấy thể loại phim nào" });
+        }
+
+        // Format lại dữ liệu trả về
+        const formattedGenres = allGenres.map(genre => ({
+            id: genre.id,
+            name: genre.name
+        }));
+
+        res.status(200).json(formattedGenres);
+    } catch (err) {
+        console.error("Lỗi khi lấy danh sách thể loại:", err);
+        res.status(500).json({ message: "Lỗi server", error: err.message });
+    }
+}
+
 module.exports = {
     getAllMoviesRecommend,
     getAllMoviesUpdate,
     getMovieDetail,
+    getAllGenres
 }
