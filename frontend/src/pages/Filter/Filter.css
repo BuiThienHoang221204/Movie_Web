@@ -1,0 +1,97 @@
+.filter span {
+  font-weight: bold;
+  margin-right: 1rem;
+  cursor: default;
+}
+
+.filter span.active {
+  font-weight: bold;
+  margin-right: 1rem;
+  cursor: default;
+  background-color: #f1f1f1;
+  padding: 0.1rem 0.2rem;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+  color: red;
+}
+
+.filter span:hover {
+  color: red;
+}
+
+.list-movie {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 2fr));
+  grid-gap: 0.5rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.movie-card {
+  width: 13rem;
+  height: 18rem;
+  cursor: pointer;
+  border-radius: 0.3rem;
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.movie-card .movie-rating {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  background-color: gray;
+  padding: 0.1rem 0.2rem;
+  border-radius: 0.3rem;
+  z-index: 1;
+}
+
+.movie-card .movie-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 0.3rem;
+  overflow: hidden;
+  position: absolute;
+}
+
+.movie-card .movie-image img {
+  width: 100%;
+  height: 100%;
+  border-radius: 0.3rem;
+  object-fit: cover;
+  transition: all 0.3s ease;
+  filter: brightness(1);
+}
+
+.movie-card .movie-image img:hover {
+  transform: scale(1.1);
+  filter: brightness(1.5);
+}
+
+.movie-card .movie-title {
+  color: black;
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-top: 0.5rem;
+  position: absolute;
+  bottom: -10%;
+}
+
+.movie-card .movie-title:hover {
+  color: red;
+}
+
+.movie-card .movie-year {
+  position: absolute;
+  left: 0.5rem;
+  bottom: 0.5rem;
+  background-color: gray;
+  padding: 0.1rem 0.2rem;
+  border-radius: 0.3rem;
+  color: white;
+  z-index: 1;
+}
