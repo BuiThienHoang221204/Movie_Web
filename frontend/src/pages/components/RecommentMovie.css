@@ -137,6 +137,7 @@
 /* hiệu ứng hover cho movie-info và play-icon-2 */
 .movie-item:hover .movie-info, .movie-item:hover .play-icon-2{
     transition: bottom 0.8s ease-in-out;
+    transition: opacity 0.5s ease-in-out;
     bottom: -20px;
     opacity: 1;
 }
