@@ -68,6 +68,35 @@ const getAllMoviesUpdate = async (req, res) => {
         res.status(500).json({ message: "Lỗi server", error: err.message })
     }
 }
+
+const getAllMovies = async (req, res) => {
+    try {
+        const newMovies = await movies.find({})
+            .sort({ release_date: -1 })
+            
+        console.log("Số lượng phim:", newMovies.length);
+
+        if (!newMovies || newMovies.length === 0) {
+            return res.status(404).json({ message: "Không tìm thấy phim" })
+        }
+
+        const formatMoviesUpdate = newMovies.map(movie => ({
+            id: movie.id,
+            title: movie.title,
+            year: movie.release_date ? movie.release_date.substring(0, 4) : null, //lấy năm phát hành
+            genre: movie.genre_ids.join(", "),
+            rating: movie.vote_average, //chia 2 để đưa về thang điểm 5
+            match: Math.round((movie.vote_average / 10) * 100), //tính toán phần trăm khớp
+            image: `https://image.tmdb.org/t/p/w500${movie.poster_path}` //lấy ảnh phim
+
+        }));
+        res.status(200).json(formatMoviesUpdate) //trả về dữ liệu cho frontend
+    } catch (err) {
+        console.error("Lỗi khi lấy phim mới:", err)
+        res.status(500).json({ message: "Lỗi server", error: err.message })
+    }
+}
+
 // lấy chi tiết phim 
 const getMovieDetail = async (req, res) => {
     try{
@@ -86,5 +115,6 @@ const getMovieDetail = async (req, res) => {
 module.exports = {
     getAllMoviesRecommend,
     getAllMoviesUpdate,
-    getMovieDetail,
+    getAllMovies,
+    getMovieDetail
 }

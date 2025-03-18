@@ -1,110 +1,142 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import images from '../../assets/img';
 import './Filter.css';
-import MovieList from '../component/MovieList';
+import MovieList from '../components/MovieList';
+import movieService from '../../services/movieService';
+import genreService from '../../services/genreService';
 
 const Filter = () => {
-    const movies = [
-        {
-            id: 1,
-            title: "Ape vs Mecha",
-            year: "2023",
-            duration: "2h 45min",
-            genres: "Action, Thriller, Sci-Fi",
-            rating: "9.5",
-            ageRating: "14+",
-            description: "Trong một thế giới mà công nghệ gặp bản năng nguyên thủy, một con vượn phải đối mặt với thách thức lớn nhất của mình: một phiên bản cơ giới hóa của chính mình. Một trận chiến cho tương lai của cả hai loài bắt đầu.",
-            image: images.banner
-        },
-        {
-            id: 2,
-            title: "Cosmic Journey",
-            year: "2023",
-            duration: "2h 30min",
-            genres: "Sci-Fi, Adventure",
-            rating: "9.2",
-            ageRating: "12+",
-            description: "Một nhóm phi hành gia dũng cảm khám phá một lỗ đen bí ẩn, dẫn họ đến một chiều không gian mới đầy nguy hiểm và kỳ diệu. Liệu họ có thể tìm đường về nhà?",
-            image: images.banner2
-        },
-        {
-            id: 3,
-            title: "Phantom Shadows",
-            year: "2023",
-            duration: "2h 15min",
-            genres: "Horror, Mystery",
-            rating: "8.7",
-            ageRating: "18+",
-            description: "Khi một gia đình chuyển đến một ngôi nhà cổ bí ẩn, họ bắt đầu trải nghiệm những hiện tượng siêu nhiên đáng sợ. Bí mật đen tối của ngôi nhà dần dần được hé lộ.",
-            image: images.banner3
-        }
-    ];
+    const [movies, setMovies] = useState([]);
+    const [genres, setGenres] = useState([]);
 
     const [filteredMovies, setFilteredMovies] = useState(movies);
-    const [activeGenre, setActiveGenre] = useState('');
+    const [activeGenre, setActiveGenre] = useState('All');
     const [activeYear, setActiveYear] = useState('All');
-    const [activeAgeRating, setActiveAgeRating] = useState('All');
+    const [activeMatch, setActiveMatch] = useState('All');
 
-    const filterByGenres = (genre) => {
+    useEffect(() => {
+        const fetchRecommentMovies = async () => {
+          try {
+            const data = await movieService.getAllMovies();
+            console.log("Dữ liệu phim từ API:", data);
+            if (data && data.length > 0) { // Nếu có dữ liệu API, sử dụng nó
+                //Loại bỏ dữ liệu có id trùng
+                let uniqueMovies = [];
+                data.forEach(movie => {
+                    if (!uniqueMovies.some(item => item.id === movie.id)) {
+                        uniqueMovies.push(movie);
+                    }
+                });
+                setMovies(uniqueMovies);
+                setFilteredMovies(uniqueMovies);
+
+            //   setMovies(data);
+            //   setFilteredMovies(data);
+            } else {// Nếu không có dữ liệu từ API, sử dụng dữ liệu mẫu
+              setMovies(fallbackMovies);
+              setFilteredMovies(fallbackMovies);
+            }
+          } catch (err) {
+            console.error('Lỗi khi lấy phim đề xuất (frontend):', err);
+            // Khi có lỗi, sử dụng dữ liệu mẫu
+            setMovies(fallbackMovies);
+            setFilteredMovies(fallbackMovies);
+          }
+        }
+    
+        fetchRecommentMovies();
+    }, []);
+
+    useEffect(() => {
+        const fetchGenres = async () => {
+          try {
+            const data = await genreService.getAllGenres();
+            console.log("Dữ liệu thể loại từ API:", data);
+            if (data && data.length > 0) { // Nếu có dữ liệu API, sử dụng nó
+              setGenres(data);
+            } else {// Nếu không có dữ liệu từ API, sử dụng dữ liệu mẫu
+            }
+          } catch (err) {
+            console.error('Lỗi khi lấy thể loại (frontend):', err);
+            // Khi có lỗi, sử dụng dữ liệu mẫu
+          }
+        }
+    
+        fetchGenres();
+    }
+    , []);
+
+    const fallbackMovies = [
+        {
+            id: 1, title: "Avengers: Endgame", year: "2019",
+            genre: "Hành động, Khoa học viễn tưởng", rating: 4.9, match: 98,
+            image: images.ImgMovie
+        },
+        {
+            id: 2, title: "Joker", year: "2019",
+            genre: "Tâm lý, Tội phạm", rating: 4.7, match: 95,
+            image: images.banner2
+        },
+    ];
+
+    const filterByGenre = (genre) => {
         let result = movies;
         setActiveGenre(genre);
-        if (genre !== '') {
-            result = result.filter(movie => movie.genres.includes(genre));
+        if (genre !== 'All') {
+          result = result.filter((movie) => movie.genre.includes(Number(genre)));
         }
         if (activeYear !== 'All') {
-            result = result.filter(movie => movie.year === activeYear);
+          result = result.filter((movie) => movie.year === activeYear);
         }
-        if (activeAgeRating !== 'All') {
-            result = result.filter(movie => movie.ageRating === activeAgeRating);
+        if (activeMatch !== 'All') {
+          result = result.filter((movie) => movie.match === Number(activeMatch));
         }
         setFilteredMovies(result);
-    }
+    };
 
     const filterByYear = (year) => {
         let result = movies;
         setActiveYear(year);
-        if (activeGenre !== '') {
-            result = result.filter(movie => movie.genres.includes(activeGenre));
+        if (activeGenre !== 'All') {
+            result = result.filter(movie => movie.genre.split(', ').includes(activeGenre));
         }
         if (year !== 'All') {
             result = result.filter(movie => movie.year === year);
         }
-        if (activeAgeRating !== 'All') {
-            result = result.filter(movie => movie.ageRating === activeAgeRating);
+        if (activeMatch !== 'All') {
+            result = result.filter(movie => movie.ageRating === activeMatch);
         }
         setFilteredMovies(result);
     }
 
-    const filterByAgeRating = (ageRating) => {
+    const filterByMatch = (match) => {
         let result = movies;
-        setActiveAgeRating(ageRating);
-        if (activeGenre !== '') {
-            result = result.filter(movie => movie.genres.includes(activeGenre));
+        setActiveMatch(match);
+        if (activeGenre !== 'All') {
+            result = result.filter(movie => movie.genre.split(', ').includes(activeGenre));
         }
         if (activeYear !== 'All') {
             result = result.filter(movie => movie.year === activeYear);
         }
-        if (ageRating !== 'All') {
-            result = result.filter(movie => movie.ageRating === ageRating);
+        if (match !== 'All') {
+            result = result.filter(movie => movie.match === match);
         }
         setFilteredMovies(result);
     }
 
   return (
     <div className='container'>
-        <h2>Filter</h2>
-        <div className='filter w-100 h-50 bg-dark border rounded-3 p-3 m-3 ms-0 me-0 text-white'>
-            <div className='mb-3'>
-                Genres
-                {[...new Set(
-                    movies.flatMap(movie => 
-                        movie.genres.split(',').map(genre => genre.trim())
-                    )
-                )].map((genre) => (
-                        <span key={genre} className={`m-3 ${activeGenre === genre ? 'active' : ''}`} onClick={() => filterByGenres(genre)}>{genre}</span>
+        <h2 className='text-white'>Filter</h2>
+        <div className='filter-props h-50 bg-dark border rounded-3 p-3 m-3 ms-0 me-0 text-white'>
+            <div className='mb-3 genre-filter'>
+                <h4 className='m-3 ms-0 title bg-dark'>Genres</h4>
+                <span  className={`m-3 ms-0 ${activeGenre === 'All' ? 'active' : ''}`} onClick={() => filterByGenre('All')}>All</span>
+                {genres.map((genre) => (
+                        <span key={genre.id} className={`m-3 ${activeGenre === genre.id ? 'active' : ''}`} onClick={() => filterByGenre(genre.id)}>{genre.name}</span>
                     ))}
             </div>
-            <div className='mb-3'>
+            <div className='mb-3 year-filter'>
+                <h4 className='m-3 ms-0 title bg-dark'>Year</h4>
                 <span  className={`m-3 ms-0 ${activeYear === 'All' ? 'active' : ''}`} onClick={() => filterByYear('All')}>All</span>
                 {
                 [...new Set(movies.map((movie) => movie.year))].map((year) => (
@@ -112,10 +144,11 @@ const Filter = () => {
                     <span key={year} className={`m-3 ${activeYear === year ? 'active' : ''}`} onClick={() => {filterByYear(year)}}>{year}</span>
                 ))}
             </div>
-            <div className='mb-1'>
-                <span  className={`m-3 ms-0 ${activeAgeRating === 'All' ? 'active' : ''}`} onClick={() => filterByAgeRating('All')}>All</span>
-                {[...new Set(movies.map((movie) => movie.ageRating))].map((ageRating) => (
-                    <span key={ageRating} className={`m-3 ${activeAgeRating === ageRating ? 'active' : ''}`} onClick={() => {filterByAgeRating(ageRating)}}>{ageRating}</span>
+            <div className='mb-1 match-filter'>
+                <h4 className='m-3 ms-0 title bg-dark'>Match</h4>
+                <span  className={`m-3 ms-0 ${activeMatch === 'All' ? 'active' : ''}`} onClick={() => filterByMatch('All')}>All</span>
+                {[...new Set(movies.map((movie) => movie.match))].sort((a, b) => b - a).map((match) => (
+                    <span key={match} className={`m-3 ${activeMatch === match ? 'active' : ''}`} onClick={() => {filterByMatch(match)}}>{match}</span>
                 ))}
             </div>
         </div>

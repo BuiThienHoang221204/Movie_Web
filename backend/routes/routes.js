@@ -24,6 +24,7 @@ router.get("/auth/status", getAuthStatus)
 // const commentRoutes = require('./comment.routes');
 //import moviecontroller
 const movieController = require('../controller/movie.controller')
+const genreController = require('../controller/genre.controller')
 
 // API version prefix
 const API_VERSION = '/api/v1';//định nghĩa phiên bản API
@@ -37,6 +38,8 @@ const API_VERSION = '/api/v1';//định nghĩa phiên bản API
 // Sửa lại route để phù hợp với đường dẫn frontend đang gọi
 router.get(`${API_VERSION}/movies/recommend`, movieController.getAllMoviesRecommend)
 router.get(`${API_VERSION}/movies/new`, movieController.getAllMoviesUpdate)
+router.get(`${API_VERSION}/movies/all`, movieController.getAllMovies)
 router.get(`${API_VERSION}/movies/:id`, movieController.getMovieDetail)
+router.get(`${API_VERSION}/genres/all`, genreController.getAllGenres)
 
 module.exports = router

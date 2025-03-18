@@ -28,7 +28,16 @@ const movieService = {
             console.error(`Lỗi khi lấy chi tiết phim với id ${id}:`, error);
             throw error;
         }
-    }
+    },
+    getAllMovies: async () => {//lấy tất cả phim
+        try{
+            const response = await apiClient.get(`/movies/all`)//gọi API để lấy tất cả phim
+            return response.data; //trả về dữ liệu từ API
+        }catch(error){
+            console.error('Lỗi khi lấy tất cả phim:', error);
+            throw error;
+        }
+    },
 }
 
 export default movieService;
