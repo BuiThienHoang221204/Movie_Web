@@ -62,7 +62,7 @@ function MovieUpdate() {
                         <img src={movie.image} alt={movie.title} className='movie-image' />
                         <FaPlay className="play-icon-2" />
                         <div className='movie-info'>
-                            <h3 className='movie-title'>{movie.title}</h3>
+                            <h3 className='recomment-movie-title'>{movie.title}</h3>
                             <p className='movie-genre'>Thể loại: {movie.genre}</p>
                             <p className='movie-match'>Phù hợp: {movie.match}%</p>
                             <p className='movie-rating'>Điểm: {movie.rating}/10</p>
