@@ -107,10 +107,10 @@ function Banner() {
             
             {/* Di chuyển phần hiển thị poster phim ra ngoài banner-content để định vị độc lập */}
             <div className="movie-poster-container">
-                <div className="movie-poster">
-                    <div className="play-button-overlay">
+                <div className="movie-poster-banner">
+                    <div className="play-button-banner">
                         {/* Sử dụng icon từ react-icons thay vì hình ảnh */}
-                        <FaPlay className="play-icon" />
+                        <FaPlay className="play-icon-banner" />
                     </div>
                     {/* Sử dụng hình ảnh từ movie hiện tại */}
                     <img 
