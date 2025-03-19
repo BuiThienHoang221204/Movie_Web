@@ -35,11 +35,11 @@ function Header() {
   return (
     <>
       <header className={`header ${scrolled ? 'scrolled' : ''}`}>
-        <div className="logo">CINEMA</div>
+        <Link to={config.home} className="logo text-decoration-none">CINEMA</Link>
         <nav className="nav-links">
-          <Link to={config.home}>Home</Link>
-          <Link to={config.allRecomment}>Trend</Link>
-          <Link to={config.blog}>Blog</Link>
+          <Link to={config.home} className={location.pathname === config.home ? 'active': ''}>Home</Link>
+          <Link to={config.allRecomment} className={location.pathname === config.allRecomment ? 'active': ''}>Trend</Link>
+          <Link to={config.blog} className={location.pathname === config.blog ? 'active': ''}>Blog</Link>
         </nav>
         <div className="search-signin">
           <input type="text" placeholder="Search" className="search-bar" />

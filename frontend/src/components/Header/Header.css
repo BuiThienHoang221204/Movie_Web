@@ -22,7 +22,7 @@
 }
 
 .logo {
-    font-size: 28px;
+    font-size: 1.8rem;
     font-weight: bold;
     letter-spacing: 2px;
     color: #e50914;
@@ -46,6 +46,7 @@
     position: relative;
     padding: 5px 0;
     transition: all 0.3s ease;
+    font-size: 1rem;
 }
 
 .nav-links a:hover {
@@ -66,6 +67,12 @@
 
 .nav-links a:hover::after {
     width: 100%;
+}
+
+.nav-links a.active {
+    transform: scale(1.1);
+    transform: translateY(-2px);
+    color: #e50914;
 }
 
 .search-signin {
