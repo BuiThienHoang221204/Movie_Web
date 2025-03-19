@@ -4,31 +4,16 @@ import './RecommentMovie.css'
 import { FaPlay, FaArrowRight } from 'react-icons/fa';
 import movieService from '../../services/movieService';
 import { useNavigate } from 'react-router-dom';
+import { useMovies } from './MovieContext';
+import config from '../../config';
 
 function RecommentMovie() {
-  const [RecommentMovies, setRecommentMovies] = useState([]);
+  const { RecommentMovies, setRecommentMovies, genres, setGenres } = useMovies();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchRecommentMovies = async () => {
-      try {
-        const data = await movieService.getRecommendMovies();
-        console.log("Dữ liệu phim từ API:", data);
-        if (data && data.length > 0) { // Nếu có dữ liệu API, sử dụng nó
-          setRecommentMovies(data);
-        } else {// Nếu không có dữ liệu từ API, sử dụng dữ liệu mẫu
-          setRecommentMovies(fallbackMovies);
-        }
-      } catch (err) {
-        console.error('Lỗi khi lấy phim đề xuất (frontend):', err);
-        // Khi có lỗi, sử dụng dữ liệu mẫu
-        setRecommentMovies(fallbackMovies);
-      }
-    }
-
-    fetchRecommentMovies();
-  }, []);
-
+  const [currentIndex, setCurrentIndex] = useState(0);// hiển thị phim đề xuất
+  const [autoPlay, setAutoPlay] = useState(true);
+  const itemMovie = 4;// số lượng phim hiển thị
+  const maxIndex = Math.max(0, RecommentMovies.length - itemMovie);// số lượng phim hiển thị
   // Dữ liệu mẫu để sử dụng khi API không có dữ liệu
   const fallbackMovies = [
     {
@@ -44,14 +29,38 @@ function RecommentMovie() {
 
   ];
 
-  // hiển thị phim đề xuất
-  const [currentIndex, setCurrentIndex] = useState(0);
-  // hiển thị tất cả phim
-  const [showAllMovies, setShowAllMovies] = useState(false);
-  const itemMovie = 4;
-  const [autoPlay, setAutoPlay] = useState(true);
-  // số lượng phim hiển thị
-  const maxIndex = Math.max(0, RecommentMovies.length - itemMovie);
+  useEffect(() => {
+    if (autoPlay && RecommentMovies.length > 0) {
+      const interval = setInterval(() => {
+        setCurrentIndex(prev => prev === maxIndex ? 0 : prev + 1);
+      }, 2000);
+      return () => clearInterval(interval);
+    }
+  }, [maxIndex, autoPlay, RecommentMovies]);
+
+  useEffect(() => {
+    const fetchRecommentMovies = async () => {
+      try {
+        const data = await movieService.getRecommendMovies();
+        const genreData = await movieService.getGenres();
+        console.log("Dữ liệu phim từ API:", data, genreData);
+        if (data && data.length > 0 && genreData && genreData.length > 0) {
+          setRecommentMovies(data);
+          setGenres(genreData);
+        } else {
+          // Nếu không có dữ liệu từ API, sử dụng dữ liệu mẫu
+          setRecommentMovies(fallbackMovies);
+        }
+      } catch (err) {
+        console.error('Lỗi khi lấy phim đề xuất (frontend):', err);
+        // Khi có lỗi, sử dụng dữ liệu mẫu
+        setRecommentMovies(fallbackMovies);
+      }
+    }
+
+    fetchRecommentMovies();
+  }, []);
+
 
   // chuyển phim tiếp theo
   const handleNext = () => {
@@ -61,19 +70,6 @@ function RecommentMovie() {
   const handlePrev = () => {
     setCurrentIndex((prev) => prev === 0 ? maxIndex : prev - 1);
   }
-  // hiển thị tất cả phim
-  const toggleShowAllMovies = () => {
-    setShowAllMovies(!showAllMovies);
-  }
-
-  useEffect(() => {
-    if (!showAllMovies && autoPlay && RecommentMovies.length > 0) {
-      const interval = setInterval(() => {
-        setCurrentIndex(prev => prev === maxIndex ? 0 : prev + 1);
-      }, 3000);
-      return () => clearInterval(interval);
-    }
-  }, [maxIndex, autoPlay, showAllMovies, RecommentMovies]);
 
   const play = () => setAutoPlay(true);
   const pause = () => setAutoPlay(false);
@@ -82,6 +78,14 @@ function RecommentMovie() {
   const handleWatchMovie = (movieId) => {
     navigate(`/watch/${movieId}`);
   };
+
+  const handleViewAll = () => {
+    navigate(config.allRecomment);
+  };
+  const genreName = (genreId) => {
+    const genre = genres.find(g => g.id === genreId)
+    return genre ? genre.name : ''
+  }
 
   // Nếu không có dữ liệu và đang tải, hiển thị "Đang tải..."
   if (RecommentMovies.length === 0) {
@@ -99,67 +103,48 @@ function RecommentMovie() {
     <div className='container'>
       <div className='title-container'>
         <h1 className='section-title'>Phim đề xuất</h1>
-        <button className='view-all-btn' onClick={toggleShowAllMovies}>
-          {showAllMovies ? 'Thu gọn' : 'Xem tất cả'}
-          <FaArrowRight className='arrow-icon' />
+        <button className='view-all-btn' onClick={handleViewAll}>
+          Xem chi tiết <FaArrowRight className='arrow-icon' />
         </button>
       </div>
 
-      {!showAllMovies ? (
-        <div className='section-movie' onMouseEnter={pause} onMouseLeave={play}>
-          <div className='movie-track'
-            style={{
-              transform: `translateX(-${currentIndex * (100 / itemMovie)}%)`,
-              transition: 'transform 0.3s ease-in-out'
-            }}>
-            {RecommentMovies.map(movie => (
-              <div key={movie.id} className='movie-item' onClick={() => handleWatchMovie(movie.id)}>
-                <img
-                  src={movie.image}
-                  alt={movie.title}
-                  className='movie-image'
-                  onError={(e) => { e.target.src = images.ImgMovie; }}
-                />
-                <FaPlay className="play-icon-2" />
-                <div className='movie-info'>
-                  <h3 className='recomment-movie-title'>{movie.title}</h3>
-                  <p className='movie-genre'>Thể loại: {movie.genre}</p>
-                  <p className='movie-match'>Phù hợp: {movie.match}%</p>
-                  <p className='movie-rating'>Điểm: {movie.rating}/10</p>
-                </div>
+      <div className='section-movie' onMouseEnter={pause} onMouseLeave={play}>
+        <div className='movie-track'
+          style={{
+            transform: `translateX(-${currentIndex * (100 / itemMovie)}%)`,
+            transition: 'transform 0.3s ease-in-out'
+          }}>
+          {RecommentMovies.map(movie => (
+            <div key={movie.id} className='movie-item' onClick={() => handleWatchMovie(movie.id)}>
+              <img
+                src={movie.image}
+                alt={movie.title}
+                className='movie-image'
+                onError={(e) => { e.target.src = images.ImgMovie; }}
+              />
+              <FaPlay className="play-icon-2" />
+              <div className='movie-info'>
+                <h3 className='recomment-movie-title'>{movie.title}</h3>
+                <p className='movie-genre'>Thể loại: {""}
+                  {movie.genre
+                    .map((id) => genreName(id))
+                    .filter((gName) => gName !== "Không xác định")
+                    .join(", ")
+                  }
+                </p>
+                <p className='movie-match'>Phù hợp: {movie.match}%</p>
+                <p className='movie-rating'>Điểm: {movie.rating}/10</p>
               </div>
-            ))}
-          </div>
-          <button className="prev" onClick={handlePrev}>
-            &#10094;
-          </button>
-          <button className="next" onClick={handleNext}>
-            &#10095;
-          </button>
+            </div>
+          ))}
         </div>
-      ) : (
-        <div className='all-movies-section'>
-          <div className='all-movies-grid'>
-            {RecommentMovies.map(movie => (
-              <div key={movie.id} className='movie-item' onClick={() => handleWatchMovie(movie.id)}>
-                <img
-                  src={movie.image}
-                  alt={movie.title}
-                  className='movie-image'
-                  onError={(e) => { e.target.src = images.ImgMovie; }}
-                />
-                <FaPlay className="play-icon-2" />
-                <div className='movie-info'>
-                  <h3 className='recomment-movie-title'>{movie.title}</h3>
-                  <p className='movie-genre'>Thể loại: {movie.genre}</p>
-                  <p className='movie-match'>Phù hợp: {movie.match}%</p>
-                  <p className='movie-rating'>Điểm: {movie.rating}/10</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+        <button className="prev" onClick={handlePrev}>
+          &#10094;
+        </button>
+        <button className="next" onClick={handleNext}>
+          &#10095;
+        </button>
+      </div>
     </div>
   )
 }
