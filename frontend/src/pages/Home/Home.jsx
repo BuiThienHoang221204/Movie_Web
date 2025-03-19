@@ -54,7 +54,7 @@ function Home() {
             <div className="trailer-info">
               <h3>PANDA PLAN Official Trailer (2024)</h3>
               <p className="release-date">Coming in 2026</p>
-              <p className="movie-description">
+              <p className="trailer-movie-description">
                 Huyền thoại võ thuật Jackie Chan trở lại trong PANDA PLAN, một bộ phim hành động - phiêu lưu đầy hấp dẫn!
                 Khi một tổ chức tội phạm quốc tế nhắm vào loài gấu trúc quý hiếm, một cựu đặc vụ (Jackie Chan) buộc phải tái xuất để bảo vệ chúng
               </p>
