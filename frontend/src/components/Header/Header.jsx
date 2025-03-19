@@ -38,8 +38,8 @@ function Header() {
         <div className="logo">CINEMA</div>
         <nav className="nav-links">
           <Link to={config.home}>Home</Link>
-          <Link to={config.home}>Trend</Link>
-          <Link to={config.home}>Blog</Link>
+          <Link to={config.allRecomment}>Trend</Link>
+          <Link to={config.blog}>Blog</Link>
         </nav>
         <div className="search-signin">
           <input type="text" placeholder="Search" className="search-bar" />

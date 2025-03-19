@@ -8,7 +8,7 @@ const getAllMoviesRecommend = async (req, res) => {
         // lấy phim có lượt đánh giá cao
         const recommentMovie = await movies.find({ vote_average: { $gte: 7.5 } })
             .sort({ popularity: -1 }) //sắp xếp theo lượt xem giảm dần
-            .limit(12) //giới hạn 12 phim
+            .limit(50) //giới hạn 50 phim
 
         console.log("Dữ liệu lấy từ MongoDB:", recommentMovie);
         
@@ -22,7 +22,7 @@ const getAllMoviesRecommend = async (req, res) => {
             id: movie.id,
             title: movie.title,
             year: movie.release_date ? movie.release_date.substring(0, 4) : null, //lấy năm phát hành
-            genre: movie.genre_ids.join(", "),
+            genre: movie.genre_ids,
             rating: movie.vote_average,
             match: Math.round((movie.vote_average / 10) * 100), //tính toán phần trăm khớp
             image: `https://image.tmdb.org/t/p/w500${movie.poster_path}` //lấy ảnh phim
@@ -57,7 +57,7 @@ const getAllMoviesUpdate = async (req, res) => {
             id: movie.id,
             title: movie.title,
             year: movie.release_date,//lấy năm phát hành
-            genre: movie.genre_ids.join(", "),
+            genre: movie.genre_ids,
             rating: movie.vote_average, //chia 2 để đưa về thang điểm 5
             match: Math.round((movie.vote_average / 10) * 100), //tính toán phần trăm khớp
             image: `https://image.tmdb.org/t/p/w500${movie.poster_path}` //lấy ảnh phim
