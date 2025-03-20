@@ -14,7 +14,7 @@ const facebookAuthController = {
         const user = req.user
 
         if(!await User.findOne({email: user.email})){
-            const newUser = new User(user)
+            const newUser = new User({...user, status: true, role: "user"})
             await newUser.save()
         }
 
@@ -31,7 +31,7 @@ const facebookAuthController = {
             ...cookieOptions,
             maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
         });
-        
+
         res.redirect(`${process.env.CLIENT_URL}`);
     },
 
