@@ -36,6 +36,7 @@
 }
 
 .nav-links {
+  margin-left: 35vh;  
   display: flex;
 }
 
@@ -248,9 +249,13 @@
   }
 
   .nav-links {
+    margin-left: 15px;
     display: none;
   }
 
+  .signin-btn{
+    margin-left: 5px;
+  }
   .search-signin {
     display: flex;
     align-items: center;
@@ -262,12 +267,13 @@
   }
 
   .search-bar {
+    width: 40%;
     flex-grow: 1;
     margin-left: 10px;
   }
 
   .search-input {
-    width: 100%;
+    width:100%;
   }
 
   .toggle-icon {
@@ -313,3 +319,4 @@
     width: 5em;
   }
 }
+
