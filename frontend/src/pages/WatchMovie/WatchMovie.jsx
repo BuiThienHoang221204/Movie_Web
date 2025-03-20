@@ -26,8 +26,8 @@ function WatchMovie() {
           movieService.getMovieDetail(id),
           movieService.getGenres()
         ]);
-        const response = await axiosInstance.get(`/api/drive/films/${movieData.title}`);
-        setMovie({...movieData, video_url: response.data.data[0].webViewLink.replace("view?usp=drivesdk", "preview")});
+
+        setMovie(movieData);
         setGenres(genresData);
         setLoading(false);
       } catch (err) {
@@ -39,6 +39,31 @@ function WatchMovie() {
 
     fetchData();
   }, [id]);
+
+  useEffect(() => {
+    if (!movie || !movie.title) return;
+
+    const fetchVideo = async () => {
+      try {
+        const response = await axiosInstance.get(`/api/drive/films/${movie.title}`);
+
+        if (response.data.success) {
+          setMovie(prevMovie => ({
+            ...prevMovie,
+            video_url: response.data.data[0].webViewLink.replace("view?usp=drivesdk", "preview"),
+          }));
+        }
+      } catch (err) {
+        if (err.response && err.response.status === 404) {
+          console.warn(`Không tìm thấy video cho phim: ${movie.title}`);
+        } else {
+          console.error("Lỗi khi lấy video:", err);
+        }
+      }
+    };
+
+    fetchVideo();
+  }, [movie]);
 
   if (loading) {
     return (
@@ -66,7 +91,7 @@ function WatchMovie() {
           <div className="movie-details-container">
             <div className="movie-poster-wrapper">
               <img
-                src={movie.video_url}
+                src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                 alt={movie.title}
                 className="movie-poster"
                 onError={(e) => {
