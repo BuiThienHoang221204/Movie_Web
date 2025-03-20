@@ -5,5 +5,6 @@ const routes = {
     blog: '/blog',
     watchDetail: '/watch/:id',
     allRecomment: '/allRecomment',
+    filter: '/filter',
 }
 export default routes;

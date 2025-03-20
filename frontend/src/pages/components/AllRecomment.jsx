@@ -4,6 +4,7 @@ import { FaPlay } from 'react-icons/fa';
 import images from '../../assets/img';
 import { useNavigate } from 'react-router-dom';
 import './AllRecomment.css';
+import MovieCard from './MovieCard';
 
 function AllRecomment() {
     const { RecommentMovies, genres } = useMovies();
@@ -40,27 +41,7 @@ function AllRecomment() {
                 <h1 className='section-title my-5'>Tất cả phim đề xuất</h1>
                 <div className='all-movies-grid'>
                     {currentMovies.map(movie => (
-                        <div key={movie.id} className='movie-item' onClick={() => handleWatchMovie(movie.id)}>
-                            <img
-                                src={movie.image}
-                                alt={movie.title}
-                                className='movie-image'
-                                onError={(e) => { e.target.src = images.ImgMovie; }}
-                            />
-                            <FaPlay className="play-icon-2" />
-                            <div className='movie-info'>
-                                <h3 className='recomment-movie-title'>{movie.title}</h3>
-                                <p className='movie-genre'>Thể loại: {""}
-                                    {movie.genre
-                                        .map((id) => genreName(id))
-                                        .filter((gName) => gName !== "Không xác định")
-                                        .join(", ")
-                                    }
-                                </p>
-                                <p className='movie-match'>Phù hợp: {movie.match}%</p>
-                                <p className='movie-rating'>Điểm: {movie.rating}/10</p>
-                            </div>
-                        </div>
+                        <MovieCard movie={movie}></MovieCard>
                     ))}
                 </div>
             </div>

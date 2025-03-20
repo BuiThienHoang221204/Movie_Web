@@ -6,7 +6,7 @@ import LoginLayout from '../layout/LoginLayout/LoginLayout';
 import WatchMovie from '../pages/WatchMovie/WatchMovie';
 import Blog from '../pages/Blog/Blog';
 import {AllRecomment} from '../pages/components';
-
+import Filter from '../pages/Filter/Filter';
 
 const routes = [
     {
@@ -34,7 +34,11 @@ const routes = [
     {
         path: config.allRecomment,
         component: AllRecomment,
-    }
+    },
+    {
+        path: config.filter,
+        component: Filter,
+    },
 ];
 
 export default routes;

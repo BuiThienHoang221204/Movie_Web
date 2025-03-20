@@ -1,0 +1,296 @@
+.filter-title {
+  font-size: 3rem;
+  font-weight: 700;
+  padding: 4em 0;
+  margin: 0;
+  text-align: center;
+  position: relative;
+}
+
+.filter-title div {
+  font-size: 3rem;
+  font-weight: 700;
+  color: red;
+  z-index: 1;
+  position: relative;
+}
+
+.filter-title div h5 {
+  color: #fff;
+}
+
+.filter-title .filter-title-img {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  border-radius: 0.3rem;
+}
+
+.filter-props span {
+  font-weight: bold;
+  margin-right: 1rem;
+  cursor: default;
+}
+
+.filter-props span.active {
+  font-weight: bold;
+  margin-right: 1rem;
+  cursor: default;
+  background-color: #f1f1f1;
+  padding: 0.1rem 0.2rem;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+  color: red;
+}
+
+.filter-props span:hover {
+  color: red;
+}
+
+.filter-props {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-props .mb-3,
+.filter-props .mb-1 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.filter-props .genre-filter,
+.filter-props .year-filter,
+.filter-props .match-filter {
+  position: relative;
+  border-radius: 0.3rem;
+  padding: 0.5rem;
+  border: 1px solid #f1f1f1;
+}
+
+.filter-props .genre-filter .title,
+.filter-props .year-filter .title,
+.filter-props .match-filter .title {
+  position: absolute;
+  top: -2.1rem;
+  left: 1rem;
+  z-index: 1;
+  padding: 0.1rem 1rem;
+  border-radius: 0 0 0.3rem;
+  color: white;
+  border-top: 1px solid #f1f1f1;
+}
+
+.list-movie {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 2fr));
+  grid-gap: 0.5rem;
+  justify-content: center;
+  margin-top: 1rem;
+  margin: 0 3rem;
+}
+
+.list-movie > * {
+  opacity: 0;
+  animation: fadeIn 0.5s forwards;
+}
+
+.list-movie > *:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.list-movie > *:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.list-movie > *:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.list-movie > *:nth-child(4) {
+  animation-delay: 0.4s;
+}
+.list-movie > *:nth-child(5) {
+  animation-delay: 0.5s;
+}
+.list-movie > *:nth-child(6) {
+  animation-delay: 0.6s;
+}
+.list-movie > *:nth-child(7) {
+  animation-delay: 0.7s;
+}
+.list-movie > *:nth-child(8) {
+  animation-delay: 0.8s;
+}
+.list-movie > *:nth-child(9) {
+  animation-delay: 0.9s;
+}
+.list-movie > *:nth-child(10) {
+  animation-delay: 1s;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.movie-card {
+  width: 13rem;
+  height: 18rem;
+  cursor: pointer;
+  border-radius: 0.3rem;
+  position: relative;
+  margin-bottom: 5rem;
+}
+
+.movie-card .movie-rating {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  background-color: gray;
+  padding: 0.1rem 0.2rem;
+  border-radius: 0.3rem;
+  z-index: 1;
+}
+
+.movie-card .movie-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 0.3rem;
+  overflow: hidden;
+  position: absolute;
+}
+
+.movie-card .movie-image img {
+  width: 100%;
+  height: 100%;
+  border-radius: 0.3rem;
+  object-fit: cover;
+  transition: all 0.3s ease;
+  filter: brightness(1);
+}
+
+.movie-card .movie-title {
+  color: #fff;
+  font-weight: bold;
+  font-size: 1.2rem;
+  position: absolute;
+  display: flex;
+  align-items: top;
+  justify-content: top;
+  bottom: -20%;
+}
+
+.movie-card .movie-title:hover {
+  color: red;
+}
+
+.movie-card .movie-year {
+  position: absolute;
+  left: 0.5rem;
+  bottom: 0.5rem;
+  background-color: gray;
+  padding: 0.1rem 0.2rem;
+  border-radius: 0.3rem;
+  color: white;
+  z-index: 1;
+}
+
+.play-icon-2 {
+  position: absolute;
+  top: 40%;
+  left: 43%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  font-size: 50px;
+  color: white;
+  background: linear-gradient(135deg, #e50914 0%, #ff3b30 100%);
+  border-radius: 50%;
+  padding: 15px;
+  box-shadow: 0 0 25px rgba(229, 9, 20, 0.8);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform: scale(1.3);
+  z-index: 1;
+}
+
+.movie-image:hover .play-icon-2 {
+  bottom: -20px;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  opacity: 1;
+  box-shadow: 0 0 35px rgba(229, 9, 20, 0.9);
+  transform: scale(1.2);
+}
+
+.movie-image:hover img {
+  transition: all 0.3s ease;
+  transform: scale(1.2);
+  filter: brightness(1.3);
+}
+
+.movie-card:hover .movie-title {
+  color: red;
+}
+
+.genre-form,
+.year-form,
+.match-form {
+  display: none;
+  width: 20rem;
+  margin: 1rem 0;
+  padding: 1rem 0;
+  background-color: transparent;
+  border: 1px solid #f1f1f1;
+  radius: 0.3rem;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+@media screen and (max-width: 768px) {
+  .list-movie {
+    margin: 0 1rem;
+  }
+  .filter-title {
+    padding: 2em 0;
+  }
+  .filter-title h1 {
+    font-size: 2rem;
+  }
+  .filter-props span {
+    display: none;
+  }
+  .movie-card {
+    width: 10rem;
+    height: 15rem;
+  }
+  .movie-card .movie-title {
+    font-size: 1rem;
+  }
+  .movie-card .movie-year {
+    font-size: 0.7rem;
+  }
+  .movie-card .movie-rating {
+    font-size: 0.7rem;
+  }
+  .play-icon-2 {
+    font-size: 40px;
+  }
+
+  .genre-form,
+  .year-form,
+  .match-form {
+    display: block;
+  }
+}
