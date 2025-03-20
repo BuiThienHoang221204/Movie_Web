@@ -1,22 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import images from '../../assets/img'
-import { FaPlay } from 'react-icons/fa';
 import movieService from '../../services/movieService';
-import { useNavigate } from 'react-router-dom';
+import MovieCard from './MovieCard';
 
 function MovieUpdate() {
     const [moviesUpdate, setMoviesUpdate] = useState([]);
-    const navigate = useNavigate();
     // lấy tất cả thể loại phim
-    const [genres, setGenres] = useState([]);
 
     const fetchMovieUpdate = async () => {
         try {
             const data = await movieService.getNewMovies();
-            const genreData = await movieService.getGenres();   
-            if (data && data.length > 0 && genreData && genreData.length > 0) {
+            if (data && data.length > 0) {
                 setMoviesUpdate(data);
-                setGenres(genreData);
             } else {
                 setMoviesUpdate(fallbackMoviesUpdate);
             }
@@ -30,10 +25,6 @@ function MovieUpdate() {
         fetchMovieUpdate();
     }, []);
 
-    const genreName = (genreId) => {
-        const genre = genres.find(g => g.id === genreId);
-        return genre ? genre.name : '';
-    }
     // Dữ liệu phim mới cập nhật
     const fallbackMoviesUpdate = [
         {
@@ -56,32 +47,12 @@ function MovieUpdate() {
         },
     ];
 
-    // Hàm để chuyển hướng đến trang WatchMovie
-    const handleWatchMovie = (movieId) => {
-        navigate(`/watch/${movieId}`);
-    };
-
     return (
         <div className='all-movies-section container'>
             <h1 className='section-title'>Phim mới cập nhật</h1>
             <div className='all-movies-grid my-5'>
                 {moviesUpdate.map(movie => (
-                    <div key={movie.id} className='movie-item' onClick={() => handleWatchMovie(movie.id)}>
-                        <img src={movie.image} alt={movie.title} className='movie-image' />
-                        <FaPlay className="play-icon-2" />
-                        <div className='movie-info'>
-                            <h3 className='recomment-movie-title'>{movie.title}</h3>
-                            <p className='movie-genre'>Thể loại: {""}
-                                {movie.genre
-                                    .map((id) => genreName(id))
-                                    .filter((gName) => gName !== "Không xác định")
-                                    .join(", ")
-                                }
-                            </p>
-                            <p className='movie-match'>Phù hợp: {movie.match}%</p>
-                            <p className='movie-rating'>Điểm: {movie.rating}/10</p>
-                        </div>
-                    </div>
+                    <MovieCard movie={movie}></MovieCard>
                 ))}
             </div>
         </div>

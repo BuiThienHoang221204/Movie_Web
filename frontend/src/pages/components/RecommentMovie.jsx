@@ -6,9 +6,10 @@ import movieService from '../../services/movieService';
 import { useNavigate } from 'react-router-dom';
 import { useMovies } from './MovieContext';
 import config from '../../config';
+import MovieCard from './MovieCard';
 
 function RecommentMovie() {
-  const { RecommentMovies, setRecommentMovies, genres, setGenres } = useMovies();
+  const { RecommentMovies, setRecommentMovies } = useMovies();
   const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);// hiển thị phim đề xuất
   const [autoPlay, setAutoPlay] = useState(true);
@@ -42,11 +43,9 @@ function RecommentMovie() {
     const fetchRecommentMovies = async () => {
       try {
         const data = await movieService.getRecommendMovies();
-        const genreData = await movieService.getGenres();
-        console.log("Dữ liệu phim từ API:", data, genreData);
-        if (data && data.length > 0 && genreData && genreData.length > 0) {
+        console.log("Dữ liệu phim từ API:", data);
+        if (data && data.length > 0) {
           setRecommentMovies(data);
-          setGenres(genreData);
         } else {
           // Nếu không có dữ liệu từ API, sử dụng dữ liệu mẫu
           setRecommentMovies(fallbackMovies);
@@ -74,18 +73,9 @@ function RecommentMovie() {
   const play = () => setAutoPlay(true);
   const pause = () => setAutoPlay(false);
 
-  // Hàm để chuyển hướng đến trang WatchMovie
-  const handleWatchMovie = (movieId) => {
-    navigate(`/watch/${movieId}`);
-  };
-
   const handleViewAll = () => {
     navigate(config.allRecomment);
   };
-  const genreName = (genreId) => {
-    const genre = genres.find(g => g.id === genreId)
-    return genre ? genre.name : ''
-  }
 
   // Nếu không có dữ liệu và đang tải, hiển thị "Đang tải..."
   if (RecommentMovies.length === 0) {
@@ -115,27 +105,7 @@ function RecommentMovie() {
             transition: 'transform 0.3s ease-in-out'
           }}>
           {RecommentMovies.map(movie => (
-            <div key={movie.id} className='movie-item' onClick={() => handleWatchMovie(movie.id)}>
-              <img
-                src={movie.image}
-                alt={movie.title}
-                className='movie-image'
-                onError={(e) => { e.target.src = images.ImgMovie; }}
-              />
-              <FaPlay className="play-icon-2" />
-              <div className='movie-info'>
-                <h3 className='recomment-movie-title'>{movie.title}</h3>
-                <p className='movie-genre'>Thể loại: {""}
-                  {movie.genre
-                    .map((id) => genreName(id))
-                    .filter((gName) => gName !== "Không xác định")
-                    .join(", ")
-                  }
-                </p>
-                <p className='movie-match'>Phù hợp: {movie.match}%</p>
-                <p className='movie-rating'>Điểm: {movie.rating}/10</p>
-              </div>
-            </div>
+            <MovieCard movie={movie}></MovieCard>
           ))}
         </div>
         <button className="prev" onClick={handlePrev}>
