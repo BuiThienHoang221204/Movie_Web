@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { FaPlay } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import movieService from '../../services/movieService';
 import { useMovies } from './MovieContext';
 
@@ -9,7 +9,8 @@ const MovieCard = (props) => {
     const navigate = useNavigate();
     const { genres, setGenres } = useMovies()
 
-    const handleWatchMovie = (movieId) => {
+    const handleWatchMovie = (movieId, e) => {
+        e.preventDefault();
         navigate(`/watch/${movieId}`);
     };
     const genreName = (genreId) => {
@@ -37,7 +38,7 @@ const MovieCard = (props) => {
 
   return (
     <>
-        <div key={movie.id} className='movie-item cursor-pointer' onClick={() => handleWatchMovie(movie.id)}>
+        <Link to={`/watch/${movie.id}`} key={movie.id} className='movie-item' onClick={() => handleWatchMovie(movie.id)}>
             <img src={movie.image} alt={movie.title} className='movie-image' />
             <FaPlay className="play-icon-2" />
             <div className='movie-info'>
@@ -52,7 +53,7 @@ const MovieCard = (props) => {
                 <p className='movie-match'>Phù hợp: {movie.match}%</p>
                 <p className='movie-rating'>Điểm: {movie.rating.toFixed(1)}/10</p>
             </div>
-        </div>
+        </Link>
     </>
   )
 }

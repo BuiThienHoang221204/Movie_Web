@@ -2,6 +2,33 @@ const movies = require('../module/movie.module') //import model movie
 const mongoose = require('mongoose') // giúp tương tác với database
 const genres = require('../module/genre.module.js') // import model genre
 
+// lấy tất cả phim
+const getAllMovies = async (req, res) => {
+    try {
+        const allMovies = await movies.find();
+        console.log("Dữ liệu lấy từ MongoDB:", allMovies);
+        
+        if (!allMovies || allMovies.length === 0) {
+            return res.status(404).json({ message: "Không tìm thấy phim nào" });
+        }
+
+        const formattedMovies = allMovies.map(movie => ({
+            id: movie.id,
+            title: movie.title,
+            year: movie.release_date ? movie.release_date.substring(0, 4) : null,
+            genre: movie.genre_ids,
+            rating: movie.vote_average,
+            match: Math.round((movie.vote_average / 10) * 100),
+            image: `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+        }));
+
+        res.status(200).json(formattedMovies);
+    } catch (err) {
+        console.error("Lỗi khi lấy phim:", err);
+        res.status(500).json({ message: "Lỗi server", error: err.message });
+    }
+}
+
 // lấy tất cả phim đề xuất
 const getAllMoviesRecommend = async (req, res) => {
     try {
@@ -109,6 +136,7 @@ const getAllGenres = async (req, res) => {
 }
 
 module.exports = {
+    getAllMovies,
     getAllMoviesRecommend,
     getAllMoviesUpdate,
     getMovieDetail,

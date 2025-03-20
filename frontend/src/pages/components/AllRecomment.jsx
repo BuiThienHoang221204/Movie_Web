@@ -1,14 +1,10 @@
 import { useState } from 'react';
 import { useMovies } from '../components/MovieContext';
-import { FaPlay } from 'react-icons/fa';
-import images from '../../assets/img';
-import { useNavigate } from 'react-router-dom';
 import './AllRecomment.css';
 import MovieCard from './MovieCard';
 
 function AllRecomment() {
-    const { RecommentMovies, genres } = useMovies();
-    const navigate = useNavigate();
+    const { RecommentMovies } = useMovies();
     const [currentPage, setCurrentPage] = useState(1);
     const moviesPerPage = 10; //số phim hiển thị trên mỗi trang
 
@@ -19,15 +15,6 @@ function AllRecomment() {
 
     //tính tổng số trang
     const totalPages = Math.ceil(RecommentMovies.length / moviesPerPage);
-
-    const genreName = (genreId) => {
-        const genre = genres.find(g => g.id === genreId);
-        return genre ? genre.name : 'Không xác định';
-    };
-
-    const handleWatchMovie = (movieId) => {
-        navigate(`/watch/${movieId}`);
-    };
 
     return (
         <>

@@ -39,5 +39,6 @@ router.get(`${API_VERSION}/movies/recommend`, movieController.getAllMoviesRecomm
 router.get(`${API_VERSION}/movies/new`, movieController.getAllMoviesUpdate)
 router.get(`${API_VERSION}/genres`, movieController.getAllGenres)
 router.get(`${API_VERSION}/movies/:id`, movieController.getMovieDetail)
+router.get(`${API_VERSION}/movies`, movieController.getAllMovies)
 
 module.exports = router
