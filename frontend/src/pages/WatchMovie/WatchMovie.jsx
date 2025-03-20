@@ -4,6 +4,7 @@ import movieService from "../../services/movieService";
 import "./WatchMovie.css";
 import { FaStar, FaCalendarAlt, FaUsers, FaPlayCircle } from "react-icons/fa";
 import images from "../../assets/img";
+import axiosInstance from "../../config/axios";
 
 function WatchMovie() {
   const { id } = useParams();
@@ -25,7 +26,8 @@ function WatchMovie() {
           movieService.getMovieDetail(id),
           movieService.getGenres()
         ]);
-        setMovie(movieData);
+        const response = await axiosInstance.get(`/api/drive/films/${movieData.title}`);
+        setMovie({...movieData, video_url: response.data.data[0].webViewLink.replace("view?usp=drivesdk", "preview")});
         setGenres(genresData);
         setLoading(false);
       } catch (err) {
@@ -64,7 +66,7 @@ function WatchMovie() {
           <div className="movie-details-container">
             <div className="movie-poster-wrapper">
               <img
-                src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                src={movie.video_url}
                 alt={movie.title}
                 className="movie-poster"
                 onError={(e) => {
@@ -136,11 +138,8 @@ function WatchMovie() {
           <div className="movie-player">
             {movie.video_url ? (
               <iframe
-                src={movie.video_url
-                  .replace("youtu.be/", "youtube.com/embed/")
-                  .replace("watch?v=", "embed/")}
+                src={movie.video_url}
                 title={movie.title}
-                frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
               ></iframe>

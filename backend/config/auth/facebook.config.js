@@ -1,7 +1,6 @@
 const passport = require("passport")
 const FacebookStrategy = require("passport-facebook").Strategy
 require("dotenv").config()
-const ROLES = require('../../config/role.config')
 
 passport.use(
     new FacebookStrategy(
@@ -16,8 +15,6 @@ passport.use(
                 name: profile.name.familyName + " " + profile.name.givenName,
                 email: profile.emails[0].value,
                 provider: "facebook",
-                status: true,
-                role: ROLES.USER,
                 avatar: profile.photos[0].value,
                 timeStamp: {
                     createdAt: new Date(),

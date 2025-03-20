@@ -14,7 +14,7 @@ const googleAuthController = {
         const user = req.user
 
         if(!await User.findOne({email: user.email})){
-            const newUser = new User(user)
+            const newUser = new User({...user, status: true, role: "user"})
             await newUser.save()
         }
 
