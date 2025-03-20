@@ -3,6 +3,7 @@ const googleAuthController = require("../controller/google.controller")
 const facebookAuthController = require("../controller/facebook.controller")
 const {signup, login, getAuthStatus, logout} = require("../controller/access.controller")
 const passport = require("../config/passport.config")
+const { getFilms } = require("../controller/drive.controller")
 const router = express()
 
 router.use(passport)
@@ -17,6 +18,9 @@ router.post("/auth/signup", signup)
 router.post("/auth/login", login)
 router.post("/auth/logout", logout)
 router.get("/auth/status", getAuthStatus)
+
+// Drive API routes
+router.get("/api/drive/films/:title", getFilms)
 
 // const filmRoutes = require('./film.routes');
 // const userRoutes = require('./user.routes');

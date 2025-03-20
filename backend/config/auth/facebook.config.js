@@ -1,7 +1,6 @@
 const passport = require("passport")
 const FacebookStrategy = require("passport-facebook").Strategy
 require("dotenv").config()
-const ROLES = require('../../config/role.config')
 
 passport.use(
     new FacebookStrategy(
