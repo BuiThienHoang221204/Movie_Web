@@ -263,6 +263,31 @@
   .all-movies-title {
     font-size: 1.5rem;
   }
+
+  .section-movie{
+    width: 100%;
+    overflow: hidden;
+  }
+  .movie-item {
+    flex: 0 0 47%;
+    position: relative;
+    transition: transform 0.3s ease;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  /* chỉnh nút trước và sau */
+.prev {
+  position: absolute;
+  top: 55%;
+  left: 6%;
+}
+
+.next {
+  position: absolute;
+  top: 55%;
+  right: 5%;
+}
 }
 
 @media (max-width: 480px) {

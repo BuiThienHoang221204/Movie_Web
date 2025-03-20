@@ -13,7 +13,7 @@ function RecommentMovie() {
   const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);// hiển thị phim đề xuất
   const [autoPlay, setAutoPlay] = useState(true);
-  const itemMovie = 4;// số lượng phim hiển thị
+  const itemMovie = 4; // Số lượng phim hiển thị trên mỗi slide
   const maxIndex = Math.max(0, RecommentMovies.length - itemMovie);// số lượng phim hiển thị
   // Dữ liệu mẫu để sử dụng khi API không có dữ liệu
   const fallbackMovies = [
@@ -101,9 +101,12 @@ function RecommentMovie() {
       <div className='section-movie' onMouseEnter={pause} onMouseLeave={play}>
         <div className='movie-track'
           style={{
-            transform: `translateX(-${currentIndex * (100 / itemMovie)}%)`,
+            transform: window.innerWidth <= 768
+              ? `translateX(-${currentIndex * 105/2}%)`
+              : `translateX(-${currentIndex * (102 / itemMovie)}%)`,
             transition: 'transform 0.3s ease-in-out'
-          }}>
+          }}
+        >
           {RecommentMovies.map(movie => (
             <MovieCard movie={movie}></MovieCard>
           ))}

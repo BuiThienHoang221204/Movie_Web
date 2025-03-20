@@ -17,7 +17,7 @@ const Filter = () => {
     useEffect(() => {
         const fetchRecommentMovies = async () => {
           try {
-            const data = await movieService.getRecommendMovies();
+            const data = await movieService.getAllMovies();
             console.log("Dữ liệu phim từ API:", data);
             if (data && data.length > 0) {
                 setMovies(data);
@@ -100,12 +100,11 @@ const Filter = () => {
     }
 
   return (
-    <div className='container-fluid'>
-        <h2 className='filter-title'> 
-            <div>FILTER
-                <h5>Bộ lọc phim theo sở thích người xem</h5></div>
-            <img src={images.banner} className='filter-title-img' alt='banner3' />
-        </h2>
+    <div>
+        <div className='filter-header'> 
+            <h1>FILTER</h1>
+            <p>Nơi chọn lọc phim theo sơ thích</p>
+        </div>
         <div className='filter-props h-50 bg-dark border rounded-3 p-3 m-5 text-white'>
             <div className='mb-3 genre-filter'>
                 <h4 className='m-3 ms-0 title bg-dark'>Genres</h4>

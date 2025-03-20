@@ -23,7 +23,7 @@ function Header() {
   useEffect(() => {
     const fetchAllMovies = async () => {
       try {
-        const data = await movieService.getRecommendMovies();
+        const data = await movieService.getAllMovies();
         console.log("Dữ liệu phim từ API:", data);
         if (data && data.length > 0) { // Nếu có dữ liệu API, sử dụng nó
           setMovieList(data);
@@ -111,7 +111,6 @@ function Header() {
   const handleMovieClick = (movieId, e) => {
     e.preventDefault();
     navigate(`/watch/${movieId}`);
-    window.location.reload();
     setSearch('');
   };
 
@@ -127,30 +126,44 @@ function Header() {
     }
   });
 
+  window.addEventListener('resize', () => {
+    if (showMenu) {
+      setShowMenu(false);
+    }
+  });
+
+  //setSearch('') khi click vào các link
+  window.addEventListener('click', (e) => {
+    if (e.target.tagName === 'A') {
+      setSearch('');
+    }
+  });
+
+
   return (
     <>
       <header className={`header ${scrolled ? 'scrolled' : ''}`}>
-        <Link to={config.home} className="logo text-decoration-none" onClick={() => handleToggleMenu()}>CINEMA</Link>
+        <Link to={config.home} className="logo text-decoration-none" onClick={() => setShowMenu(false)}>CINEMA</Link>
         <nav className="nav-links">
           <Link to={config.home} className={location.pathname === config.home ? 'active': ''}>Home</Link>
           <Link to={config.allRecomment} className={location.pathname === config.allRecomment ? 'active': ''}>Trend</Link>
           <Link to={config.blog} className={location.pathname === config.blog ? 'active': ''}>Blog</Link>
         </nav>
         <div className="search-signin">
-          <Link to={config.filter} title='Filter'><FaFilter className='filter-icon me-2 border rounded-2 p-2 fs-2 cursor-pointer text-white' /></Link>
+          <Link to={config.filter} title='Filter'><FaFilter className='filter-icon me-2 border rounded-2 p-2 fs-2 cursor-pointer text-white' onClick={() => {setShowMenu(false);setSearch('')}} /></Link>
           <div className='search-bar'>
             <FaSearch className="search-ic" />
             <input type="text" placeholder="Search" className="search-input" value={search} onFocus={() => setShowMenu(false)} onChange={(e) => setSearch(e.target.value)} />  
             <div className={'movie-list ' + (search ? '' : 'd-none')}>
             {movieList.length > 0 ? (
                 searchMovies.map(movie => (
-                  <div key={movie.id} className='s-movie' onClick={(e) => handleMovieClick(movie.id, e)}> 
+                  <Link to={`watch/${movie.id}`} key={movie.id} className='s-movie' onClick={(e) => handleMovieClick(movie.id, e)}> 
                     <img src={movie.image} alt={movie.title} className='movie-img' />
                     <div className='s-movie-info'>
                       <h5>{movie.title}</h5>
                       <p><span>{movie.year}</span></p>
                     </div>
-                  </div>
+                  </Link>
                 ))
               ) : (
                 search && <center>No results</center>
@@ -167,14 +180,16 @@ function Header() {
         <FaList className='toggle-icon' onClick={() => handleToggleMenu()}></FaList>
         <div className={"toggle-menu" + (showMenu ? ' d-block' : '')}>
           <nav className="nav-links">
-            <Link to={config.home} className={location.pathname === config.home ? 'active': '' } onClick={() => handleToggleMenu()}>Home</Link>
-            <Link to={config.allRecomment} className={location.pathname === config.allRecomment ? 'active': ''} onClick={() => handleToggleMenu()}>Trend</Link>
-            <Link to={config.blog} className={location.pathname === config.blog ? 'active': ''} onClick={() => handleToggleMenu()}>Blog</Link>
+            <Link to={config.home} className={location.pathname === config.home ? 'active': '' } onClick={() => setShowMenu(false)}>Home</Link>
+            <Link to={config.allRecomment} className={location.pathname === config.allRecomment ? 'active': ''} onClick={() => setShowMenu(false)}>Trend</Link>
+            <Link to={config.blog} className={location.pathname === config.blog ? 'active': ''} onClick={() => setShowMenu(false)}>Blog</Link>
           </nav>
           {!user ? (
             <Link className="signin-btn" to={config.login}>Sign In</Link>
           ) : (
-            <User />
+            <div className='user'>
+              <User />
+            </div>
           )}
         </div>
         

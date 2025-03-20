@@ -2,6 +2,15 @@ import apiClient from './api';
 
 //tạo service để lấy dữ liệu từ API
 const movieService = {
+    getAllMovies: async () => {//lấy tất cả phim
+        try{
+            const response = await apiClient.get('/movies')//gọi API để lấy tất cả phim
+            return response.data; //trả về dữ liệu từ API
+        }catch(error){
+            console.error('Lỗi khi lấy tất cả phim:', error);
+            throw error;
+        }
+    },
     getRecommendMovies: async () => {//lấy phim đề xuất
         try{
             const response = await apiClient.get('/movies/recommend') //gọi API để lấy phim đề xuất
