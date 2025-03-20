@@ -33,9 +33,6 @@ const User = () => {
       // Xóa state trong Redux
       dispatch(clearAccessToken());
       
-      // Chuyển hướng về trang chủ
-      navigate('/');
-      
       // Đóng dropdown
       setIsOpen(false);
     } catch (error) {
