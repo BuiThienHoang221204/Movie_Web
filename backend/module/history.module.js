@@ -1,15 +1,16 @@
 const mongoose = require('mongoose');
 
 const watchHistorySchema = new mongoose.Schema({
-  movieId: {type: mongoose.Schema.Types.ObjectId, ref: 'Movie', required: true},
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  videoUrl: { type: String, required: true },
-  title: { type: String },
-  image: { type: String },
-  genre: { type: String },
-  rating: { type: Number, default: 0 },
+  _id: {
+          type: mongoose.Schema.Types.ObjectId,
+          auto: true,
+      },
+  userId: { type: String, ref: 'users', required: true},
+  movieId: {type: Number, ref: 'movies', required: true},
   progress: { type: Number, default: 0 },
-  watchedAt: { type: Date, default: Date.now },
+  lastWatched: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model('WatchHistories', watchHistorySchema);
+const watchHistories = mongoose.model('watchhistories', watchHistorySchema);
+
+module.exports = watchHistories;

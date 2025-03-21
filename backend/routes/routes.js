@@ -40,10 +40,13 @@ router.get(`${API_VERSION}/movies/recommend`, movieController.getAllMoviesRecomm
 router.get(`${API_VERSION}/movies/new`, movieController.getAllMoviesUpdate)
 router.get(`${API_VERSION}/genres`, movieController.getAllGenres)
 router.get(`${API_VERSION}/movies/:id`, movieController.getMovieDetail)
+router.get(`${API_VERSION}/movies`, movieController.getAllMovies)
 
-router.get(`${API_VERSION}/movieHistories`, historyController.getWatchHistory)
+router.get(`${API_VERSION}/movieHistories/:userId`, historyController.getWatchHistory)
+router.get(`${API_VERSION}/movieHistories`, historyController.getAllWatchHistories)
+
 router.post(`${API_VERSION}/movieHistories`, historyController.addWatchHistory)
-router.delete(`${API_VERSION}/movieHistories/:id`, historyController.deleteWatchHistory)
 router.put(`${API_VERSION}/movieHistories/:id`, historyController.updateWatchHistory)
+router.delete(`${API_VERSION}/movieHistories/:id`, historyController.deleteWatchHistory)
 
 module.exports = router

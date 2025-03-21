@@ -1,43 +1,54 @@
 import React, { useState, useEffect } from 'react';
 import { FaArrowRight, FaArrowDown } from 'react-icons/fa';
 import './WatchHistory.css';
+import movieService from '../../services/movieService';
+import {useMovies} from '../components/MovieContext';
+import { Link } from 'react-router-dom';
 
-const WatchHistory = ({ user }) => {
+const WatchHistory = (props) => {
+  const { user } = props;
+  const { genres } = useMovies();
+  const [movies, setMovies] = useState([]);
   const [showAllMovies, setShowAllMovies] = useState(false);
   const [watchHistory, setWatchHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0); // For navigation
 
-  // Fetch watch history
+  // Fetch watch history of user
   useEffect(() => {
     const fetchWatchHistory = async () => {
-      if (!user || !user._id) {
-        setError('Không thể tải lịch sử xem phim: Thiếu thông tin người dùng.');
-        setLoading(false);
-        return;
-      }
-
       try {
-        setLoading(true);
-        const response = await fetch(`http://localhost:5000/api/watch-history/${user._id}`);
-        if (!response.ok) {
-          throw new Error(`Server error: ${response.status} - ${response.statusText}`);
+        const data = await movieService.getWatchHistory(user.email);
+        if (data && data.length > 0) {
+          setWatchHistory(data);
         }
-        const data = await response.json();
-        setWatchHistory(data);
-        setError(null);
       } catch (err) {
-        console.error('Error fetching watch history:', err);
-        setError(`Không thể tải lịch sử xem phim: ${err.message}`);
-        setWatchHistory([]);
+        console.error('Lỗi khi lấy lịch sử xem phim (frontend):', err);
+        setError('Lỗi khi lấy lịch sử xem phim.');
       } finally {
         setLoading(false);
       }
-    };
+    }
 
     fetchWatchHistory();
-  }, [user]);
+  }, []);
+
+  useEffect(() => {
+    const fetchRecommentMovies = async () => {
+      try {
+        const data = await movieService.getAllMovies();
+        if (data && data.length > 0) {
+            setMovies(data);
+
+        }
+      } catch (err) {
+        console.error('Lỗi khi lấy phim đề xuất (frontend):', err);
+      }
+    }
+
+    fetchRecommentMovies();
+  }, []);
 
   // Toggle show all movies
   const toggleShowAllMovies = () => {
@@ -68,6 +79,7 @@ const WatchHistory = ({ user }) => {
       </div>    );
   }
 
+
   // Adjust rating to a 5-star scale if backend uses 10-star scale
   const normalizeRating = (rating) => (rating / 2).toFixed(1);
 
@@ -93,21 +105,31 @@ const WatchHistory = ({ user }) => {
           <div className="history-grid">
             <div className="movie-track">
               {watchHistory.slice(currentIndex, currentIndex + 4).map((item) => (
-                <div key={`${item.userId}-${item.movieId}`} className="history-item">
-                  <img
-                    src={item.image || 'https://via.placeholder.com/350x500'}
-                    alt={item.title}
-                    className="history-image"
-                  />
-                  <div className="history-info">
-                    <div className="history-rating">★ {normalizeRating(item.rating) || 0}/5</div>
-                    <h2 className="history-title">
-                      {item.title || item.videoUrl.split('/').pop().replace('.mp4', '') || 'Unknown Video'}
-                    </h2>
-                    <div className="history-genre">{item.genre || 'Unknown Genre'}</div>
-                    <div className="history-match">Match: {Math.round(item.progress * 100) || 0}%</div>
-                  </div>
-                </div>
+                <Link key={`${item.userId}-${item.movieId}`}  to={`/watch/${item.movieId}`} className="history-item text-decoration-none">
+                  {
+                    movies.map((movie) => {
+                      if (movie.id === item.movieId) {
+                        return (
+                          <div key={`${item.userId}-${item.movieId}`} >
+                            <img
+                            src={movie.image || 'https://via.placeholder.com/350x500'}
+                            alt={movie.title}
+                            className="history-image"
+                            />
+                            <div className="history-info">
+                              <div className="history-rating">★ {normalizeRating(movie.rating) || 0}/5</div>
+                              <h2 className="history-title">
+                                {item.title}
+                              </h2>
+                              <div className="history-genre">{item.genre || 'Unknown Genre'}</div>
+                              <div className="history-match">Match: {Math.round(item.progress * 100) || 0}%</div>
+                            </div>
+                          </div>
+                        );
+                      }
+                    })
+                  }
+                </Link>
               ))}
             </div>
             <button
@@ -129,22 +151,33 @@ const WatchHistory = ({ user }) => {
             <div className="all-movies-section">
               <h2 className="all-movies-title">Toàn bộ phim đã xem</h2>
               <div className="all-movies-grid">
-                {watchHistory.map((item) => (
-                  <div key={`${item.userId}-${item.movieId}`} className="history-item">
-                    <img
-                      src={item.image || 'https://via.placeholder.com/350x500'}
-                      alt={item.title}
-                      className="history-image"
-                    />
-                    <div className="history-info">
-                      <div className="history-rating">★ {normalizeRating(item.rating) || 0}/5</div>
-                      <h2 className="history-title">
-                        {item.title || item.videoUrl.split('/').pop().replace('.mp4', '') || 'Unknown Video'}
-                      </h2>
-                      <div className="history-genre">{item.genre || 'Unknown Genre'}</div>
-                      <div className="history-match">Match: {Math.round(item.progress * 100) || 0}%</div>
-                    </div>
-                  </div>
+                {watchHistory.map((item) => (               
+
+                  <Link key={`${item.userId}-${item.movieId}`} to={`/watch/${item.movieId}`} className="history-item text-decoration-none">
+                    {
+                      movies.map((movie) => {
+                        if (movie.id === item.movieId) {
+                          return (
+                            <div key={`${item.userId}-${item.movieId}`} >
+                              <img
+                              src={movie.image || 'https://via.placeholder.com/350x500'}
+                              alt={movie.title}
+                              className="history-image"
+                              />
+                              <div className="history-info">
+                                <div className="history-rating">★ {normalizeRating(movie.rating) || 0}/5</div>
+                                <h2 className="history-title">
+                                  {item.title}
+                                </h2>
+                                <div className="history-genre">{item.genre || 'Unknown Genre'}</div>
+                                <div className="history-match">Match: {Math.round(item.progress * 100) || 0}%</div>
+                              </div>
+                            </div>
+                          );
+                        }
+                      })
+                    }
+                  </Link>
                 ))}
               </div>
             </div>

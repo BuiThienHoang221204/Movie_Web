@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import WatchHistory from '../components/WatchHistory';
 import './UserProfile.css';
+import movieService from '../../services/movieService';
 
 function UserProfile({ user: propUser }) {
   const reduxUser = useSelector((state) => state.auth.user);
@@ -15,20 +16,12 @@ function UserProfile({ user: propUser }) {
 
   useEffect(() => {
     const fetchWatchStats = async () => {
-      if (!user || !user._id) return;
-
       try {
-        const response = await fetch(`http://localhost:5000/api/watch-history/${user._id}`);
-        if (!response.ok) throw new Error('Failed to fetch watch history');
-        const history = await response.json();
+        const data = await movieService.getWatchHistory(user.email);
+        const totalWatched = data.length;
+        let favoriteGenre = 'N/A';
 
-        const totalWatched = history.length;
-        const genreCount = history.reduce((acc, item) => {
-          acc[item.genre] = (acc[item.genre] || 0) + 1;
-          return acc;
-        }, {});
-        const favoriteGenre = Object.entries(genreCount).sort((a, b) => b[1] - a[1])[0]?.[0] || 'N/A';
-        const hoursWatched = history.reduce((acc, item) => acc + (item.progress || 0) * 2, 0); // Assume 2 hours per movie
+        const hoursWatched = data.reduce((acc, item) => acc + (item.progress || 0) * 2, 0); // Assume 2 hours per movie
 
         setWatchStats({
           totalWatched,
