@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import images from '../../assets/img'
-import { FaPlay } from 'react-icons/fa';
 import movieService from '../../services/movieService';
+import MovieCard from './MovieCard';
 
 function MovieUpdate() {
     const [moviesUpdate, setMoviesUpdate] = useState([]);
-    
+    // lấy tất cả thể loại phim
+
     const fetchMovieUpdate = async () => {
         try {
             const data = await movieService.getNewMovies();
@@ -45,21 +46,13 @@ function MovieUpdate() {
             image: images.ImgMovie
         },
     ];
+
     return (
         <div className='all-movies-section container'>
             <h1 className='section-title'>Phim mới cập nhật</h1>
             <div className='all-movies-grid my-5'>
                 {moviesUpdate.map(movie => (
-                    <div key={movie.id} className='movie-item'>
-                        <img src={movie.image} alt={movie.title} className='movie-image' />
-                        <FaPlay className="play-icon-2" />
-                        <div className='movie-info'>
-                            <h3 className='movie-title'>{movie.title}</h3>
-                            <p className='movie-genre'>Thể loại: {movie.genre}</p>
-                            <p className='movie-match'>Phù hợp: {movie.match}%</p>
-                            <p className='movie-rating'>Điểm: {movie.rating}/10</p>
-                        </div>
-                    </div>
+                    <MovieCard movie={movie}></MovieCard>
                 ))}
             </div>
         </div>

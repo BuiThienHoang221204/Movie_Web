@@ -3,6 +3,7 @@ const googleAuthController = require("../controller/google.controller")
 const facebookAuthController = require("../controller/facebook.controller")
 const {signup, login, getAuthStatus, logout} = require("../controller/access.controller")
 const passport = require("../config/passport.config")
+const { getFilms } = require("../controller/drive.controller")
 const router = express()
 
 router.use(passport)
@@ -18,13 +19,15 @@ router.post("/auth/login", login)
 router.post("/auth/logout", logout)
 router.get("/auth/status", getAuthStatus)
 
+// Drive API routes
+router.get("/api/drive/films/:title", getFilms)
+
 // const filmRoutes = require('./film.routes');
 // const userRoutes = require('./user.routes');
 // const accessRoutes = require('./access.routes');
 // const commentRoutes = require('./comment.routes');
 //import moviecontroller
 const movieController = require('../controller/movie.controller')
-const genreController = require('../controller/genre.controller')
 
 // API version prefix
 const API_VERSION = '/api/v1';//định nghĩa phiên bản API
@@ -38,8 +41,8 @@ const API_VERSION = '/api/v1';//định nghĩa phiên bản API
 // Sửa lại route để phù hợp với đường dẫn frontend đang gọi
 router.get(`${API_VERSION}/movies/recommend`, movieController.getAllMoviesRecommend)
 router.get(`${API_VERSION}/movies/new`, movieController.getAllMoviesUpdate)
-router.get(`${API_VERSION}/movies/all`, movieController.getAllMovies)
+router.get(`${API_VERSION}/genres`, movieController.getAllGenres)
 router.get(`${API_VERSION}/movies/:id`, movieController.getMovieDetail)
-router.get(`${API_VERSION}/genres/all`, genreController.getAllGenres)
+router.get(`${API_VERSION}/movies`, movieController.getAllMovies)
 
 module.exports = router

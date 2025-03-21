@@ -8,6 +8,7 @@ import { setAccessToken, setUser, clearAccessToken } from './redux/authSlice';
 import axiosInstance from './config/axios';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { MovieProvider } from './pages/components/MovieContext';
 
 function App() {
   const dispatch = useDispatch();
@@ -33,33 +34,35 @@ function App() {
 
   return (
     <>
-      <Router>
-        <Routes>
-          {routes.map((route, index) => {
-            const Page = route.component;
-            const Layout = route.layout || DefaultLayout;
-            return (
-              <Route key={index} path={route.path} element={
-                <Layout>
-                  <Page />
-                </Layout>
-              } />
-            )
-          })}
-        </Routes>
-      </Router>
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
-      />
+      <MovieProvider>
+        <Router>
+          <Routes>
+            {routes.map((route, index) => {
+              const Page = route.component;
+              const Layout = route.layout || DefaultLayout;
+              return (
+                <Route key={index} path={route.path} element={
+                  <Layout>
+                    <Page />
+                  </Layout>
+                } />
+              )
+            })}
+          </Routes>
+        </Router>
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+        />
+      </MovieProvider>
     </>
   )
 }

@@ -1,0 +1,64 @@
+/* Header */
+.trend-header {
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+    url("../../assets/img/bg-blog.jpg");
+  background-size: cover;
+  background-position: center;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.trend-header-content h1 {
+  font-size: 3.2rem;
+  margin: 0;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, #e50914, #b20710);
+  -webkit-background-clip: text; /*background cho text*/
+  -webkit-text-fill-color: transparent;
+  margin: 10px 0;
+}
+
+.trend-header p {
+  color: #fff;
+  font-size: 1.2rem;
+  opacity: 0.7;
+}
+
+/* phân trang */
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  gap: 15px;
+}
+
+.page-btn {
+  background-color: #1a1a1a;
+  border: 1px solid #333;
+  color: #fff;
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.page-btn:hover {
+  background-color: #e50914;
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.page-btn.active {
+  background-color: #e50914;
+  color: white;
+  font-weight: bold;
+  border-color: #e50914;
+  transform: translateY(-2px);
+}

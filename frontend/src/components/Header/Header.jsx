@@ -1,22 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import './Header.css';
-import { Link, useNavigate } from 'react-router-dom';
+import images from '../../assets/img';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import config from '../../config';
 import { Banner } from '../../pages/components';
 import { useSelector } from 'react-redux';
 import User from '../User/User';
-import { FaSearch, FaFilter } from 'react-icons/fa';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import images from '../../assets/img';
+import { FaSearch, FaFilter, FaList } from 'react-icons/fa';
 import movieService from '../../services/movieService';
 
 function Header() {
   const [scrolled, setScrolled] = useState(false);
   const user = useSelector((state) => state.auth.user);
+  const location = useLocation();
+  const isHomePage = location.pathname === '/' || location.pathname === '/home';
   const [search, setSearch] = useState('');
   const [movieList, setMovieList] = useState([]);
   const [searchMovies, setSearchMovies] = useState([]);
   const navigate = useNavigate();
+  const [showMenu, setShowMenu] = useState(false);
 
   useEffect(() => {
     const fetchAllMovies = async () => {
@@ -38,25 +40,6 @@ function Header() {
     fetchAllMovies();
   }, []);
 
-  // Thêm effect để theo dõi sự kiện cuộn
-  useEffect(() => {
-    const handleScroll = () => {
-      // Kiểm tra vị trí cuộn, nếu > 50px thì thêm class scrolled
-      if (window.scrollY > 50) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
-    };
-
-    // Thêm event listener
-    window.addEventListener('scroll', handleScroll);
-
-    // Cleanup function
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
 
   const fallbackMovies = [
     {
@@ -94,6 +77,26 @@ function Header() {
     },
   ];
 
+  // Thêm effect để theo dõi sự kiện cuộn
+  useEffect(() => {
+    const handleScroll = () => {
+      // Kiểm tra vị trí cuộn, nếu > 50px thì thêm class scrolled
+      if (window.scrollY > 50) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+
+    // Thêm event listener
+    window.addEventListener('scroll', handleScroll);
+
+    // Cleanup function
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   useEffect(() => {
     if(!search) {
       setSearchMovies([]);
@@ -105,51 +108,93 @@ function Header() {
     setSearchMovies(filteredMovies);
   }, [search]);
 
-  const handleMovieClick = (movieId) => {
+  const handleMovieClick = (movieId, e) => {
+    e.preventDefault();
     navigate(`/watch/${movieId}`);
-    window.location.reload();
     setSearch('');
   };
+
+  
+  const handleToggleMenu = () => {
+    setSearch('');
+    setShowMenu(!showMenu);
+  }
+
+  window.addEventListener('scroll', () => {
+    if (showMenu) {
+      setShowMenu(false);
+    }
+  });
+
+  window.addEventListener('resize', () => {
+    if (showMenu) {
+      setShowMenu(false);
+    }
+  });
+
+  //setSearch('') khi click vào các link
+  window.addEventListener('click', (e) => {
+    if (e.target.tagName === 'A') {
+      setSearch('');
+    }
+  });
+
 
   return (
     <>
       <header className={`header ${scrolled ? 'scrolled' : ''}`}>
-        <Link to={config.home} className="logo">CINEMA</Link>
+        <Link to={config.home} className="logo text-decoration-none" onClick={() => setShowMenu(false)}>CINEMA</Link>
         <nav className="nav-links">
-          <Link to={config.home}>Home</Link>
-          <Link to={config.home}>Trend</Link>
-          <Link to={config.home}>Blog</Link>
+          <Link to={config.home} className={location.pathname === config.home ? 'active': ''}>Home</Link>
+          <Link to={config.allRecomment} className={location.pathname === config.allRecomment ? 'active': ''}>Trend</Link>
+          <Link to={config.blog} className={location.pathname === config.blog ? 'active': ''}>Blog</Link>
         </nav>
         <div className="search-signin">
-          <Link to={config.filter} title='Filter'><FaFilter className='filter-icon me-2 border rounded-2 p-2 fs-2 cursor-pointer text-white' /></Link>
+          <Link to={config.filter} title='Filter'><FaFilter className='filter-icon me-2 border rounded-2 p-2 fs-2 cursor-pointer text-white' onClick={() => {setShowMenu(false);setSearch('')}} /></Link>
           <div className='search-bar'>
-            <FaSearch className="search-icon" />
-            <input type="text" placeholder="Search" className="search-input" value={search} onChange={(e) => setSearch(e.target.value)} />
-            
-          </div>
-          <div className={'movie-list ' + (search ? '' : 'd-none')}>
+            <FaSearch className="search-ic" />
+            <input type="text" placeholder="Search" className="search-input" value={search} onFocus={() => setShowMenu(false)} onChange={(e) => setSearch(e.target.value)} />  
+            <div className={'movie-list ' + (search ? '' : 'd-none')}>
             {movieList.length > 0 ? (
                 searchMovies.map(movie => (
-                  <div key={movie.id} className='movie' onClick={() => handleMovieClick(movie.id)}> 
+                  <Link to={`watch/${movie.id}`} key={movie.id} className='s-movie' onClick={(e) => handleMovieClick(movie.id, e)}> 
                     <img src={movie.image} alt={movie.title} className='movie-img' />
-                    <div className='movie-info'>
+                    <div className='s-movie-info'>
                       <h5>{movie.title}</h5>
                       <p><span>{movie.year}</span></p>
                     </div>
-                  </div>
+                  </Link>
                 ))
               ) : (
                 search && <center>No results</center>
               )}
+            </div>
           </div>
+          
           {!user ? (
             <Link className="signin-btn" to={config.login}>Sign In</Link>
           ) : (
             <User />
           )}
         </div>
+        <FaList className='toggle-icon' onClick={() => handleToggleMenu()}></FaList>
+        <div className={"toggle-menu" + (showMenu ? ' d-block' : '')}>
+          <nav className="nav-links">
+            <Link to={config.home} className={location.pathname === config.home ? 'active': '' } onClick={() => setShowMenu(false)}>Home</Link>
+            <Link to={config.allRecomment} className={location.pathname === config.allRecomment ? 'active': ''} onClick={() => setShowMenu(false)}>Trend</Link>
+            <Link to={config.blog} className={location.pathname === config.blog ? 'active': ''} onClick={() => setShowMenu(false)}>Blog</Link>
+          </nav>
+          {!user ? (
+            <Link className="signin-btn" to={config.login}>Sign In</Link>
+          ) : (
+            <div className='user'>
+              <User />
+            </div>
+          )}
+        </div>
+        
       </header>
-      <Banner />
+      {isHomePage && <Banner />}
     </>
   );
 }

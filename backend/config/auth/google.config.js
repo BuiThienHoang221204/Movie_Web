@@ -1,7 +1,6 @@
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 require("dotenv").config();
-const ROLES = require("../../config/role.config")
 
 passport.use(
     new GoogleStrategy(
@@ -15,8 +14,6 @@ passport.use(
                 name: profile.displayName,
                 email: profile.emails[0].value,
                 provider: "google",
-                status: true,
-                role: ROLES.USER,
                 avatar: profile.photos[0].value,
                 timeStamp: {
                     createdAt: new Date(),

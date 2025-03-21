@@ -1,75 +1,83 @@
-import React, { useState, useEffect } from 'react';
-import './Home.css';
-import images from '../../assets/img';
-import MovieListWithPag from '../components/MovieListWithPag';
-import movieService from '../../services/movieService';
+import React, { useEffect, useState } from 'react'
+import { RecommentMovie } from '../components'
+import MoiveUpdate from '../components/MovieUpdate'
+import movieService from '../../services/movieService'
+import './Home.css'
 
 function Home() {
-  const [RecommentMovies, setRecommentMovies] = useState([]);
-  const [TrendingMovies, setTrendingMovies] = useState([]);
-
+  const [trailer, setTrailer] = useState([]);
   useEffect(() => {
-    const fetchRecommentMovies = async () => {
-      try {
-        const data = await movieService.getRecommendMovies();
-        console.log("Dữ liệu phim từ API:", data);
-        if (data && data.length > 0) { // Nếu có dữ liệu API, sử dụng nó
-          setRecommentMovies(data);
-        } else {// Nếu không có dữ liệu từ API, sử dụng dữ liệu mẫu
-          setRecommentMovies(fallbackMovies);
-        }
-      } catch (err) {
-        console.error('Lỗi khi lấy phim đề xuất (frontend):', err);
-        // Khi có lỗi, sử dụng dữ liệu mẫu
-        setRecommentMovies(fallbackMovies);
-      }
-    }
-
-    fetchRecommentMovies();
-  }, []);
-
-  useEffect(() => {
-    const fetchTrendingMovies = async () => {
+    const fetchTrailer = async () => {
       try {
         const data = await movieService.getNewMovies();
         console.log("Dữ liệu phim từ API:", data);
         if (data && data.length > 0) { // Nếu có dữ liệu API, sử dụng nó
-          setTrendingMovies(data);
+          //lấy 3 phim đầu tiên
+          setTrailer(data.slice(0, 3));
         } else {// Nếu không có dữ liệu từ API, sử dụng dữ liệu mẫu
-          setTrendingMovies(fallbackMovies);
+          setTrailer(upcomingMovies);
         }
       } catch (err) {
         console.error('Lỗi khi lấy phim đề xuất (frontend):', err);
         // Khi có lỗi, sử dụng dữ liệu mẫu
-        setTrendingMovies(fallbackMovies);
+        setTrailer(upcomingMovies);
       }
     }
 
-    fetchTrendingMovies();
+    fetchTrailer();
   }, []);
-
-  const fallbackMovies = [
-    {
-      id: 1, title: "Avengers: Endgame", year: "2019",
-      genre: "Hành động, Khoa học viễn tưởng", rating: 4.9, match: 98,
-      image: images.ImgMovie
-    },
-    {
-      id: 2, title: "Joker", year: "2019",
-      genre: "Tâm lý, Tội phạm", rating: 4.7, match: 95,
-      image: images.banner2
-    },
-
-  ];
-
+  // Sample upcoming movies data
+  const upcomingMovies = [
+    { id: 1, title: "Spider-Man 4: Brand New Day", year: "May 2026" },
+    { id: 2, title: "The Batman", year: "March 2022" },
+    { id: 3, title: "The Dark Knight", year: "July 2008" },
+  ]
   return (
-    <>
-      <div className='home pt-2 pb-5'>
-        <MovieListWithPag title={'Top Trending'} movies={TrendingMovies.sort((a, b) => b.rating - a.rating)}></MovieListWithPag>
-        <MovieListWithPag title={'Top Rating'} movies={RecommentMovies.sort((a, b) => parseFloat(b.rating) - parseFloat(a.rating))}></MovieListWithPag>
-        <MovieListWithPag title={'You May Like✨'} movies={RecommentMovies.sort((a, b) => parseFloat(b.rating) - parseFloat(a.rating))}></MovieListWithPag>
+    <div>
+      <RecommentMovie />
+      <MoiveUpdate />
+      <div className="trailer-section container">
+        <h1 className='title-trailer'>Trailer phim hot</h1>
+        <div className="trailer-content">
+          <div className="trailer-main">
+            <iframe width="100%" height="100%"
+              src="https://www.youtube.com/embed/ksls6lIiSPg?autoplay=1&mute=1"
+              title="PANDA PLAN Official Trailer (2024) Jackie Chan"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerPolicy="strict-origin-when-cross-origin"
+              allowFullScreen
+            >
+            </iframe>
+          </div>
+          <div className="trailer-sidebar">
+            <div className="trailer-info">
+              <h3>PANDA PLAN Official Trailer (2024)</h3>
+              <p className="release-date">Coming in 2026</p>
+              <p className="trailer-movie-description">
+                Huyền thoại võ thuật Jackie Chan trở lại trong PANDA PLAN, một bộ phim hành động - phiêu lưu đầy hấp dẫn!
+                Khi một tổ chức tội phạm quốc tế nhắm vào loài gấu trúc quý hiếm, một cựu đặc vụ (Jackie Chan) buộc phải tái xuất để bảo vệ chúng
+              </p>
+              <button className="add-watchlist-btn">
+                <i className="fa fa-plus"></i> Add to Watchlist
+              </button>
+            </div>
+            <div className="upcoming-movies">
+              <h3>Coming Soon</h3>
+              <ul className="upcoming-list">
+                {trailer.map(movie => (
+                  <li key={movie.id} className="upcoming-item">
+                    <span className="upcoming-title">{movie.title}</span>
+                    <span className="upcoming-date">{movie.year}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
       </div>
-    </>
+    </div>
   )
 }
+
 export default Home

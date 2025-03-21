@@ -8,7 +8,7 @@ import { useMovies } from './MovieContext';
 import config from '../../config';
 import MovieCard from './MovieCard';
 
-function RecommentMovie() {
+const RelatedMovies = () => {
   const { RecommentMovies, setRecommentMovies } = useMovies();
   const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);// hiển thị phim đề xuất
@@ -120,6 +120,6 @@ function RecommentMovie() {
       </div>
     </div>
   )
-}
+};
 
-export default RecommentMovie
+export default RelatedMovies; 

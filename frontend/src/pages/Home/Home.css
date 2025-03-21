@@ -1,8 +1,243 @@
-.home {
-  background: linear-gradient(
-    90deg,
-    rgba(0, 0, 0, 0.8) 0%,
-    rgba(0, 0, 0, 0.6) 80%,
-    rgba(0, 0, 0, 0.1) 100%
-  );
+.title-trailer {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #ffffff;
+    background: linear-gradient(135deg, #f0e1e1 0%, #ff000d 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin: 40px 0;
+    padding-top: 30px;
+}
+
+.title-trailer::after {
+    content: '';
+    display: block;
+    width: 200px;
+    height: 3px;
+    background: linear-gradient(to right, #e50914, rgba(229, 9, 20, 0.3));
+    margin: 10px 0;
+    border-radius: 3px;
+}
+
+.trailer-section {
+    margin-bottom: 60px;
+}
+
+.trailer-content {
+    display: flex;
+    gap: 20px;
+}
+
+.trailer-main {
+    flex: 1;
+}
+
+.trailer-sidebar {
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.trailer-info {
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.trailer-info h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #ffffff;
+}
+
+.release-date {
+    color: #e50914;
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+
+.trailer-movie-description {
+    color: #cccccc;
+    line-height: 1.5;
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+}
+
+/* chỉnh nút thêm vào danh sách xem sau */
+.add-watchlist-btn {
+    background: rgba(229, 9, 20, 0.8);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.add-watchlist-btn:hover {
+    background: #e50914;
+}
+
+/* chỉnh danh sách phim sắp ra mắt */
+.upcoming-movies {
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.upcoming-movies h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #ffffff;
+    position: relative;
+}
+
+/* chỉnh đường viền */
+.upcoming-movies h3::after {
+    content: '';
+    display: block;
+    width: 50px;
+    height: 2px;
+    background: #e50914;
+    margin: 8px 0;
+}
+
+/* chỉnh danh sách phim sắp ra mắt */
+.upcoming-list {
+    list-style: none;
+    padding: 0;
+}
+
+.upcoming-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.upcoming-item:last-child {
+    border-bottom: none;
+}
+
+.upcoming-title {
+    font-size: 1rem;
+    color: #ffffff;
+    font-weight: 500;
+}
+
+.upcoming-date {
+    color: #e50914;
+    font-size: 1rem;
+}
+
+/* Media Queries for Responsive Design */
+@media (max-width: 1200px) {
+    .container {
+        width: 95%;
+        margin: 0 auto;
+    }
+
+    .trailer-main iframe {
+        max-height: 450px;
+    }
+}
+
+@media (max-width: 992px) {
+    .title-trailer {
+        font-size: 2rem;
+        margin: 30px 0;
+    }
+
+    .trailer-main iframe {
+        max-height: 400px;
+    }
+}
+
+@media (max-width: 768px) {
+    .trailer-content {
+        flex-direction: column;
+    }
+
+    .trailer-sidebar {
+        width: 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .trailer-info,
+    .upcoming-movies {
+        flex: 1;
+        min-width: 280px;
+    }
+
+    .title-trailer {
+        font-size: 1.8rem;
+        margin: 25px 0;
+        padding-top: 20px;
+    }
+
+    .title-trailer::after {
+        width: 150px;
+    }
+}
+
+@media (max-width: 576px) {
+    .trailer-sidebar {
+        flex-direction: column;
+    }
+
+    .title-trailer {
+        font-size: 1.5rem;
+        margin: 20px 0;
+    }
+
+    .title-trailer::after {
+        width: 120px;
+        height: 2px;
+    }
+
+    .trailer-info h3 {
+        font-size: 1.3rem;
+    }
+
+    .upcoming-movies h3 {
+        font-size: 1.2rem;
+    }
+
+    .upcoming-item {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .upcoming-date {
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .trailer-section {
+        margin-bottom: 40px;
+    }
+
+    .trailer-info,
+    .upcoming-movies {
+        padding: 15px;
+    }
+
+    .movie-description {
+        font-size: 0.9rem;
+    }
+
+    .add-watchlist-btn {
+        padding: 8px 12px;
+        font-size: 0.9rem;
+    }
 }

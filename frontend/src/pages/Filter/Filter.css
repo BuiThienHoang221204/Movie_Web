@@ -1,3 +1,36 @@
+.filter-header {
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+    url("../../assets/img/bg-blog.jpg");
+  background-size: cover;
+  background-position: center;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-bottom: 50px;
+  border-radius: 0.3rem;
+}
+
+.filter-header h1 {
+  font-size: 3.2rem;
+  margin: 0;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, #e50914, #b20710);
+  -webkit-background-clip: text; /*background cho text*/
+  -webkit-text-fill-color: transparent;
+  margin: 10px 0;
+}
+
+.filter-header p {
+  color: #fff;
+  font-size: 1.2rem;
+  opacity: 0.7;
+}
+
 .filter-props span {
   font-weight: bold;
   margin-right: 1rem;
@@ -48,7 +81,7 @@
   position: absolute;
   top: -2.1rem;
   left: 1rem;
-  z-index: 1000;
+  z-index: 1;
   padding: 0.1rem 1rem;
   border-radius: 0 0 0.3rem;
   color: white;
@@ -58,9 +91,10 @@
 .list-movie {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 2fr));
-  grid-gap: 0.5rem;
+  grid-gap: 1.2rem;
   justify-content: center;
   margin-top: 1rem;
+  margin: 0 3rem;
 }
 
 .list-movie > * {
@@ -209,4 +243,55 @@
 
 .movie-card:hover .movie-title {
   color: red;
+}
+
+.genre-form,
+.year-form,
+.match-form {
+  display: none;
+  width: 20rem;
+  margin: 1rem 0;
+  padding: 1rem 0;
+  background-color: transparent;
+  border: 1px solid #f1f1f1;
+  radius: 0.3rem;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+@media screen and (max-width: 768px) {
+  .list-movie {
+    margin: 0 1rem;
+  }
+  .filter-title {
+    padding: 2em 0;
+  }
+  .filter-title h1 {
+    font-size: 2rem;
+  }
+  .filter-props span {
+    display: none;
+  }
+  .movie-card {
+    width: 10rem;
+    height: 15rem;
+  }
+  .movie-card .movie-title {
+    font-size: 1rem;
+  }
+  .movie-card .movie-year {
+    font-size: 0.7rem;
+  }
+  .movie-card .movie-rating {
+    font-size: 0.7rem;
+  }
+  .play-icon-2 {
+    font-size: 40px;
+  }
+
+  .genre-form,
+  .year-form,
+  .match-form {
+    display: block;
+  }
 }

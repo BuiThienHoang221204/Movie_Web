@@ -31,13 +31,13 @@ function Banner() {
         },
         {
             id: 3,
-            title: "Phantom Shadows",
+            title: "Avengers",
             year: "2023",
             duration: "2h 15min",
             genres: "Horror, Mystery",
             rating: "8.7",
             ageRating: "18+",
-            description: "Khi một gia đình chuyển đến một ngôi nhà cổ bí ẩn, họ bắt đầu trải nghiệm những hiện tượng siêu nhiên đáng sợ. Bí mật đen tối của ngôi nhà dần dần được hé lộ.",
+            description: "nhóm siêu anh hùng mạnh nhất trong Vũ trụ Điện ảnh Marvel (MCU), được tập hợp bởi Nick Fury nhằm bảo vệ Trái Đất trước các mối đe dọa nguy hiểm",
             image: images.banner3
         }
     ];
@@ -107,10 +107,10 @@ function Banner() {
             
             {/* Di chuyển phần hiển thị poster phim ra ngoài banner-content để định vị độc lập */}
             <div className="movie-poster-container">
-                <div className="movie-poster">
-                    <div className="play-button-overlay">
+                <div className="movie-poster-banner">
+                    <div className="play-button-banner">
                         {/* Sử dụng icon từ react-icons thay vì hình ảnh */}
-                        <FaPlay className="play-icon" />
+                        <FaPlay className="play-icon-banner" />
                     </div>
                     {/* Sử dụng hình ảnh từ movie hiện tại */}
                     <img 
