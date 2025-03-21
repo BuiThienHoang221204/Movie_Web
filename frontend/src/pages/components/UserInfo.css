@@ -1,0 +1,144 @@
+.user-info-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #1c2526;
+    border-radius: 10px;
+    color: #fff;
+    font-family: Arial, sans-serif;
+  }
+  
+  .user-info-title {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #e50914;
+  }
+  
+  .user-info-content {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+  
+  .avatar-section {
+    text-align: center;
+  }
+  
+  .user-avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+    border: 2px solid #e50914;
+  }
+  
+  .avatar-input {
+    display: block;
+    margin: 0 auto;
+    padding: 5px;
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #e50914;
+    border-radius: 5px;
+  }
+  
+  .info-section {
+    flex: 1;
+  }
+  
+  .info-section p {
+    font-size: 1.1rem;
+    margin: 10px 0;
+  }
+  
+  .info-section p strong {
+    color: #e50914;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-group label {
+    display: block;
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+    color: #e50914;
+  }
+  
+  .form-input {
+    width: 100%;
+    padding: 8px;
+    font-size: 1rem;
+    border: 1px solid #e50914;
+    border-radius: 5px;
+    background-color: #333;
+    color: #fff;
+  }
+  
+  .form-input:disabled {
+    background-color: #444;
+    color: #888;
+  }
+  
+  .form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  
+  .edit-btn,
+  .save-btn,
+  .cancel-btn {
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .edit-btn {
+    background-color: #e50914;
+    color: #fff;
+  }
+  
+  .edit-btn:hover {
+    background-color: #ff3b30;
+  }
+  
+  .save-btn {
+    background-color: #28a745;
+    color: #fff;
+  }
+  
+  .save-btn:hover {
+    background-color: #218838;
+  }
+  
+  .cancel-btn {
+    background-color: #6c757d;
+    color: #fff;
+  }
+  
+  .cancel-btn:hover {
+    background-color: #5a6268;
+  }
+
+  .back-btn {
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    background-color: #6c757d;
+    color: #fff;
+    margin-top: 10px;
+  }
+  
+  .back-btn:hover {
+    background-color: #5a6268;
+  }

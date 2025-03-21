@@ -24,6 +24,7 @@ router.get("/auth/status", getAuthStatus)
 // const commentRoutes = require('./comment.routes');
 //import moviecontroller
 const movieController = require('../controller/movie.controller')
+const historyController = require('../controller/history.controller')
 
 // API version prefix
 const API_VERSION = '/api/v1';//định nghĩa phiên bản API
@@ -39,6 +40,10 @@ router.get(`${API_VERSION}/movies/recommend`, movieController.getAllMoviesRecomm
 router.get(`${API_VERSION}/movies/new`, movieController.getAllMoviesUpdate)
 router.get(`${API_VERSION}/genres`, movieController.getAllGenres)
 router.get(`${API_VERSION}/movies/:id`, movieController.getMovieDetail)
-router.get(`${API_VERSION}/movies`, movieController.getAllMovies)
+
+router.get(`${API_VERSION}/movieHistories`, historyController.getWatchHistory)
+router.post(`${API_VERSION}/movieHistories`, historyController.addWatchHistory)
+router.delete(`${API_VERSION}/movieHistories/:id`, historyController.deleteWatchHistory)
+router.put(`${API_VERSION}/movieHistories/:id`, historyController.updateWatchHistory)
 
 module.exports = router
