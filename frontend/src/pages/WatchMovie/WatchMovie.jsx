@@ -32,7 +32,7 @@ function WatchMovie() {
         setGenres(genresData);
         setLoading(false);
       } catch (err) {
-        console.error("Lỗi khi lấy dữ liệu:", err);
+        console.error("Lỗi khi tải dữ liệu:", err);
         setError("Không thể tải thông tin phim. Vui lòng thử lại sau.");
         setLoading(false);
       }
@@ -58,7 +58,7 @@ function WatchMovie() {
         if (err.response && err.response.status === 404) {
           console.warn(`Không tìm thấy video cho phim: ${movie.title}`);
         } else {
-          console.error("Lỗi khi lấy video:", err);
+          console.error("Lỗi khi tải video:", err);
         }
       }
     };
@@ -88,7 +88,7 @@ function WatchMovie() {
       <div className="movie-content">
         {/* Phần thông tin phim */}
         <div className="movie-info-section">
-          {/* Container cho hình ảnh và thông tin */}
+          {/* Phần poster và thông tin */}
           <div className="movie-details-container">
             <div className="movie-poster-wrapper">
               <img
@@ -126,7 +126,7 @@ function WatchMovie() {
                 </div>
               </div>
 
-              {/* Chỉ hiển thị phần thể loại khi có genre_ids và có ít nhất một thể loại tồn tại */}
+              {/* Chỉ hiển thị thể loại khi có genre_ids và có ít nhất một thể loại */}
               {movie.genre_ids && movie.genre_ids.length > 0 && (
                 <div className="movie-genres">
                   <h3>Thể loại:</h3>
