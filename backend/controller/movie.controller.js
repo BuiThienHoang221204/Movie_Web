@@ -1,6 +1,6 @@
 const movies = require('../module/movie.module') //import model movie
-const mongoose = require('mongoose') // giúp tương tác với database
 const genres = require('../module/genre.module.js') // import model genre
+const mongoose = require('mongoose') // giúp tương tác với database
 
 // lấy tất cả phim
 const getAllMovies = async (req, res) => {
