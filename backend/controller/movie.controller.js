@@ -6,7 +6,7 @@ const mongoose = require('mongoose') // giúp tương tác với database
 const getAllMovies = async (req, res) => {
     try {
         const allMovies = await movies.find();
-        console.log("Dữ liệu lấy từ MongoDB:", allMovies);
+        // console.log("Dữ liệu lấy từ MongoDB:", allMovies)
         
         if (!allMovies || allMovies.length === 0) {
             return res.status(404).json({ message: "Không tìm thấy phim nào" });
@@ -37,7 +37,7 @@ const getAllMoviesRecommend = async (req, res) => {
             .sort({ popularity: -1 }) //sắp xếp theo lượt xem giảm dần
             .limit(50) //giới hạn 50 phim
 
-        console.log("Dữ liệu lấy từ MongoDB:", recommentMovie);
+        // console.log("Dữ liệu lấy từ MongoDB:", recommentMovie);
         
         //kiểm tra xem có phim không
         if (!recommentMovie || recommentMovie.length === 0) {
@@ -72,7 +72,7 @@ const getAllMoviesUpdate = async (req, res) => {
             .sort({ release_date: 1 }) // Sắp xếp theo ngày phát hành tăng dần (ra mắt sớm trước)
             .limit(10)
             
-        console.log("Số lượng phim mới tìm thấy:", newMovies.length);
+        // console.log("Số lượng phim mới tìm thấy:", newMovies.length);
             
         //kiểm tra xem có phim không
         if (!newMovies || newMovies.length === 0) {
@@ -116,7 +116,7 @@ const getMovieDetail = async (req, res) => {
 const getAllGenres = async (req, res) => {
     try {
         const allGenres = await genres.find();
-        console.log("Dữ liệu thể loại:", allGenres); // log để debug
+        // console.log("Dữ liệu thể loại:", allGenres);
         
         if (!allGenres || allGenres.length === 0) {
             return res.status(404).json({ message: "Không tìm thấy thể loại phim nào" });
