@@ -19,6 +19,13 @@ router.post("/auth/login", login)
 router.post("/auth/logout", logout)
 router.get("/auth/status", getAuthStatus)
 
+const test = async (req, res) => {
+    const allMovies = await movies.find();
+    console.log("Dữ liệu lấy từ MongoDB:", allMovies);
+    res.status(200).json(allMovies);
+}
+router.get("/test", test)
+
 // Drive API routes
 router.get("/api/drive/films/:title", getFilms)
 
