@@ -5,7 +5,7 @@ const {signup, login, getAuthStatus, logout} = require("../controller/access.con
 const passport = require("../config/passport.config")
 const { getFilms } = require("../controller/drive.controller")
 const router = express()
-const movies = require("../module/movies.module")
+const movies = require("../module/movie.module")
 
 router.use(passport)
 
