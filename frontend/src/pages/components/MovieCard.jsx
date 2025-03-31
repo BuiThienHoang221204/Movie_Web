@@ -22,7 +22,7 @@ const MovieCard = (props) => {
         const fetchGenres = async () => {
             try {
                 const data = await movieService.getGenres();
-                console.log("Dữ liệu thể loại từ API:", data);
+                // console.log("Dữ liệu thể loại từ API:", data);
                 if (data && data.length > 0) { // Nếu có dữ liệu API, sử dụng nó
                     setGenres(data);
                 } else {// Nếu không có dữ liệu từ API, sử dụng dữ liệu mẫu

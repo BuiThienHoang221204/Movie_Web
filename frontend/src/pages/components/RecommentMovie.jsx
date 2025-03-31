@@ -43,7 +43,7 @@ function RecommentMovie() {
     const fetchRecommentMovies = async () => {
       try {
         const data = await movieService.getRecommendMovies();
-        console.log("Dữ liệu phim từ API:", data);
+        // console.log("Dữ liệu phim từ API:", data);
         if (data && data.length > 0) {
           setRecommentMovies(data);
         } else {
