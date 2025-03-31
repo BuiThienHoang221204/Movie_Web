@@ -24,7 +24,7 @@ function Header() {
     const fetchAllMovies = async () => {
       try {
         const data = await movieService.getAllMovies();
-        console.log("Dữ liệu phim từ API:", data);
+        // console.log("Dữ liệu phim từ API:", data);
         if (data && data.length > 0) { // Nếu có dữ liệu API, sử dụng nó
           setMovieList(data);
         } else {// Nếu không có dữ liệu từ API, sử dụng dữ liệu mẫu

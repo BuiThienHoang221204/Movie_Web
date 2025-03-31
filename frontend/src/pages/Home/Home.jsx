@@ -10,7 +10,7 @@ function Home() {
     const fetchTrailer = async () => {
       try {
         const data = await movieService.getNewMovies();
-        console.log("Dữ liệu phim từ API:", data);
+        // console.log("Dữ liệu phim từ API:", data);
         if (data && data.length > 0) { // Nếu có dữ liệu API, sử dụng nó
           //lấy 3 phim đầu tiên
           setTrailer(data.slice(0, 3));
