@@ -1,5 +1,5 @@
 const movies = require('../module/movie.module') //import model movie
-const genres = require('../module/genre.module.js') // import model genre
+const genres = require('../module/genre.module') // import model genre
 const mongoose = require('mongoose') // giúp tương tác với database
 
 // lấy tất cả phim
