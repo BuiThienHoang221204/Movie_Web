@@ -21,7 +21,7 @@ app.use(cookieParser()) // Parse cookies
 // CORS configuration
 app.use(cors({
     origin: process.env.CLIENT_URL || 'http://localhost:5173',
-    credentials: process.env.CLIENT_URL === 'production' ? 'strict' : 'lax',
+    credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Cookie'],
     exposedHeaders: ['Set-Cookie'],
