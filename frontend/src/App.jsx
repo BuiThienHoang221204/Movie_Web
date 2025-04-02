@@ -17,10 +17,8 @@ function App() {
     try {
       const response = await axiosInstance.get('auth/status');
 
-      if (response.status === 200) {
-        dispatch(setUser(response.data.user));
-        dispatch(setAccessToken(response.data.accessToken));
-      }
+      dispatch(setUser(response.data.user));
+      dispatch(setAccessToken(response.data.accessToken));
     } catch (error) {
       if (error.response?.status === 401) {
         dispatch(clearAccessToken());
