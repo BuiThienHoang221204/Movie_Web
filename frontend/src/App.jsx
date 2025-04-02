@@ -9,14 +9,15 @@ import axiosInstance from './config/axios';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { MovieProvider } from './pages/components/MovieContext';
+import axios from 'axios';
 
 function App() {
   const dispatch = useDispatch();
 
   const checkAuthStatus = async () => {
     try {
-      const response = await axiosInstance.get('auth/status');
-
+      const response = await axios.get('https://hmovie.onrender.com/auth/status')
+      
       dispatch(setUser(response.data.user));
       dispatch(setAccessToken(response.data.accessToken));
     } catch (error) {
