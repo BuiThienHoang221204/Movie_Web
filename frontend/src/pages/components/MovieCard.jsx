@@ -3,6 +3,7 @@ import { FaPlay } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom'
 import movieService from '../../services/movieService';
 import { useMovies } from './MovieContext';
+import { server } from '../../config'; //import server từ config.js
 
 const MovieCard = (props) => {
     const movie = props.movie;
@@ -38,7 +39,7 @@ const MovieCard = (props) => {
 
   return (
     <>
-        <Link to={`/watch/${movie.id}`} key={movie.id} className='movie-item' onClick={() => handleWatchMovie(movie.id)}>
+        <Link to={`${server}/watch/${movie.id}`} key={movie.id} className='movie-item' onClick={() => handleWatchMovie(movie.id)}>
             <img src={movie.image} alt={movie.title} className='movie-image' />
             <FaPlay className="play-icon-2" />
             <div className='movie-info'>
