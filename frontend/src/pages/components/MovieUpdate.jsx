@@ -52,7 +52,7 @@ function MovieUpdate() {
             <h1 className='section-title'>Phim mới cập nhật</h1>
             <div className='all-movies-grid my-5'>
                 {moviesUpdate.map(movie => (
-                    <MovieCard movie={movie}></MovieCard>
+                    <MovieCard movie={movie} key={movie.id}></MovieCard>
                 ))}
             </div>
         </div>
