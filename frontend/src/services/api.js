@@ -9,7 +9,7 @@ const apiClient = axios.create({
         'Content-Type': 'application/json', //định dạng dữ liệu gửi đi là json
         'Accept': 'application/json', //định dạng dữ liệu nhận về là json
     },
-    timeout: 10000, //thời gian chờ request là 10s
+    timeout: 20000, //thời gian chờ request là 10s
 });
 
 //Interceptor được sử dụng để chặn và xử lý request hoặc response trước khi chúng được gửi đến server
