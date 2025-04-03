@@ -1,6 +1,5 @@
 import React from 'react';
 import { FaPlay } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
 import { useMovies } from './MovieContext';
 
 const MovieCard = (props) => {
@@ -12,9 +11,10 @@ const MovieCard = (props) => {
         return genre ? genre.name : ''
     }
 
+
   return (
     <>
-        <Link to={`watch/${movie.id}`} className='movie-item'>
+        <div onClick={() => window.location.href = `/watch/${movie.id}`} className='movie-item'>
             <img src={movie.image} alt={movie.title} className='movie-image' />
             <FaPlay className="play-icon-2" />
             <div className='movie-info'>
@@ -29,7 +29,7 @@ const MovieCard = (props) => {
                 <p className='movie-match'>Phù hợp: {movie.match}%</p>
                 <p className='movie-rating'>Điểm: {movie.rating.toFixed(1)}/10</p>
             </div>
-        </Link>
+        </div>
     </>
   )
 }
