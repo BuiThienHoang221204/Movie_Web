@@ -5,11 +5,11 @@ import routes from './routes'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useDispatch } from 'react-redux';
 import { setAccessToken, setUser, clearAccessToken } from './redux/authSlice';
-import axiosInstance from './config/axios';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { MovieProvider } from './pages/components/MovieContext';
 import axios from 'axios';
+import Chatbot from './components/Chatbot/Chatbot';
 
 function App() {
   const dispatch = useDispatch();
@@ -48,6 +48,7 @@ function App() {
               )
             })}
           </Routes>
+          <Chatbot></Chatbot>
         </Router>
         <ToastContainer
           position="top-right"
