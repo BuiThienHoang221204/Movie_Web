@@ -244,7 +244,7 @@ const Chatbot = () => {
     const movieYear = movie.year || (movie.releaseDate ? new Date(movie.releaseDate).getFullYear() : "Không rõ");
     
     const botResponse = {
-      text: `Đây là thông tin về phim ${movie.title}:\nThể loại: ${getMovieGenres(movie).split(", ")}\nNăm phát hành: ${movieYear}\nĐánh giá: ${movie.rating.toFixed(1)}/10\nBạn có muốn xem phim này không?`,
+      text: `Đây là thông tin về phim ${movie.title}:\nThể loại: ${movie.genre}\nNăm phát hành: ${movieYear}\nĐánh giá: ${movie.rating.toFixed(1)}/10\nBạn có muốn xem phim này không?`,
       isUser: false,
       timestamp: new Date()
     };
@@ -253,103 +253,116 @@ const Chatbot = () => {
     setShowSuggestions(false);
   };
 
-  // Xử lý khi người dùng chọn loại tìm kiếm
-  const handleSearchTypeSelection = (type) => {
-    let responseText = '';
-    switch (type) {
-      case '1':
-        responseText = 'Vui lòng nhập tên phim bạn muốn tìm:';
-        setSearchState({ isSearching: true, searchType: 'title' });
-        break;
-      case '2':
-        responseText = 'Vui lòng nhập thể loại phim bạn muốn tìm:';
-        setSearchState({ isSearching: true, searchType: 'genre' });
-        break;
-      case '3':
-        responseText = 'Vui lòng nhập năm phát hành:';
-        setSearchState({ isSearching: true, searchType: 'year' });
-        break;
-      default:
-        return;
-    }
-
-    const botResponse = {
-      text: responseText,
-      isUser: false,
-      timestamp: new Date()
-    };
-    setMessages(prev => [...prev, botResponse]);
-  };
-
-  // Xử lý tin nhắn từ người dùng
-  const handleSendMessage = async (input) => {
-    if (!input.trim()) return;
+  const handleSendMessage = (e) => {
+    e.preventDefault();
+    if (!inputMessage.trim()) return;
 
     const userMessage = {
-      text: input,
+      text: inputMessage,
       isUser: true,
       timestamp: new Date()
     };
     setMessages(prev => [...prev, userMessage]);
+    setInputMessage('');
 
-    // Kiểm tra nếu đang trong quá trình tìm kiếm
+    const input = inputMessage.toLowerCase();
+
+    // Xử lý tìm kiếm dựa trên trạng thái tìm kiếm hiện tại
     if (searchState.isSearching) {
       let searchResults = [];
       let responseText = '';
+      let showNoResultOptions = false;
 
-      switch (searchState.searchType) {
-        case 'title': {
-          searchResults = searchMoviesByKeyword(input);
-          responseText = searchResults.length > 0 
-            ? 'Đây là các phim phù hợp với tên bạn tìm:'
-            : 'Không tìm thấy phim nào có tên tương tự.';
-          break;
+      if (searchState.searchType === 'name') {
+        searchResults = movies
+          .filter(movie => 
+            movie.title.toLowerCase().includes(input)
+          )
+          .sort((a, b) => b.rating - a.rating)
+          .slice(0, 5);
+        if (searchResults.length > 0) {
+          responseText = "Đây là kết quả tìm kiếm phù hợp:";
+        } else {
+          responseText = "Không tìm thấy phim nào phù hợp.";
+          showNoResultOptions = true;
         }
+      } else if (searchState.searchType === 'genre') {
+        const searchInput = input.toLowerCase().trim();
+        let searchResults = [];
+        let responseText = '';
+        let showNoResultOptions = false;
 
-        case 'genre': {
-          // Chuyển đổi input sang tên thể loại tiếng Anh
-          const englishGenreName = getEnglishGenreName(input);
-          const matchedGenre = Object.entries(genreMapping).find(([viet]) => 
-            viet.includes(input.toLowerCase()) || input.toLowerCase().includes(viet)
-          );
-          
-          if (matchedGenre || englishGenreName) {
-            const genreId = genres.find(g => 
-              g.name.toLowerCase() === (matchedGenre ? matchedGenre[1] : englishGenreName)
-            )?.id;
-            
-            if (genreId) {
-              searchResults = movies
-                .filter(movie => movie.genre_ids && movie.genre_ids.includes(genreId))
-                .sort((a, b) => b.rating - a.rating)
-                .slice(0, 5);
-            }
-          }
-          
-          responseText = searchResults.length > 0 
-            ? `Đây là các phim thể loại ${matchedGenre ? matchedGenre[0] : input}:`
-            : `Không tìm thấy phim thuộc thể loại ${input}.`;
-          break;
-        }
-
-        case 'year': {
-          const year = parseInt(input);
-          if (!isNaN(year)) {
+        // Tìm kiếm theo ID thể loại
+        const matchedGenre = Object.entries(genreMapping).find(([viet]) => 
+          viet.includes(searchInput) || searchInput.includes(viet)
+        );
+        
+        if (matchedGenre) {
+          const genreId = genres.find(g => g.name.toLowerCase() === matchedGenre[1])?.id;
+          if (genreId) {
             searchResults = movies
-              .filter(movie => {
-                // Kiểm tra năm từ cả year và releaseDate
-                const movieYear = movie.year || (movie.releaseDate && new Date(movie.releaseDate).getFullYear());
-                return movieYear === year;
-              })
+              .filter(movie => movie.genre_ids && movie.genre_ids.includes(genreId))
               .sort((a, b) => b.rating - a.rating)
               .slice(0, 5);
           }
-          responseText = !isNaN(year) 
-            ? (searchResults.length > 0 
-              ? `Đây là các phim phát hành năm ${year}:`
-              : `Không tìm thấy phim nào phát hành năm ${year}.`)
-            : 'Vui lòng nhập năm hợp lệ (ví dụ: 2023)';
-          break;
+        }
+
+        // Nếu không tìm thấy kết quả, thử tìm kiếm mở rộng
+        if (searchResults.length === 0) {
+          searchResults = movies
+            .filter(movie => {
+              const movieGenres = getMovieGenres(movie);
+              return movieGenres.some(genre => 
+                genre.toLowerCase().includes(searchInput) ||
+                searchInput.includes(genre.toLowerCase())
+              );
+            })
+            .sort((a, b) => b.rating - a.rating)
+            .slice(0, 5);
+        }
+
+        if (searchResults.length > 0) {
+          const displayGenre = matchedGenre ? matchedGenre[0] : searchInput;
+          responseText = `Đây là các phim thể loại "${displayGenre}":`;
+        } else {
+          responseText = "Không tìm thấy phim thuộc thể loại này.";
+          showNoResultOptions = true;
+        }
+
+        const botResponse = {
+          text: responseText,
+          isUser: false,
+          timestamp: new Date(),
+          showMovies: searchResults.length > 0 ? searchResults : null,
+          showNoResultOptions: showNoResultOptions
+        };
+        
+        setTimeout(() => {
+          setMessages(prev => [...prev, botResponse]);
+          if (searchResults.length > 0) {
+            setSearchState({ isSearching: false, searchType: null });
+          }
+        }, 500);
+        return;
+      } else if (searchState.searchType === 'year') {
+        const yearNum = parseInt(input);
+        if (!isNaN(yearNum)) {
+          searchResults = movies
+            .filter(movie => {
+              const movieYear = movie.year || new Date(movie.releaseDate).getFullYear();
+              return movieYear === yearNum;
+            })
+            .sort((a, b) => b.rating - a.rating)
+            .slice(0, 5);
+          if (searchResults.length > 0) {
+            responseText = `Đây là các phim phát hành năm ${yearNum}:`;
+          } else {
+            responseText = `Không tìm thấy phim nào phát hành năm ${yearNum}.`;
+            showNoResultOptions = true;
+          }
+        } else {
+          responseText = "Vui lòng nhập năm hợp lệ (ví dụ: 2023).";
+          showNoResultOptions = true;
         }
       }
 
@@ -358,9 +371,9 @@ const Chatbot = () => {
         isUser: false,
         timestamp: new Date(),
         showMovies: searchResults.length > 0 ? searchResults : null,
-        showNoResultOptions: searchResults.length === 0
+        showNoResultOptions: showNoResultOptions
       };
-
+      
       setTimeout(() => {
         setMessages(prev => [...prev, botResponse]);
         if (searchResults.length > 0) {
@@ -370,59 +383,84 @@ const Chatbot = () => {
       return;
     }
 
-    // Xử lý các pattern tìm kiếm trực tiếp
-    const genrePattern = /phim\s+([a-zA-Z\sàáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]+)/i;
-    const yearPattern = /phim.*?(\d{4})|(\d{4}).*?phim/i;
-    let searchResults = [];
-    
-    if (input.toLowerCase() === 'tìm kiếm phim') {
-      const botResponse = {
-        text: 'Bạn muốn tìm phim theo:\n1. Tên phim\n2. Thể loại\n3. Năm phát hành\nHãy nhập số tương ứng hoặc gõ từ khóa tìm kiếm.',
-        isUser: false,
-        timestamp: new Date()
-      };
-      setMessages(prev => [...prev, botResponse]);
-      return;
-    }
-
-    // Check if input is a search type selection
-    if (['1', '2', '3'].includes(input)) {
-      handleSearchTypeSelection(input);
-      return;
-    }
-
-    // Existing direct search patterns
-    const genreMatch = input.match(genrePattern);
+    // Kiểm tra và xử lý trực tiếp các pattern tìm kiếm cụ thể
+    const yearPattern = /phim.*(\d{4})|(\d{4}).*phim/i;
     const yearMatch = input.match(yearPattern);
+    if (yearMatch) {
+      const year = yearMatch[1] || yearMatch[2];
+      const searchResults = movies
+        .filter(movie => {
+          const movieYear = movie.year || new Date(movie.releaseDate).getFullYear();
+          return movieYear === parseInt(year);
+        })
+        .sort((a, b) => b.rating - a.rating)
+        .slice(0, 5);
 
+      const botResponse = {
+        text: searchResults.length > 0 
+          ? `Đây là các phim phát hành năm ${year}:`
+          : `Không tìm thấy phim nào phát hành năm ${year}.`,
+        isUser: false,
+        timestamp: new Date(),
+        showMovies: searchResults.length > 0 ? searchResults : null,
+        showNoResultOptions: searchResults.length === 0
+      };
+      setTimeout(() => setMessages(prev => [...prev, botResponse]), 500);
+      return;
+    }
+
+    // Cập nhật pattern tìm kiếm thể loại trực tiếp
+    const genrePattern = /phim\s+([a-zA-Z\sàáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]+)/i;
+    const genreMatch = input.match(genrePattern);
     if (genreMatch) {
-      // Existing genre match logic
-    } else if (yearMatch) {
-      const year = parseInt(yearMatch[1] || yearMatch[2]);
-      if (!isNaN(year)) {
+      const searchInput = genreMatch[1].toLowerCase().trim();
+      let searchResults = [];
+
+      // Tìm kiếm theo ID thể loại
+      const matchedGenre = Object.entries(genreMapping).find(([viet]) => 
+        viet.includes(searchInput) || searchInput.includes(viet)
+      );
+      
+      if (matchedGenre) {
+        const genreId = genres.find(g => g.name.toLowerCase() === matchedGenre[1])?.id;
+        if (genreId) {
+          searchResults = movies
+            .filter(movie => movie.genre_ids && movie.genre_ids.includes(genreId))
+            .sort((a, b) => b.rating - a.rating)
+            .slice(0, 5);
+        }
+      }
+
+      // Nếu không tìm thấy kết quả, thử tìm kiếm mở rộng
+      if (searchResults.length === 0) {
         searchResults = movies
           .filter(movie => {
-            const movieYear = movie.year || (movie.releaseDate && new Date(movie.releaseDate).getFullYear());
-            return movieYear === year;
+            const movieGenres = getMovieGenres(movie);
+            return movieGenres.some(genre => 
+              genre.toLowerCase().includes(searchInput) ||
+              searchInput.includes(genre.toLowerCase())
+            );
           })
           .sort((a, b) => b.rating - a.rating)
           .slice(0, 5);
-
-        const botResponse = {
-          text: searchResults.length > 0 
-            ? `Đây là các phim phát hành năm ${year}:`
-            : `Không tìm thấy phim nào phát hành năm ${year}.`,
-          isUser: false,
-          timestamp: new Date(),
-          showMovies: searchResults.length > 0 ? searchResults : null,
-          showNoResultOptions: searchResults.length === 0
-        };
-        setTimeout(() => setMessages(prev => [...prev, botResponse]), 500);
-        return;
       }
+
+      const displayGenre = matchedGenre ? matchedGenre[0] : searchInput;
+      const botResponse = {
+        text: searchResults.length > 0 
+          ? `Đây là các phim thể loại ${displayGenre}:`
+          : `Không tìm thấy phim thuộc thể loại ${displayGenre}.`,
+        isUser: false,
+        timestamp: new Date(),
+        showMovies: searchResults.length > 0 ? searchResults : null,
+        showNoResultOptions: searchResults.length === 0
+      };
+      setTimeout(() => setMessages(prev => [...prev, botResponse]), 500);
+      return;
     } else {
-      // Default to keyword search
-      searchResults = searchMoviesByKeyword(input);
+      // Thêm tìm kiếm trực tiếp nếu không phải là pattern đặc biệt
+      const searchResults = searchMoviesByKeyword(input);
+      
       if (searchResults.length > 0) {
         const botResponse = {
           text: "Đây là các phim phù hợp với tìm kiếm của bạn:",
@@ -431,15 +469,56 @@ const Chatbot = () => {
           showMovies: searchResults
         };
         setTimeout(() => setMessages(prev => [...prev, botResponse]), 500);
-      } else {
-        const botResponse = {
-          text: "Không tìm thấy phim phù hợp. Bạn có thể thử tìm kiếm theo:\n1. Tên phim\n2. Thể loại\n3. Năm phát hành",
-          isUser: false,
-          timestamp: new Date(),
-          showNoResultOptions: true
-        };
-        setTimeout(() => setMessages(prev => [...prev, botResponse]), 500);
+        return;
       }
+    }
+
+    // Xử lý các từ khóa tìm kiếm chung
+    const movieKeywords = ['phim', 'movie', 'xem phim', 'tìm phim', 'muốn xem'];
+    if (movieKeywords.some(keyword => input.includes(keyword))) {
+      const botResponse = {
+        text: "Bạn muốn tìm phim theo:\n1. Tên phim\n2. Thể loại\n3. Năm phát hành\nHãy nhập số tương ứng hoặc cho tôi biết bạn muốn tìm theo cách nào.",
+        isUser: false,
+        timestamp: new Date()
+      };
+      setTimeout(() => setMessages(prev => [...prev, botResponse]), 500);
+      return;
+    }
+
+    // Xử lý lựa chọn phương thức tìm kiếm bằng số
+    if (input === '1' || input.includes('tên')) {
+      const botResponse = {
+        text: "Hãy nhập tên phim bạn muốn tìm:",
+        isUser: false,
+        timestamp: new Date()
+      };
+      setSearchState({ isSearching: true, searchType: 'name' });
+      setTimeout(() => setMessages(prev => [...prev, botResponse]), 500);
+    } else if (input === '2' || input.includes('thể loại')) {
+      const botResponse = {
+        text: "Hãy nhập thể loại phim bạn muốn xem (Ví dụ: Hành động, Tình cảm, Kinh dị,...):",
+        isUser: false,
+        timestamp: new Date()
+      };
+      setSearchState({ isSearching: true, searchType: 'genre' });
+      setTimeout(() => setMessages(prev => [...prev, botResponse]), 500);
+    } else if (input === '3' || input.includes('năm')) {
+      const botResponse = {
+        text: "Hãy nhập năm phát hành phim (Ví dụ: 2023):",
+        isUser: false,
+        timestamp: new Date()
+      };
+      setSearchState({ isSearching: true, searchType: 'year' });
+      setTimeout(() => setMessages(prev => [...prev, botResponse]), 500);
+    } else {
+      // Nếu không nhận diện được ý định của người dùng
+      const botResponse = {
+        text: "Tôi có thể giúp bạn tìm phim theo tên, thể loại hoặc năm phát hành. Bạn muốn làm gì?",
+        isUser: false,
+        timestamp: new Date(),
+        showQuickOptions: true
+      };
+      setTimeout(() => setMessages(prev => [...prev, botResponse]), 500);
     }
   };
 
