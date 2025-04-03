@@ -244,7 +244,7 @@ const Chatbot = () => {
     const movieYear = movie.year || (movie.releaseDate ? new Date(movie.releaseDate).getFullYear() : "Không rõ");
     
     const botResponse = {
-      text: `Đây là thông tin về phim ${movie.title}:\nThể loại: ${movie.genre}\nNăm phát hành: ${movieYear}\nĐánh giá: ${movie.rating.toFixed(1)}/10\nBạn có muốn xem phim này không?`,
+      text: `Đây là thông tin về phim ${movie.title}:\nThể loại: ${getMovieGenres(movie)}\nNăm phát hành: ${movieYear}\nĐánh giá: ${movie.rating.toFixed(1)}/10\nBạn có muốn xem phim này không?`,
       isUser: false,
       timestamp: new Date()
     };
@@ -301,7 +301,7 @@ const Chatbot = () => {
           const genreId = genres.find(g => g.name.toLowerCase() === matchedGenre[1])?.id;
           if (genreId) {
             searchResults = movies
-              .filter(movie => movie.genre_ids && movie.genre_ids.includes(genreId))
+              .filter(movie => movie.genre && movie.genre.includes(genreId))
               .sort((a, b) => b.rating - a.rating)
               .slice(0, 5);
           }
@@ -311,11 +311,13 @@ const Chatbot = () => {
         if (searchResults.length === 0) {
           searchResults = movies
             .filter(movie => {
-              const movieGenres = getMovieGenres(movie);
-              return movieGenres.some(genre => 
-                genre.toLowerCase().includes(searchInput) ||
-                searchInput.includes(genre.toLowerCase())
-              );
+              if (!movie.genre) return false;
+              return movie.genre.some(genreId => {
+                const genre = genres.find(g => g.id === genreId);
+                if (!genre) return false;
+                const genreName = genre.name.toLowerCase();
+                return genreName.includes(searchInput) || searchInput.includes(genreName);
+              });
             })
             .sort((a, b) => b.rating - a.rating)
             .slice(0, 5);
@@ -350,7 +352,7 @@ const Chatbot = () => {
           searchResults = movies
             .filter(movie => {
               const movieYear = movie.year || new Date(movie.releaseDate).getFullYear();
-              return movieYear === yearNum;
+              return parseInt(movieYear) === yearNum;
             })
             .sort((a, b) => b.rating - a.rating)
             .slice(0, 5);
@@ -361,7 +363,7 @@ const Chatbot = () => {
             showNoResultOptions = true;
           }
         } else {
-          responseText = "Vui lòng nhập năm hợp lệ (ví dụ: 2023).";
+          responseText = `Vui lòng nhập năm hợp lệ (ví dụ: ${new Date().getFullYear()}).`;
           showNoResultOptions = true;
         }
       }
@@ -391,7 +393,7 @@ const Chatbot = () => {
       const searchResults = movies
         .filter(movie => {
           const movieYear = movie.year || new Date(movie.releaseDate).getFullYear();
-          return movieYear === parseInt(year);
+          return parseInt(movieYear) === parseInt(year);
         })
         .sort((a, b) => b.rating - a.rating)
         .slice(0, 5);
@@ -425,7 +427,7 @@ const Chatbot = () => {
         const genreId = genres.find(g => g.name.toLowerCase() === matchedGenre[1])?.id;
         if (genreId) {
           searchResults = movies
-            .filter(movie => movie.genre_ids && movie.genre_ids.includes(genreId))
+            .filter(movie => movie.genre && movie.genre.includes(genreId))
             .sort((a, b) => b.rating - a.rating)
             .slice(0, 5);
         }
@@ -435,11 +437,13 @@ const Chatbot = () => {
       if (searchResults.length === 0) {
         searchResults = movies
           .filter(movie => {
-            const movieGenres = getMovieGenres(movie);
-            return movieGenres.some(genre => 
-              genre.toLowerCase().includes(searchInput) ||
-              searchInput.includes(genre.toLowerCase())
-            );
+            if (!movie.genre) return false;
+            return movie.genre.some(genreId => {
+              const genre = genres.find(g => g.id === genreId);
+              if (!genre) return false;
+              const genreName = genre.name.toLowerCase();
+              return genreName.includes(searchInput) || searchInput.includes(genreName);
+            });
           })
           .sort((a, b) => b.rating - a.rating)
           .slice(0, 5);
@@ -504,7 +508,7 @@ const Chatbot = () => {
       setTimeout(() => setMessages(prev => [...prev, botResponse]), 500);
     } else if (input === '3' || input.includes('năm')) {
       const botResponse = {
-        text: "Hãy nhập năm phát hành phim (Ví dụ: 2023):",
+        text: `Hãy nhập năm phát hành phim (Ví dụ: ${new Date().getFullYear()}):`,
         isUser: false,
         timestamp: new Date()
       };
@@ -529,8 +533,8 @@ const Chatbot = () => {
       .filter(movie => {
         const titleMatch = movie.title.toLowerCase().includes(searchTerm);
         const genreMatch = movie.genre && movie.genre.some(genreId => {
-          const genreName = getGenreNameById(genreId);
-          return genreName.toLowerCase().includes(searchTerm);
+          const genre = genres.find(g => g.id === genreId);
+          return genre && genre.name.toLowerCase().includes(searchTerm);
         });
         const yearMatch = movie.year && movie.year.toString().includes(searchTerm);
         return titleMatch || genreMatch || yearMatch;
@@ -669,7 +673,7 @@ const Chatbot = () => {
       case 'year':
         setTimeout(() => {
           const botResponse = {
-            text: "Bạn muốn tìm phim phát hành năm nào? Hãy nhập năm phát hành (ví dụ: 2023).",
+            text: `Bạn muốn tìm phim phát hành năm nào? Hãy nhập năm phát hành (Ví dụ: ${new Date().getFullYear()}):`,
             isUser: false,
             timestamp: new Date()
           };
@@ -719,7 +723,7 @@ const Chatbot = () => {
           promptText = "Hãy nhập thể loại phim khác (Ví dụ: Hành động, Tình cảm, Kinh dị,...):";
           break;
         case 'year':
-          promptText = "Hãy nhập năm phát hành khác (Ví dụ: 2023):";
+          promptText = `Hãy nhập năm phát hành khác (Ví dụ: ${new Date().getFullYear()}):`;
           break;
         default:
           promptText = "Bạn muốn tìm kiếm gì?";
