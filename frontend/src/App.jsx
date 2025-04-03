@@ -8,7 +8,8 @@ import { setAccessToken, setUser, clearAccessToken } from './redux/authSlice';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { MovieProvider } from './pages/components/MovieContext';
-import axios from 'axios';
+import axiosInstance from './config/axios';
+
 import Chatbot from './components/Chatbot/Chatbot';
 
 function App() {
@@ -16,7 +17,7 @@ function App() {
 
   const checkAuthStatus = async () => {
     try {
-      const response = await axios.get('https://hmovie.onrender.com/auth/status')
+      const response = await axiosInstance.get('/auth/status', { withCredentials: true });
       
       dispatch(setUser(response.data.user));
       dispatch(setAccessToken(response.data.accessToken));
