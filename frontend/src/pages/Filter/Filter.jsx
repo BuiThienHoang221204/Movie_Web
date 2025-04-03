@@ -103,7 +103,7 @@ const Filter = () => {
     <div>
         <div className='filter-header'> 
             <h1>FILTER</h1>
-            <p>Nơi chọn lọc phim theo sơ thích</p>
+            <p>Nơi chọn lọc phim theo sở thích</p>
         </div>
         <div className='filter-props h-50 bg-dark border rounded-3 p-3 m-5 text-white'>
             <div className='mb-3 genre-filter'>

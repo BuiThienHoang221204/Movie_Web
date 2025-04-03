@@ -108,7 +108,7 @@ const RelatedMovies = () => {
           }}
         >
           {RecommentMovies.map(movie => (
-            <MovieCard movie={movie}></MovieCard>
+            <MovieCard movie={movie} key={movie.id}></MovieCard>
           ))}
         </div>
         <button className="prev" onClick={handlePrev}>

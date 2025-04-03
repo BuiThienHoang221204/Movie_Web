@@ -43,7 +43,7 @@ function RecommentMovie() {
     const fetchRecommentMovies = async () => {
       try {
         const data = await movieService.getRecommendMovies();
-        console.log("Dữ liệu phim từ API:", data);
+        // console.log("Dữ liệu phim từ API:", data);
         if (data && data.length > 0) {
           setRecommentMovies(data);
         } else {
@@ -108,7 +108,7 @@ function RecommentMovie() {
           }}
         >
           {RecommentMovies.map(movie => (
-            <MovieCard movie={movie}></MovieCard>
+            <MovieCard movie={movie} key={movie.id}></MovieCard>
           ))}
         </div>
         <button className="prev" onClick={handlePrev}>

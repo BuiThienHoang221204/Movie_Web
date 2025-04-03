@@ -1,13 +1,15 @@
 import axios from 'axios';
 
+import { server } from '../config'; //import server từ config.js
+
 //thiết lập mặt định cho axios
 const apiClient = axios.create({
-    baseURL: 'http://localhost:5000/api/v1', //URL cơ sở dữ liệu của backend
+    baseURL: `${server}/api/v1`, //URL cơ sở dữ liệu của backend
     headers:{//thêm header cho request
         'Content-Type': 'application/json', //định dạng dữ liệu gửi đi là json
         'Accept': 'application/json', //định dạng dữ liệu nhận về là json
     },
-    timeout: 10000, //thời gian chờ request là 10s
+    timeout: 20000, //thời gian chờ request là 10s
 });
 
 //Interceptor được sử dụng để chặn và xử lý request hoặc response trước khi chúng được gửi đến server

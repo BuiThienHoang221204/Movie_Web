@@ -48,7 +48,7 @@ function WatchMovie() {
       try {
         const response = await axiosInstance.get(`/api/drive/films/${movie.title}`);
 
-        if (response.data.success) {
+        if (response.data.success) {//Kiểm tra xem API trả về dữ liệu thành công hay không
           setMovie(prevMovie => ({
             ...prevMovie,
             video_url: response.data.data[0].webViewLink.replace("view?usp=drivesdk", "preview"),
@@ -162,7 +162,8 @@ function WatchMovie() {
           </div>
 
           <div className="movie-player">
-            {movie.video_url ? (
+            {movie.video_url ?
+            (
               <iframe
                 src={movie.video_url}
                 title={movie.title}

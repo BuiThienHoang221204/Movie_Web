@@ -36,7 +36,7 @@
 }
 
 .nav-links {
-  margin-left: 35vh;  
+  margin-left: 35vh;
   display: flex;
 }
 
@@ -253,7 +253,7 @@
     display: none;
   }
 
-  .signin-btn{
+  .signin-btn {
     margin-left: 5px;
   }
   .search-signin {
@@ -273,7 +273,7 @@
   }
 
   .search-input {
-    width:100%;
+    width: 100%;
   }
 
   .toggle-icon {
@@ -289,7 +289,7 @@
     height: 11rem;
     background-color: #1a1a1a;
     z-index: 1000;
-    animation: slide-down 0.3s ease;
+    animation: slide-down 0.3s ease-in-out;
   }
 
   .toggle-menu .signin-btn {
@@ -311,6 +311,10 @@
     }
   }
 
+  .movie-list {
+    width: 100%;
+  }
+
   .toggle-menu .nav-links {
     display: flex;
     flex-direction: column;
@@ -319,4 +323,3 @@
     width: 5em;
   }
 }
-
