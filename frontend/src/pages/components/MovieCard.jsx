@@ -39,7 +39,7 @@ const MovieCard = (props) => {
 
   return (
     <>
-        <Link to={`${server}/watch/${movie.id}`} key={movie.id} className='movie-item' onClick={() => handleWatchMovie(movie.id)}>
+        <Link to={`watch/${movie.id}`} className='movie-item'>
             <img src={movie.image} alt={movie.title} className='movie-image' />
             <FaPlay className="play-icon-2" />
             <div className='movie-info'>
