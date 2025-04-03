@@ -9,11 +9,7 @@ const MovieCard = (props) => {
     const movie = props.movie;
     const navigate = useNavigate();
     const { genres, setGenres } = useMovies()
-
-    const handleWatchMovie = (movieId, e) => {
-        e.preventDefault();
-        navigate(`/watch/${movieId}`);
-    };
+    
     const genreName = (genreId) => {
         const genre = genres.find(g => g.id === genreId)
         return genre ? genre.name : ''
