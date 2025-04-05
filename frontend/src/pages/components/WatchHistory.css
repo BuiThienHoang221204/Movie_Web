@@ -1,282 +1,165 @@
-/* src/components/WatchHistory.css */
+/* WatchHistory.css */
 .watch-history-container {
-  position: relative;
-  padding: 0 40px;
-  margin-bottom: 40px;
-  background-color: #1a1a1a;
-  color: #fff;
+  color: #ffffff;
 }
 
-/* Định dạng cho phần tiêu đề và nút xem tất cả */
 .title-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 1.5rem;
 }
 
-/* Chỉnh tiêu đề */
 .watch-history-title {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #e50914;
-  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #f87171; /* text-red-400 */
 }
 
-/* Chỉnh đường viền */
-.watch-history-title::after {
-  content: '';
-  display: block;
-  width: 200px;
-  height: 3px;
-  background: linear-gradient(to right, #e50914, rgba(229, 9, 20, 0.3));
-  margin: 10px 0;
-  border-radius: 3px;
-}
-
-/* Nút xem tất cả */
 .view-all-btn {
   display: flex;
   align-items: center;
-  background: linear-gradient(135deg, #e50914 0%, #ff3b30 100%);
-  color: white;
+  gap: 0.5rem;
+  background-color: #dc2626; /* bg-red-600 */
+  color: #ffffff;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
   border: none;
-  border-radius: 30px;
-  padding: 10px 20px;
-  font-size: 16px;
-  font-weight: 600;
   cursor: pointer;
-  transition: background 0.3s ease;
-  box-shadow: 0 4px 15px rgba(229, 9, 20, 0.4);
+  transition: background-color 0.2s ease;
 }
 
 .view-all-btn:hover {
-  background: linear-gradient(135deg, #ff3b30 0%, #e50914 100%); /* Subtle background change on hover */
+  background-color: #b91c1c; /* bg-red-700 */
+}
+
+.view-all-btn:disabled {
+  background-color: #6b7280; /* gray-500 */
+  cursor: not-allowed;
 }
 
 .arrow-icon {
-  margin-left: 10px;
+  width: 1rem;
+  height: 1rem;
 }
 
-/* Chỉnh phần phim */
+.no-history-message,
+.loading-message,
+.error-message {
+  text-align: center;
+  color: #9ca3af; /* text-gray-400 */
+  font-size: 1.25rem;
+}
+
 .history-grid {
-  padding: 20px 0;
-  overflow: hidden;
-  margin-bottom: 30px;
   position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
 .movie-track {
-  display: flex;
-  gap: 25px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  width: 100%;
 }
 
 .history-item {
-  flex: 0 0 24%;
-  position: relative;
-  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.1); /* bg-opacity-10 */
+  border-radius: 0.5rem;
   overflow: hidden;
-  background: #2a2a2a; /* Match the card background from the UserProfile */
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.history-item:hover {
+  transform: scale(1.03);
 }
 
 .history-image {
-  height: 350px;
-  object-fit: cover;
   width: 100%;
-  border-radius: 8px 8px 0 0; /* Rounded top corners */
+  height: 300px;
+  object-fit: cover;
 }
 
 .history-info {
-  padding: 10px;
-  width: 100%;
-  background-color: #2a2a2a; /* Match the card background */
-  color: white;
-  font-size: 1.2rem;
-  text-align: center;
-}
-
-/* Style các thành phần trong history-info */
-.history-title {
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 5px;
-  color: #ffffff;
-}
-
-.history-genre {
-  font-size: 14px;
-  font-style: italic;
-  margin-bottom: 5px;
-  color: #b0b0b0;
-}
-
-.history-match {
-  font-size: 14px;
-  font-weight: bold;
-  color: #4CAF50;
-  margin-bottom: 5px;
+  padding: 0.75rem;
 }
 
 .history-rating {
-  font-size: 14px;
-  font-weight: bold;
-  color: #FFD700;
+  color: #f59e0b; /* Amber for stars */
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
 }
 
-/* Phần hiển thị tất cả phim */
-.all-movies-section {
-  margin-top: 40px;
-  padding-top: 30px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  animation: fadeIn 0.5s ease-in-out;
-}
-
-.all-movies-title {
-  font-size: 1.8rem;
-  font-weight: 600;
-  margin-bottom: 25px;
+.history-title {
+  font-size: 1rem;
+  font-weight: 500;
   color: #ffffff;
-  position: relative;
-  display: inline-block;
+  margin-bottom: 0.25rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* Grid hiển thị tất cả phim */
-.all-movies-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(220px, 1fr));
-  gap: 25px;
-  padding: 20px 0;
+.history-genre {
+  font-size: 0.875rem;
+  color: #d1d5db; /* text-gray-300 */
+  margin-bottom: 0.25rem;
 }
 
-/* Chỉnh nút trước và sau */
+.history-match {
+  font-size: 0.875rem;
+  color: #10b981; /* text-green-500 */
+}
+
+.nav-btn {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border: none;
+  border-radius: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.nav-btn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.nav-btn:disabled {
+  background-color: rgba(255, 255, 255, 0.05);
+  cursor: not-allowed;
+}
+
 .prev {
   position: absolute;
-  top: 45%;
-  left: -40px;
-  background-color: rgba(0, 0, 0, 0.5);
-  color: white;
-  transform: translateY(50%);
-  border-radius: 50%;
-  font-size: 20px;
-  opacity: 0.5;
-  padding: 10px 15px;
-  border: none;
-  cursor: pointer;
-  z-index: 10;
+  left: -3rem;
 }
-
-/* .prev:hover,
-.next:hover {
-  background-color: #e50914;
-  opacity: 1;
-} */
 
 .next {
   position: absolute;
-  top: 45%;
-  right: -40px;
-  background-color: rgba(0, 0, 0, 0.5);
-  transform: translateY(50%);
-  color: white;
-  border-radius: 50%;
-  font-size: 20px;
-  opacity: 0.5;
-  padding: 10px 15px;
-  border: none;
-  cursor: pointer;
-  z-index: 10;
+  right: -3rem;
 }
 
-/* Media queries */
-@media (max-width: 768px) {
-  .all-movies-grid {
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  }
-
-  .title-container {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .view-all-btn {
-    margin-top: 15px;
-  }
-
-  .all-movies-title {
-    font-size: 1.5rem;
-  }
-
-  .movie-track {
-    flex-wrap: wrap;
-  }
-
-  .history-item {
-    flex: 0 0 45%;
-  }
-
-  .watch-history-title {
-    font-size: 2rem;
-  }
+.all-movies-section {
+  margin-top: 2rem;
 }
 
-@media (max-width: 480px) {
-  .all-movies-grid {
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 10px;
-  }
-
-  .history-image {
-    height: 220px;
-  }
-
-  .watch-history-title {
-    font-size: 2rem;
-  }
-
-  .all-movies-title {
-    font-size: 1.3rem;
-  }
-
-  .movie-track {
-    flex-wrap: wrap;
-  }
-
-  .history-item {
-    flex: 0 0 100%;
-  }
-}
-
-/* Hiệu ứng fadeIn */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-.no-history-message {
-  text-align: center;
-  padding: 20px;
-  color: #b0b0b0;
+.all-movies-title {
   font-size: 1.5rem;
-  font-style: italic;
+  font-weight: 600;
+  color: #f87171; /* text-red-400 */
+  margin-bottom: 1.5rem;
 }
 
-.test-controls {
-  margin-bottom: 20px;
-}
-
-.test-controls button {
-  margin-right: 10px;
-  padding: 5px 10px;
-  background-color: #e50914;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-
-.test-controls button:hover {
-  background-color: #ff3b30;
+.all-movies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
 }
