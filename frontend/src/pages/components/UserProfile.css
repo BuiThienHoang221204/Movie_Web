@@ -1,0 +1,87 @@
+/* UserInfo.css */
+.min-h-screen {
+  min-height: 100vh;
+  background-color: #000000; /* black */
+  color: #ffffff;
+  padding: 1.5rem;
+}
+
+.pt-24 {
+  padding-top: 6rem;
+}
+
+.bg-gray-800 {
+  background-color: #374151; /* gray-800 */
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  border: 1px solid #4b5563; /* gray-700 */
+}
+
+.bg-gray-700 {
+  background-color: #4b5563; /* gray-700 */
+  border-radius: 0.75rem;
+  border: 1px solid #6b7280; /* gray-600 */
+  padding: 1rem;
+}
+
+.bg-gray-600 {
+  background-color: #4b5563; /* gray-600 */
+  border-radius: 0.5rem;
+  border: 1px solid #6b7280; /* gray-500 */
+}
+
+.text-red-400 {
+  color: #f87171; /* red-400 */
+}
+
+.text-red-500 {
+  color: #ef4444; /* red-500 */
+}
+
+.bg-red-600 {
+  background-color: #dc2626; /* red-600 */
+}
+
+.bg-red-600:hover {
+  background-color: #b91c1c; /* red-700 */
+}
+
+.border-red-500 {
+  border-color: #ef4444; /* red-500 */
+}
+
+.focus\:border-red-500:focus {
+  border-color: #ef4444; /* red-500 */
+}
+
+.text-gray-400 {
+  color: #9ca3af;
+}
+
+.text-gray-300 {
+  color: #d1d5db;
+}
+
+.rounded-lg {
+  border-radius: 0.5rem;
+}
+
+.rounded-xl {
+  border-radius: 0.75rem;
+}
+
+.transition-colors {
+  transition: background-color 0.2s ease;
+}
+
+input {
+  background-color: #4b5563; /* gray-600 */
+  color: #ffffff;
+  border: 1px solid #6b7280; /* gray-500 */
+}
+
+input:focus {
+  outline: none;
+  border-color: #ef4444; /* red-500 */
+}

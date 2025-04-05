@@ -1,0 +1,165 @@
+/* WatchHistory.css */
+.watch-history-container {
+  color: #ffffff;
+}
+
+.title-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.watch-history-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #f87171; /* text-red-400 */
+}
+
+.view-all-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #dc2626; /* bg-red-600 */
+  color: #ffffff;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.view-all-btn:hover {
+  background-color: #b91c1c; /* bg-red-700 */
+}
+
+.view-all-btn:disabled {
+  background-color: #6b7280; /* gray-500 */
+  cursor: not-allowed;
+}
+
+.arrow-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.no-history-message,
+.loading-message,
+.error-message {
+  text-align: center;
+  color: #9ca3af; /* text-gray-400 */
+  font-size: 1.25rem;
+}
+
+.history-grid {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.movie-track {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  width: 100%;
+}
+
+.history-item {
+  background-color: rgba(255, 255, 255, 0.1); /* bg-opacity-10 */
+  border-radius: 0.5rem;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.history-item:hover {
+  transform: scale(1.03);
+}
+
+.history-image {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+}
+
+.history-info {
+  padding: 0.75rem;
+}
+
+.history-rating {
+  color: #f59e0b; /* Amber for stars */
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
+}
+
+.history-title {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #ffffff;
+  margin-bottom: 0.25rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.history-genre {
+  font-size: 0.875rem;
+  color: #d1d5db; /* text-gray-300 */
+  margin-bottom: 0.25rem;
+}
+
+.history-match {
+  font-size: 0.875rem;
+  color: #10b981; /* text-green-500 */
+}
+
+.nav-btn {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border: none;
+  border-radius: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.nav-btn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.nav-btn:disabled {
+  background-color: rgba(255, 255, 255, 0.05);
+  cursor: not-allowed;
+}
+
+.prev {
+  position: absolute;
+  left: -3rem;
+}
+
+.next {
+  position: absolute;
+  right: -3rem;
+}
+
+.all-movies-section {
+  margin-top: 2rem;
+}
+
+.all-movies-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #f87171; /* text-red-400 */
+  margin-bottom: 1.5rem;
+}
+
+.all-movies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
