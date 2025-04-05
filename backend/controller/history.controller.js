@@ -1,24 +1,28 @@
 const mongoose = require('mongoose');
 const watchHistories = require('../module/history.module'); // Import watch history model
 
-// Get all watch histories
+// Get all
 const getAllWatchHistories = async (req, res) => {
   try {
     const watch = await watchHistories.find();
     res.status(200).json(watch);
-  } catch (err) {
+  }
+  catch (err) {
     console.error("Error getting watch histories:", err);
     res.status(500).json({ message: "Server error", error: err.message });
   }
 };
 
-// Get watch history for a specific user by email
+
+// Get watch history for a specific user
 const getWatchHistory = async (req, res) => {
   try {
-    const { email } = req.params; // Assuming email is passed as a route parameter
-    const watchHistory = await watchHistories.find({ email });
+    const userId = req.params.userId;
+    const watchHistory = await watchHistories.find({ userId: userId });
+    console.log(watchHistory);
     res.status(200).json(watchHistory);
-  } catch (err) {
+  }
+  catch (err) {
     console.error("Error getting watch history:", err);
     res.status(500).json({ message: "Server error", error: err.message });
   }
@@ -31,7 +35,8 @@ const addWatchHistory = async (req, res) => {
     const newWatchHistory = new watchHistories({ email, movieId, progress });
     await newWatchHistory.save();
     res.status(201).json(newWatchHistory);
-  } catch (err) {
+  }
+  catch (err) {
     console.error("Error adding watch history:", err);
     res.status(500).json({ message: "Server error", error: err.message });
   }
@@ -41,41 +46,33 @@ const addWatchHistory = async (req, res) => {
 const updateWatchHistory = async (req, res) => {
   try {
     const { id } = req.params;
-    const { progress } = req.body; // Assuming progress is the only field to update
-    const updatedHistory = await watchHistories.findByIdAndUpdate(
-      id,
-      { progress, lastWatched: Date.now() }, // Update progress and lastWatched timestamp
-      { new: true } // Return the updated document
-    );
-    if (!updatedHistory) {
-      return res.status(404).json({ message: "Watch history not found" });
-    }
-    res.status(200).json(updatedHistory);
-  } catch (err) {
+    const { progress } = req.body;
+    await watchHistories.findByIdAndUpdate(id, { progress });
+    res.status(200).json({ message: "Watch history updated" });
+  }
+  catch (err) {
     console.error("Error updating watch history:", err);
     res.status(500).json({ message: "Server error", error: err.message });
   }
-};
+}
 
 // Delete watch history
 const deleteWatchHistory = async (req, res) => {
   try {
     const { id } = req.params;
-    const deletedHistory = await watchHistories.findByIdAndDelete(id);
-    if (!deletedHistory) {
-      return res.status(404).json({ message: "Watch history not found" });
-    }
+    await watchHistories.findByIdAndDelete(id);
     res.status(200).json({ message: "Watch history deleted" });
-  } catch (err) {
+  }
+  catch (err) {
     console.error("Error deleting watch history:", err);
     res.status(500).json({ message: "Server error", error: err.message });
   }
 };
 
 module.exports = {
-  getAllWatchHistories,
   getWatchHistory,
   addWatchHistory,
   updateWatchHistory,
   deleteWatchHistory,
+  getAllWatchHistories
 };
