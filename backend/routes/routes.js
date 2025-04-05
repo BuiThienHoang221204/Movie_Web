@@ -28,8 +28,6 @@ router.get("/api/drive/films/:title", getFilms)
 // const commentRoutes = require('./comment.routes');
 //import moviecontroller
 const movieController = require('../controller/movie.controller')
-const historyController = require('../controller/history.controller')
-const userController = require('../controller/user.controller')
 
 // API version prefix
 const API_VERSION = '/api/v1';//định nghĩa phiên bản API
@@ -46,15 +44,5 @@ router.get(`${API_VERSION}/movies/new`, movieController.getAllMoviesUpdate)
 router.get(`${API_VERSION}/genres`, movieController.getAllGenres)
 router.get(`${API_VERSION}/movies/:id`, movieController.getMovieDetail)
 router.get(`${API_VERSION}/movies`, movieController.getAllMovies)
-
-router.get(`${API_VERSION}/movieHistories/:userId`, historyController.getWatchHistory)
-router.get(`${API_VERSION}/movieHistories`, historyController.getAllWatchHistories)
-
-router.post(`${API_VERSION}/movieHistories`, historyController.addWatchHistory)
-router.put(`${API_VERSION}/movieHistories/:id`, historyController.updateWatchHistory)
-router.delete(`${API_VERSION}/movieHistories/:id`, historyController.deleteWatchHistory)
-
-router.get(`${API_VERSION}/user-info`, userController.getUser);
-router.put(`${API_VERSION}/user-info`, userController.updateUser);
 
 module.exports = router
