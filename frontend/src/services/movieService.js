@@ -47,6 +47,51 @@ const movieService = {
             console.error('Lỗi khi lấy danh sách thể loại:', error);
             throw error;
         }
+    },
+    getWatchHistory: async (userId) => {//lấy lịch sử xem phim
+        try {
+            const response = await apiClient.get(`/movieHistories/${userId}`);//sửa lại endpoint cho đúng
+            return response.data; //trả về dữ liệu từ API
+        } catch (error) {
+            console.error('Lỗi khi lấy lịch sử xem phim:', error);
+            throw error;
+        }
+    },
+    addWatchHistory: async (data) => {//thêm lịch sử xem phim
+        try {
+            const response = await apiClient.post('/movieHistories', data);//sửa lại endpoint cho đúng
+            return response.data; //trả về dữ liệu từ API
+        } catch (error) {
+            console.error('Lỗi khi thêm lịch sử xem phim:', error);
+            throw error;
+        }
+    },
+    deleteWatchHistory: async (id) => {//xóa lịch sử xem phim
+        try {
+            const response = await apiClient.delete(`/movieHistories/${id}`);//sửa lại endpoint cho đúng
+            return response.data; //trả về dữ liệu từ API
+        } catch (error) {
+            console.error('Lỗi khi xóa lịch sử xem phim:', error);
+            throw error;
+        }
+    },
+    updateWatchHistory: async (id, data) => {//cập nhật lịch sử xem phim
+        try {
+            const response = await apiClient.put(`/movieHistories/${id}`, data);//sửa lại endpoint cho đúng
+            return response.data; //trả về dữ liệu từ API
+        } catch (error) {
+            console.error('Lỗi khi cập nhật lịch sử xem phim:', error);
+            throw error;
+        }
+    },
+    getAllWatchHistories: async () => {//lấy tất cả lịch sử xem phim
+        try {
+            const response = await apiClient.get('/movieHistories');//sửa lại endpoint cho đúng
+            return response;
+        } catch (error) {
+            console.error('Lỗi khi lấy tất cả lịch sử xem phim:', error);
+            throw error;
+        }
     }
 }
 
