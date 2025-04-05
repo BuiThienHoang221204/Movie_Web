@@ -31,6 +31,9 @@ const movieController = require('../controller/movie.controller')
 <<<<<<< HEAD
 =======
 const historyController = require('../controller/history.controller')
+<<<<<<< HEAD
+>>>>>>> parent of 819f177 (WatchHistory, UserProfile, UserInfo)
+=======
 >>>>>>> parent of 819f177 (WatchHistory, UserProfile, UserInfo)
 
 // API version prefix
@@ -58,5 +61,8 @@ router.post(`${API_VERSION}/movieHistories`, historyController.addWatchHistory)
 router.put(`${API_VERSION}/movieHistories/:id`, historyController.updateWatchHistory)
 router.delete(`${API_VERSION}/movieHistories/:id`, historyController.deleteWatchHistory)
 
+<<<<<<< HEAD
+>>>>>>> parent of 819f177 (WatchHistory, UserProfile, UserInfo)
+=======
 >>>>>>> parent of 819f177 (WatchHistory, UserProfile, UserInfo)
 module.exports = router
