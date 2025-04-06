@@ -143,7 +143,7 @@ function Header() {
   return (
     <>
       <header className={`header ${scrolled ? 'scrolled' : ''}`}>
-        <Link to={config.home} className="logo text-decoration-none" onClick={() => setShowMenu(false)}>CINEMA</Link>
+        <Link to={config.home} className="logo text-decoration-none" onClick={() => setShowMenu(false)}>HMOVIE</Link>
         <nav className="nav-links">
           <Link to={config.home} className={location.pathname === config.home ? 'active': ''}>Home</Link>
           <Link to={config.allRecomment} className={location.pathname === config.allRecomment ? 'active': ''}>Trend</Link>
