@@ -24,7 +24,7 @@ const UserInfo = ({ user: propUser }) => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axiosInstance.get('/auth/user-info');
+        const response = await axiosInstance.get('/auth/user');
         const fetchedUser = response.data;
         setName(fetchedUser.name || '');
         setAvatar(fetchedUser.avatar || '');
@@ -82,7 +82,7 @@ const UserInfo = ({ user: propUser }) => {
     };
 
     try {
-      const response = await axiosInstance.put('/auth/user-info', updatedUser);
+      const response = await axiosInstance.put('/auth/user', updatedUser);
       dispatch(setUser(response.data));
       setSuccess('Cập nhật thông tin thành công!');
 

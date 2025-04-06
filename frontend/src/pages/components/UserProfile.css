@@ -1,8 +1,153 @@
-/* UserInfo.css */
+/* Reset and Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #000;
+  color: #fff;
+  font-family: 'Arial', sans-serif;
+}
+
+/* Profile Header */
+.profile-header {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+@media (min-width: 768px) {
+  .profile-header {
+    flex-direction: row;
+  }
+}
+
+.avatar-container {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid #ef4444;
+  transition: transform 0.2s ease;
+}
+
+.avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-info {
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .profile-info {
+    text-align: left;
+  }
+}
+
+.welcome-text {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: #f87171;
+  line-height: 1.2;
+}
+
+.email-text {
+  color: #9ca3af;
+  margin-top: 0.25rem;
+  font-size: 1rem;
+}
+
+.edit-profile-btn {
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #ef4444;
+  color: #fff;
+  border-radius: 8px;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.edit-profile-btn:hover {
+  background-color: #dc2626;
+}
+
+/* Watch Stats */
+.watch-stats {
+  background: rgba(183, 29, 29, 0.05);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(178, 54, 54, 0.3);
+}
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #f87171;
+  margin-bottom: 1rem;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.stat-card {
+  background: #211f24;
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.stat-number {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: #ef4444;
+  display: block;
+}
+
+.stat-label {
+  color: #d1d5db;
+  margin-top: 0.5rem;
+  font-size: 1rem;
+}
+
+/* Watch History */
+.watch-history {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Utility Classes */
 .min-h-screen {
   min-height: 100vh;
-  background-color: #000000; /* black */
-  color: #ffffff;
+}
+
+.p-6 {
   padding: 1.5rem;
 }
 
@@ -10,78 +155,15 @@
   padding-top: 6rem;
 }
 
-.bg-gray-800 {
-  background-color: #374151; /* gray-800 */
-  border-radius: 0.75rem;
-  padding: 1.5rem;
-  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-  border: 1px solid #4b5563; /* gray-700 */
+.max-w-5xl {
+  max-width: 64rem;
 }
 
-.bg-gray-700 {
-  background-color: #4b5563; /* gray-700 */
-  border-radius: 0.75rem;
-  border: 1px solid #6b7280; /* gray-600 */
-  padding: 1rem;
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.bg-gray-600 {
-  background-color: #4b5563; /* gray-600 */
-  border-radius: 0.5rem;
-  border: 1px solid #6b7280; /* gray-500 */
-}
-
-.text-red-400 {
-  color: #f87171; /* red-400 */
-}
-
-.text-red-500 {
-  color: #ef4444; /* red-500 */
-}
-
-.bg-red-600 {
-  background-color: #dc2626; /* red-600 */
-}
-
-.bg-red-600:hover {
-  background-color: #b91c1c; /* red-700 */
-}
-
-.border-red-500 {
-  border-color: #ef4444; /* red-500 */
-}
-
-.focus\:border-red-500:focus {
-  border-color: #ef4444; /* red-500 */
-}
-
-.text-gray-400 {
-  color: #9ca3af;
-}
-
-.text-gray-300 {
-  color: #d1d5db;
-}
-
-.rounded-lg {
-  border-radius: 0.5rem;
-}
-
-.rounded-xl {
-  border-radius: 0.75rem;
-}
-
-.transition-colors {
-  transition: background-color 0.2s ease;
-}
-
-input {
-  background-color: #4b5563; /* gray-600 */
-  color: #ffffff;
-  border: 1px solid #6b7280; /* gray-500 */
-}
-
-input:focus {
-  outline: none;
-  border-color: #ef4444; /* red-500 */
+.space-y-8 > * + * {
+  margin-top: 2rem;
 }

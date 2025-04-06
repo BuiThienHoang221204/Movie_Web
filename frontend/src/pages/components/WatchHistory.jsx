@@ -141,7 +141,6 @@ const WatchHistory = (props) => {
                         ★ {normalizeRating(movie.rating) || 0}/5
                       </div>
                       <h2 className="history-title">{movie.title}</h2>
-                      <div className="history-genre">{movie.genre || 'Unknown Genre'}</div>
                       <div className="history-match">
                         Progress: {(item.progress * 100) || 0}%
                       </div>
@@ -181,9 +180,8 @@ const WatchHistory = (props) => {
                           ★ {normalizeRating(movie.rating) || 0}/5
                         </div>
                         <h2 className="history-title">{movie.title}</h2>
-                        <div className="history-genre">{movie.genre || 'Unknown Genre'}</div>
                         <div className="history-match">
-                          Match: {Math.round(item.progress * 100) || 0}%
+                          Progress: {(item.progress * 100) || 0}%
                         </div>
                       </div>
                     </div>
