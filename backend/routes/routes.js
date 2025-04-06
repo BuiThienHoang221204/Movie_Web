@@ -28,13 +28,13 @@ router.get("/api/drive/films/:title", getFilms)
 // const commentRoutes = require('./comment.routes');
 //import moviecontroller
 const movieController = require('../controller/movie.controller')
-<<<<<<< HEAD
-=======
+// <<<<<<< HEAD
+// =======
 const historyController = require('../controller/history.controller')
-<<<<<<< HEAD
->>>>>>> parent of 819f177 (WatchHistory, UserProfile, UserInfo)
-=======
->>>>>>> parent of 819f177 (WatchHistory, UserProfile, UserInfo)
+// <<<<<<< HEAD
+// >>>>>>> parent of 819f177 (WatchHistory, UserProfile, UserInfo)
+// =======
+// >>>>>>> parent of 819f177 (WatchHistory, UserProfile, UserInfo)
 
 // API version prefix
 const API_VERSION = '/api/v1';//định nghĩa phiên bản API
@@ -52,8 +52,8 @@ router.get(`${API_VERSION}/genres`, movieController.getAllGenres)
 router.get(`${API_VERSION}/movies/:id`, movieController.getMovieDetail)
 router.get(`${API_VERSION}/movies`, movieController.getAllMovies)
 
-<<<<<<< HEAD
-=======
+// <<<<<<< HEAD
+// =======
 router.get(`${API_VERSION}/movieHistories/:userId`, historyController.getWatchHistory)
 router.get(`${API_VERSION}/movieHistories`, historyController.getAllWatchHistories)
 
@@ -61,8 +61,8 @@ router.post(`${API_VERSION}/movieHistories`, historyController.addWatchHistory)
 router.put(`${API_VERSION}/movieHistories/:id`, historyController.updateWatchHistory)
 router.delete(`${API_VERSION}/movieHistories/:id`, historyController.deleteWatchHistory)
 
-<<<<<<< HEAD
->>>>>>> parent of 819f177 (WatchHistory, UserProfile, UserInfo)
-=======
->>>>>>> parent of 819f177 (WatchHistory, UserProfile, UserInfo)
+// <<<<<<< HEAD
+// >>>>>>> parent of 819f177 (WatchHistory, UserProfile, UserInfo)
+// =======
+// >>>>>>> parent of 819f177 (WatchHistory, UserProfile, UserInfo)
 module.exports = router

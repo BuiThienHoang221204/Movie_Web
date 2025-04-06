@@ -9,7 +9,6 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { MovieProvider } from './pages/components/MovieContext';
 import axiosInstance from './config/axios';
-
 import Chatbot from './components/Chatbot/Chatbot';
 
 function App() {
