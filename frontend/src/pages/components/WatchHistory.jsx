@@ -22,6 +22,7 @@ const WatchHistory = (props) => {
         const data = await movieService.getWatchHistory(user.email);
         if (data && data.length > 0) {
           setWatchHistory(data);
+          console.log('Lịch sử xem phim:', data);
         }
       } catch (err) {
         console.error('Lỗi khi lấy lịch sử xem phim (frontend):', err);

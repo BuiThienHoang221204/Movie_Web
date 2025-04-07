@@ -50,8 +50,8 @@ router.post(`${API_VERSION}/movieHistories`, historyController.addWatchHistory)
 router.put(`${API_VERSION}/movieHistories/:id`, historyController.updateWatchHistory)
 router.delete(`${API_VERSION}/movieHistories/:id`, historyController.deleteWatchHistory)
 
-router.get(`${API_VERSION}/user-info`, userController.getUser);
-router.put(`${API_VERSION}/user-info`, userController.updateUser);
-router.delete(`${API_VERSION}/user-info`, userController.deleteUser);
+router.get(`${API_VERSION}/auth/status`, userController.getUser);
+router.put(`${API_VERSION}/auth/status`, userController.updateUser);
+router.delete(`${API_VERSION}/auth/status`, userController.deleteUser);
 
 module.exports = router
