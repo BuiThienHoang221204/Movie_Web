@@ -20,10 +20,13 @@ const authSlice = createSlice({
       state.accessToken = null;
       state.user = null;
     },
+    updateUserField: (state, action) => {
+      state.user = { ...state.user, ...action.payload }; // Partial user updates
+    },
   },
 });
 
-export const { setAccessToken, clearAccessToken, setUser } = authSlice.actions;
+export const { setAccessToken, clearAccessToken, setUser, updateUserField } = authSlice.actions;
 
 export const selectAccessToken = (state) => state.auth.accessToken; // Selector để lấy accessToken
 export const selectUser = (state) => state.auth.user; // Selector để lấy user
