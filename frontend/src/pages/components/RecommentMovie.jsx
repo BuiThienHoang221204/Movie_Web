@@ -19,15 +19,14 @@ function RecommentMovie() {
   const fallbackMovies = [
     {
       id: 1, title: "Avengers: Endgame", year: "2019",
-      genre: "Hành động, Khoa học viễn tưởng", rating: 4.9, match: 98,
+      genre: "Action, Sci-Fi", rating: 4.9, match: 98,
       image: images.ImgMovie
     },
     {
       id: 2, title: "Joker", year: "2019",
-      genre: "Tâm lý, Tội phạm", rating: 4.7, match: 95,
+      genre: "Drama, Crime", rating: 4.7, match: 95,
       image: images.banner2
     },
-
   ];
 
   useEffect(() => {
@@ -83,7 +82,7 @@ function RecommentMovie() {
       <div className='container'>
         <div className='loading-container'>
           <div className='loading-spinner'></div>
-          <p>Đang tải dữ liệu phim...</p>
+          <p>Loading movie data...</p>
         </div>
       </div>
     );
@@ -92,9 +91,9 @@ function RecommentMovie() {
   return (
     <div className='container'>
       <div className='title-container'>
-        <h1 className='section-title'>Phim đề xuất</h1>
+        <h1 className='section-title'>Recommended Movies</h1>
         <button className='view-all-btn' onClick={handleViewAll}>
-          Xem chi tiết <FaArrowRight className='arrow-icon' />
+          View All <FaArrowRight className='arrow-icon' />
         </button>
       </div>
 
@@ -102,7 +101,7 @@ function RecommentMovie() {
         <div className='movie-track'
           style={{
             transform: window.innerWidth <= 768
-              ? `translateX(-${currentIndex * 105/2}%)`
+              ? `translateX(-${currentIndex * 105 / 2}%)`
               : `translateX(-${currentIndex * (102 / itemMovie)}%)`,
             transition: 'transform 0.3s ease-in-out'
           }}

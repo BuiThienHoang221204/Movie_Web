@@ -7,96 +7,96 @@ import images from '../../assets/img';
 function Blog() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredPosts, setFilteredPosts] = useState([]);
-  const [activeCategory, setActiveCategory] = useState('Tất cả');
+  const [activeCategory, setActiveCategory] = useState('All');
 
   // Dữ liệu mẫu cho blog
   const blogPosts = [
     {
       id: 1,
-      title: 'Top 10 phim hay nhất năm 2023 bạn không thể bỏ lỡ',
-      excerpt: 'Những bộ phim đáng xem nhất năm 2023 với những cảnh quay đẹp mắt và cốt truyện hấp dẫn...',
-      content: 'Nội dung chi tiết về top 10 phim hay nhất 2023...',
+      title: 'Top 10 Best Movies of 2023 You Can’t Miss',
+      excerpt: 'The most must-watch movies of 2023 with stunning visuals and compelling storylines...',
+      content: 'Detailed content about the top 10 best movies of 2023...',
       image: images.banner1 || 'https://images.unsplash.com/photo-1616530940355-351fabd9524b',
       author: 'Minh Tuấn',
-      date: '15/11/2023',
-      category: 'Đánh giá phim',
+      date: '11/15/2023',
+      category: 'Movie Reviews',
       comments: 45
     },
     {
       id: 2,
-      title: 'Phân tích chi tiết về cái kết của Oppenheimer',
-      excerpt: 'Bộ phim Oppenheimer của Christopher Nolan đã để lại nhiều câu hỏi với cái kết đầy suy ngẫm...',
-      content: 'Nội dung phân tích về cái kết của Oppenheimer...',
+      title: 'A Detailed Analysis of the Ending of Oppenheimer',
+      excerpt: 'Christopher Nolan’s movie Oppenheimer left many questions with its thought-provoking ending...',
+      content: 'Content analysis about the ending of Oppenheimer...',
       image: images.banner2 || 'https://images.unsplash.com/photo-1626814026160-2237a95fc5a0',
       author: 'Thanh Hà',
-      date: '28/10/2023',
-      category: 'Phân tích phim',
+      date: '10/28/2023',
+      category: 'Movie Analysis',
       comments: 32
     },
     {
       id: 3,
-      title: 'Lịch chiếu phim bom tấn 2024 - Chuẩn bị bùng nổ với loạt phim Marvel mới',
-      excerpt: 'Năm 2024 hứa hẹn sẽ là một năm bùng nổ của điện ảnh với hàng loạt bom tấn được lên lịch ra mắt...',
-      content: 'Thông tin chi tiết về lịch chiếu phim 2024...',
+      title: '2024 Blockbuster Movie Release Schedule - Get Ready for the New Marvel Movies',
+      excerpt: '2024 promises to be an explosive year for cinema with a series of blockbuster movies scheduled for release...',
+      content: 'Detailed information about the 2024 movie release schedule...',
       image: images.banner3 || 'https://images.unsplash.com/photo-1635805737707-575885ab0820',
       author: 'Hoàng Long',
-      date: '05/12/2023',
-      category: 'Tin tức điện ảnh',
+      date: '12/05/2023',
+      category: 'Cinema News',
       comments: 18
     },
     {
       id: 4,
-      title: 'Hậu trường thú vị của bộ phim "The Batman" mà ít ai biết',
-      excerpt: 'Những câu chuyện hậu trường thú vị và những khó khăn trong quá trình sản xuất bộ phim The Batman...',
-      content: 'Chi tiết về hậu trường The Batman...',
+      title: 'The Fascinating Behind-the-Scenes of "The Batman" That Few Know About',
+      excerpt: 'Behind-the-scenes stories and the challenges during the production of The Batman...',
+      content: 'Details about the behind-the-scenes of The Batman...',
       image: images.ImgMovie || 'https://images.unsplash.com/photo-1595769816263-9b910be24d5f',
       author: 'Thùy Linh',
-      date: '20/09/2023',
-      category: 'Hậu trường',
+      date: '09/20/2023',
+      category: 'Behind the Scenes',
       comments: 27
     },
     {
       id: 5,
-      title: 'Những xu hướng phim ảnh mới nổi trong năm 2023',
-      excerpt: 'Điểm qua những xu hướng phim ảnh đang thịnh hành và được khán giả yêu thích trong năm 2023...',
-      content: 'Chi tiết về các xu hướng phim ảnh 2023...',
+      title: 'Emerging Movie Trends in 2023',
+      excerpt: 'An overview of the popular movie trends that have captured the audience’s attention in 2023...',
+      content: 'Detailed information about the movie trends of 2023...',
       image: images.banner2 || 'https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c',
       author: 'Anh Tú',
-      date: '03/08/2023',
-      category: 'Xu hướng',
+      date: '08/03/2023',
+      category: 'Trends',
       comments: 36
     },
     {
       id: 6,
-      title: 'Cách Nolan tạo nên những tác phẩm kinh điển - Từ Inception đến Oppenheimer',
-      excerpt: 'Đi sâu vào phong cách đạo diễn độc đáo của Christopher Nolan và cách ông tạo nên những kiệt tác điện ảnh...',
-      content: 'Phân tích phong cách đạo diễn của Christopher Nolan...',
+      title: 'How Nolan Creates Masterpieces - From Inception to Oppenheimer',
+      excerpt: 'A deep dive into Christopher Nolan’s unique directing style and how he creates cinematic masterpieces...',
+      content: 'An analysis of Christopher Nolan’s directing style...',
       image: images.banner1 || 'https://images.unsplash.com/photo-1440404653325-ab127d49abc1',
       author: 'Minh Khải',
-      date: '17/11/2023',
-      category: 'Phân tích phim',
+      date: '11/17/2023',
+      category: 'Movie Analysis',
       comments: 52
     }
   ];
 
   const categories = [
-    'Tất cả',
-    'Đánh giá phim',
-    'Phân tích phim',
-    'Tin tức điện ảnh',
-    'Hậu trường',
-    'Xu hướng'
+    'All',
+    'Movie Reviews',
+    'Movie Analysis',
+    'Cinema News',
+    'Behind the Scenes',
+    'Trends'
   ];
 
   // Lọc bài viết theo category và search term
   useEffect(() => {
     const results = blogPosts.filter(post => {
-      const matchCategory = activeCategory === 'Tất cả' || post.category === activeCategory;
+      const matchCategory = activeCategory === 'All' || post.category === activeCategory;
       const matchSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         post.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
+        post.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
       return matchCategory && matchSearch;
     });
-    
+
     setFilteredPosts(results);
   }, [searchTerm, activeCategory]);
 
@@ -105,28 +105,28 @@ function Blog() {
       <div className="blog-container">
         <div className="blog-header">
           <div className="blog-header-content">
-            <h1>Blog Phim</h1>
-            <p>Tin tức, đánh giá và phân tích phim mới nhất</p>
+            <h1>Blog Movies</h1>
+            <p>Latest movie news, reviews and analysis</p>
           </div>
         </div>
-        
+
         <div className="blog-main">
           <div className="blog-sidebar">
             <div className="blog-search">
               <input
                 type="text"
-                placeholder="Tìm kiếm bài viết..."
+                placeholder="Search articles..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
               <FaSearch className="search-icon" />
             </div>
-            
+
             <div className="blog-categories">
-              <h3>Danh mục</h3>
+              <h3>Category</h3>
               <ul>
                 {categories.map(category => (
-                  <li 
+                  <li
                     key={category}
                     className={activeCategory === category ? 'active' : ''}
                     onClick={() => setActiveCategory(category)}
@@ -136,9 +136,9 @@ function Blog() {
                 ))}
               </ul>
             </div>
-            
+
             <div className="blog-recent">
-              <h3>Bài viết gần đây</h3>
+              <h3>Recent articles</h3>
               <ul>
                 {blogPosts.slice(0, 3).map(post => (
                   <li key={post.id}>
@@ -154,7 +154,7 @@ function Blog() {
               </ul>
             </div>
           </div>
-          
+
           <div className="blog-content">
             {filteredPosts.length > 0 ? (
               filteredPosts.map(post => (
@@ -173,18 +173,18 @@ function Blog() {
                     <div className="blog-post-meta">
                       <span><FaUser /> {post.author}</span>
                       <span><FaCalendarAlt /> {post.date}</span>
-                      <span><FaComment /> {post.comments} bình luận</span>
+                      <span><FaComment /> {post.comments} comments</span>
                     </div>
                     <Link to={`/blog/${post.id}`} className="read-more">
-                      Đọc tiếp
+                      Read on
                     </Link>
                   </div>
                 </div>
               ))
             ) : (
               <div className="no-results">
-                <h3>Không tìm thấy bài viết nào phù hợp</h3>
-                <p>Vui lòng thử với từ khóa khác hoặc chọn danh mục khác</p>
+                <h3>No matching posts found</h3>
+                <p>Please try a different keyword or select another category</p>
               </div>
             )}
           </div>
