@@ -344,7 +344,7 @@
 
   .movie-poster-wrapper {
     max-width: 400px;
-    max-height: 500px;
+    max-height: 300px;
     margin: 0 auto;
   }
   
@@ -371,7 +371,7 @@
   }
   
   .movie-poster-wrapper {
-    max-width: 320px;
+    max-width: 250px;
   }
   
   .movie-player {
@@ -381,8 +381,8 @@
 
 @media (max-width: 576px) {
   .movie-poster-wrapper {
-    max-width: 280px;
-    max-height: 400px;
+    max-width: 200px;
+    /* max-height: 400px; */
   }
   
   .movie-titledhau {
@@ -419,7 +419,7 @@
   
   .movie-poster-wrapper {
     max-width: 240px;
-    max-height: 350px;
+    max-height: 150px;
   }
   
   .movie-player {
@@ -436,7 +436,7 @@
 @media (max-width: 400px) {
   .movie-poster-wrapper {
     max-width: 200px;
-    max-height: 300px;
+    max-height: 100px;
   }
   
   .movie-titledhau {
