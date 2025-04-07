@@ -416,7 +416,7 @@
 
 .movie-rating {
   font-size: 13px;
-  color: #666;
+  /* color: #666; */
 }
 
 .movie-suggest-btn {
