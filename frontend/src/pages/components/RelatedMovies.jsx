@@ -92,9 +92,7 @@ const RelatedMovies = () => {
   return (
     <div className='container'>
       <div className='title-container'>
-        <h1 className='section-title'>Phim đề xuất</h1>
         <button className='view-all-btn' onClick={handleViewAll}>
-          Xem chi tiết <FaArrowRight className='arrow-icon' />
         </button>
       </div>
 
