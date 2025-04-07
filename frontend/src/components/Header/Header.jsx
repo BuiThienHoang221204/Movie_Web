@@ -24,7 +24,7 @@ function Header() {
     const fetchAllMovies = async () => {
       try {
         const data = await movieService.getAllMovies();
-        console.log("Dữ liệu phim từ API:", data);
+        // console.log("Dữ liệu phim từ API:", data);
         if (data && data.length > 0) { // Nếu có dữ liệu API, sử dụng nó
           setMovieList(data);
         } else {// Nếu không có dữ liệu từ API, sử dụng dữ liệu mẫu
@@ -43,39 +43,40 @@ function Header() {
 
   const fallbackMovies = [
     {
-        id: 1,
-        title: "Ape vs Mecha",
-        year: "2023",
-        duration: "2h 45min",
-        genres: "Action, Thriller, Sci-Fi",
-        rating: "9.5",
-        ageRating: "14+",
-        description: "Trong một thế giới mà công nghệ gặp bản năng nguyên thủy, một con vượn phải đối mặt với thách thức lớn nhất của mình: một phiên bản cơ giới hóa của chính mình. Một trận chiến cho tương lai của cả hai loài bắt đầu.",
-        image: images.banner
+      id: 1,
+      title: "Ape vs Mecha",
+      year: "2023",
+      duration: "2h 45min",
+      genres: "Action, Thriller, Sci-Fi",
+      rating: "9.5",
+      ageRating: "14+",
+      description: "In a world where technology clashes with primal instinct, an ape must face its greatest challenge: a mechanized version of itself. A battle for the future of both species begins.",
+      image: images.banner
     },
     {
-        id: 2,
-        title: "Cosmic Journey",
-        year: "2023",
-        duration: "2h 30min",
-        genres: "Sci-Fi, Adventure",
-        rating: "9.2",
-        ageRating: "12+",
-        description: "Một nhóm phi hành gia dũng cảm khám phá một lỗ đen bí ẩn, dẫn họ đến một chiều không gian mới đầy nguy hiểm và kỳ diệu. Liệu họ có thể tìm đường về nhà?",
-        image: images.banner2
+      id: 2,
+      title: "Cosmic Journey",
+      year: "2023",
+      duration: "2h 30min",
+      genres: "Sci-Fi, Adventure",
+      rating: "9.2",
+      ageRating: "12+",
+      description: "A brave team of astronauts explores a mysterious black hole, leading them to a new dimension full of dangers and wonders. Will they find their way back home?",
+      image: images.banner2
     },
     {
-        id: 3,
-        title: "Phantom Shadows",
-        year: "2023",
-        duration: "2h 15min",
-        genres: "Horror, Mystery",
-        rating: "8.7",
-        ageRating: "18+",
-        description: "Khi một gia đình chuyển đến một ngôi nhà cổ bí ẩn, họ bắt đầu trải nghiệm những hiện tượng siêu nhiên đáng sợ. Bí mật đen tối của ngôi nhà dần dần được hé lộ.",
-        image: images.banner3
+      id: 3,
+      title: "Phantom Shadows",
+      year: "2023",
+      duration: "2h 15min",
+      genres: "Horror, Mystery",
+      rating: "8.7",
+      ageRating: "18+",
+      description: "When a family moves into an old, mysterious house, they begin to experience terrifying supernatural phenomena. The dark secret of the house slowly comes to light.",
+      image: images.banner3
     },
   ];
+
 
   // Thêm effect để theo dõi sự kiện cuộn
   useEffect(() => {
@@ -98,11 +99,11 @@ function Header() {
   }, []);
 
   useEffect(() => {
-    if(!search) {
+    if (!search) {
       setSearchMovies([]);
       return;
     }
-    const filteredMovies = movieList.filter(movie => 
+    const filteredMovies = movieList.filter(movie =>
       movie.title.toLowerCase().trim().includes(search.trim().toLowerCase())
     );
     setSearchMovies(filteredMovies);
@@ -114,7 +115,7 @@ function Header() {
     setSearch('');
   };
 
-  
+
   const handleToggleMenu = () => {
     setSearch('');
     setShowMenu(!showMenu);
@@ -143,21 +144,21 @@ function Header() {
   return (
     <>
       <header className={`header ${scrolled ? 'scrolled' : ''}`}>
-        <Link to={config.home} className="logo text-decoration-none" onClick={() => setShowMenu(false)}>CINEMA</Link>
+        <Link to={config.home} className="logo text-decoration-none" onClick={() => setShowMenu(false)}>HMOVIE</Link>
         <nav className="nav-links">
-          <Link to={config.home} className={location.pathname === config.home ? 'active': ''}>Home</Link>
-          <Link to={config.allRecomment} className={location.pathname === config.allRecomment ? 'active': ''}>Trend</Link>
-          <Link to={config.blog} className={location.pathname === config.blog ? 'active': ''}>Blog</Link>
+          <Link to={config.home} className={location.pathname === config.home ? 'active' : ''}>Home</Link>
+          <Link to={config.allRecomment} className={location.pathname === config.allRecomment ? 'active' : ''}>Trend</Link>
+          <Link to={config.blog} className={location.pathname === config.blog ? 'active' : ''}>Blog</Link>
         </nav>
         <div className="search-signin">
-          <Link to={config.filter} title='Filter'><FaFilter className='filter-icon me-2 border rounded-2 p-2 fs-2 cursor-pointer text-white' onClick={() => {setShowMenu(false);setSearch('')}} /></Link>
+          <Link to={config.filter} title='Filter'><FaFilter className='filter-icon me-2 border rounded-2 p-2 fs-2 cursor-pointer text-white' onClick={() => { setShowMenu(false); setSearch('') }} /></Link>
           <div className='search-bar'>
             <FaSearch className="search-ic" />
-            <input type="text" placeholder="Search" className="search-input" value={search} onFocus={() => setShowMenu(false)} onChange={(e) => setSearch(e.target.value)} />  
+            <input type="text" placeholder="Search" className="search-input" value={search} onFocus={() => setShowMenu(false)} onChange={(e) => setSearch(e.target.value)} />
             <div className={'movie-list ' + (search ? '' : 'd-none')}>
-            {movieList.length > 0 ? (
+              {movieList.length > 0 ? (
                 searchMovies.map(movie => (
-                  <Link to={`watch/${movie.id}`} key={movie.id} className='s-movie' onClick={(e) => handleMovieClick(movie.id, e)}> 
+                  <Link to={`/watch/${movie.id}`} key={movie.id} className='s-movie' onClick={(e) => handleMovieClick(movie.id, e)}>
                     <img src={movie.image} alt={movie.title} className='movie-img' />
                     <div className='s-movie-info'>
                       <h5>{movie.title}</h5>
@@ -170,7 +171,7 @@ function Header() {
               )}
             </div>
           </div>
-          
+
           {!user ? (
             <Link className="signin-btn" to={config.login}>Sign In</Link>
           ) : (
@@ -180,9 +181,9 @@ function Header() {
         <FaList className='toggle-icon' onClick={() => handleToggleMenu()}></FaList>
         <div className={"toggle-menu" + (showMenu ? ' d-block' : '')}>
           <nav className="nav-links">
-            <Link to={config.home} className={location.pathname === config.home ? 'active': '' } onClick={() => setShowMenu(false)}>Home</Link>
-            <Link to={config.allRecomment} className={location.pathname === config.allRecomment ? 'active': ''} onClick={() => setShowMenu(false)}>Trend</Link>
-            <Link to={config.blog} className={location.pathname === config.blog ? 'active': ''} onClick={() => setShowMenu(false)}>Blog</Link>
+            <Link to={config.home} className={location.pathname === config.home ? 'active' : ''} onClick={() => setShowMenu(false)}>Home</Link>
+            <Link to={config.allRecomment} className={location.pathname === config.allRecomment ? 'active' : ''} onClick={() => setShowMenu(false)}>Trend</Link>
+            <Link to={config.blog} className={location.pathname === config.blog ? 'active' : ''} onClick={() => setShowMenu(false)}>Blog</Link>
           </nav>
           {!user ? (
             <Link className="signin-btn" to={config.login}>Sign In</Link>
@@ -192,7 +193,7 @@ function Header() {
             </div>
           )}
         </div>
-        
+
       </header>
       {isHomePage && <Banner />}
     </>

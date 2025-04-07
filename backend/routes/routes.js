@@ -3,6 +3,7 @@ const googleAuthController = require("../controller/google.controller")
 const facebookAuthController = require("../controller/facebook.controller")
 const {signup, login, getAuthStatus, logout} = require("../controller/access.controller")
 const passport = require("../config/passport.config")
+const { getFilms } = require("../controller/drive.controller")
 const router = express()
 
 router.use(passport)
@@ -18,14 +19,22 @@ router.post("/auth/login", login)
 router.post("/auth/logout", logout)
 router.get("/auth/status", getAuthStatus)
 
+// Drive API routes
+router.get("/api/drive/films/:title", getFilms)
+
 // const filmRoutes = require('./film.routes');
 // const userRoutes = require('./user.routes');
 // const accessRoutes = require('./access.routes');
 // const commentRoutes = require('./comment.routes');
 //import moviecontroller
 const movieController = require('../controller/movie.controller')
+// <<<<<<< HEAD
+// =======
 const historyController = require('../controller/history.controller')
-const userController = require('../controller/user.controller')
+// <<<<<<< HEAD
+// >>>>>>> parent of 819f177 (WatchHistory, UserProfile, UserInfo)
+// =======
+// >>>>>>> parent of 819f177 (WatchHistory, UserProfile, UserInfo)
 
 // API version prefix
 const API_VERSION = '/api/v1';//định nghĩa phiên bản API
@@ -43,6 +52,8 @@ router.get(`${API_VERSION}/genres`, movieController.getAllGenres)
 router.get(`${API_VERSION}/movies/:id`, movieController.getMovieDetail)
 router.get(`${API_VERSION}/movies`, movieController.getAllMovies)
 
+// <<<<<<< HEAD
+// =======
 router.get(`${API_VERSION}/movieHistories/:userId`, historyController.getWatchHistory)
 router.get(`${API_VERSION}/movieHistories`, historyController.getAllWatchHistories)
 
@@ -53,5 +64,4 @@ router.delete(`${API_VERSION}/movieHistories/:id`, historyController.deleteWatch
 router.get(`${API_VERSION}/auth/status`, userController.getUser);
 router.put(`${API_VERSION}/auth/status`, userController.updateUser);
 router.delete(`${API_VERSION}/auth/status`, userController.deleteUser);
-
 module.exports = router

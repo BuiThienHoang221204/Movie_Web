@@ -17,16 +17,7 @@ const connectDB = async () => {
         console.error("MongoDB connection error:", error.message)
         process.exit(1)
     }
-};
-
-    mongoose.connection.on('disconnected', () => {
-        console.log('MongoDB disconnected. Attempting to reconnect...');
-        connectDB();
-    });
-    
-    mongoose.connection.on('error', (err) => {
-        console.error('MongoDB connection error:', err);
-    });
+}
 
 connectDB()
 

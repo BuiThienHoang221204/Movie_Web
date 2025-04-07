@@ -5,22 +5,21 @@ import routes from './routes'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useDispatch } from 'react-redux';
 import { setAccessToken, setUser, clearAccessToken } from './redux/authSlice';
-import axiosInstance from './config/axios';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { MovieProvider } from './pages/components/MovieContext';
+import axiosInstance from './config/axios';
+import Chatbot from './components/Chatbot/Chatbot';
 
 function App() {
   const dispatch = useDispatch();
 
   const checkAuthStatus = async () => {
     try {
-      const response = await axiosInstance.get('auth/status');
-
-      if (response.status === 200) {
-        dispatch(setUser(response.data.user));
-        dispatch(setAccessToken(response.data.accessToken));
-      }
+      const response = await axiosInstance.get('/auth/status', { withCredentials: true });
+      
+      dispatch(setUser(response.data.user));
+      dispatch(setAccessToken(response.data.accessToken));
     } catch (error) {
       if (error.response?.status === 401) {
         dispatch(clearAccessToken());
@@ -49,6 +48,7 @@ function App() {
               )
             })}
           </Routes>
+          <Chatbot></Chatbot>
         </Router>
         <ToastContainer
           position="top-right"

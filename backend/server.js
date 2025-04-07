@@ -20,7 +20,7 @@ app.use(cookieParser()) // Parse cookies
 
 // CORS configuration
 app.use(cors({
-    origin: process.env.CLIENT_URL || 'http://localhost:5173',
+    origin: process.env.CLIENT_URL,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Cookie'],
@@ -30,6 +30,11 @@ app.use(cors({
 // Routes
 app.use(router)
 
+// Route cơ bản để tránh 404 (health check)
+app.get('/', (req, res) => {
+    res.status(200).json({ message: 'Backend is running' });
+  });
+  
 // Error handling middleware
 app.use((err, req, res, next) => {
     console.error('Error:', err);
@@ -39,7 +44,7 @@ app.use((err, req, res, next) => {
     });
 });
 
-app.listen(port, () => {
+app.listen(port, '0.0.0.0',() => {
     console.log(`Server running on http://localhost:${port}`);
     console.log('CORS origin:', process.env.CLIENT_URL || 'http://localhost:5173');
 }) 

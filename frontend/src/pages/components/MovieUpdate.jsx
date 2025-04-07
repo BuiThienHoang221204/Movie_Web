@@ -31,7 +31,7 @@ function MovieUpdate() {
             id: 1,
             title: "Dune: Part Two",
             year: "2024",
-            genre: "Khoa học viễn tưởng, Phiêu lưu",
+            genre: "Sci-Fi, Adventure",
             rating: 4.8,
             match: 97,
             image: images.banner3
@@ -40,7 +40,7 @@ function MovieUpdate() {
             id: 2,
             title: "Oppenheimer",
             year: "2023",
-            genre: "Tiểu sử, Chính kịch",
+            genre: "Biography, Drama",
             rating: 4.9,
             match: 98,
             image: images.ImgMovie
@@ -49,10 +49,10 @@ function MovieUpdate() {
 
     return (
         <div className='all-movies-section container'>
-            <h1 className='section-title'>Phim mới cập nhật</h1>
+            <h1 className='section-title'>Newly Updated Movies</h1>
             <div className='all-movies-grid my-5'>
                 {moviesUpdate.map(movie => (
-                    <MovieCard movie={movie}></MovieCard>
+                    <MovieCard movie={movie} key={movie.id}></MovieCard>
                 ))}
             </div>
         </div>

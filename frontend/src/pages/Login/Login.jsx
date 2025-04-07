@@ -25,7 +25,7 @@ const Login = () => {
     const currentUrl = window.location.href;
     const urlParams = new URLSearchParams(window.location.search);
     const accessToken = urlParams.get('accessToken');
-    
+
     if (accessToken) {
       // Store the access token (e.g., in localStorage or your state management solution)
       localStorage.setItem('accessToken', accessToken);
@@ -56,7 +56,7 @@ const Login = () => {
   // Validate form
   const validateForm = () => {
     const newErrors = {};
-    
+
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
@@ -73,7 +73,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       toast.error('Please check your input and try again.');
       return;
@@ -85,26 +85,26 @@ const Login = () => {
 
       if (response.status === 200) {
         const { accessToken, user } = response.data;
-        
+
         // Update Redux store
         dispatch(setAccessToken(accessToken));
         dispatch(setUser(user));
-        
+
         toast.success('Welcome! Login successful.');
         navigate('/');
       }
     } catch (error) {
       console.error('Login error:', error);
       const errorMessage = error.response?.data?.message || 'Something went wrong. Please try again.';
-      
+
       // Show toast notification for all errors
       toast.error(errorMessage);
-      
+
       // Set form errors for authentication issues
       if (error.response?.status === 401 || error.response?.status === 400) {
         setErrors({}); // Clear any existing errors instead of setting them
       }
-      
+
       // Special handling for provider-specific errors
       if (error.response?.data?.message?.includes('authentication')) {
         const provider = error.response.data.message.match(/with (\w+)/)?.[1];
@@ -129,7 +129,7 @@ const Login = () => {
   return (
     <div className="min-h-screen relative flex items-center justify-center p-4 overflow-hidden">
       {/* Background Image & Overlay */}
-      <div 
+      <div
         className="fixed inset-0 bg-cover bg-center bg-no-repeat"
         style={{
           backgroundImage: `url(${images.banner})`
@@ -141,17 +141,15 @@ const Login = () => {
       </div>
 
       {/* Logo */}
-      <Link to="/" className="absolute top-8 left-8 md:left-16 z-20 no-underline">
-        <div className="text-3xl md:text-4xl font-bold text-red-500 cursor-pointer hover:text-red-400 transition-colors duration-300" style={{ textShadow: '0 0 10px rgba(229, 9, 20, 0.5)' }}>
-          CINEMA
-        </div>
+      <Link to="/" className="absolute top-4 left-2 md:left-9 z-20 logo text-decoration-none">
+        HMOVIE
       </Link>
 
       {/* Content */}
       <div className="container relative z-10">
         <div className="row justify-content-end">
           <div className="col-12 col-md-8 col-lg-6 offset-lg-1 px-4 md:px-6">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ delay: 0.3, duration: 0.5, ease: "easeOut" }}
@@ -160,7 +158,7 @@ const Login = () => {
               {/* Glass effect overlay */}
               <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent opacity-30"></div>
               <div className="absolute inset-0 bg-gradient-to-r from-primary-500/5 via-transparent to-primary-500/5"></div>
-              
+
               <div className="relative">
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
@@ -173,13 +171,13 @@ const Login = () => {
                 </motion.div>
 
                 {/* Social Login Buttons */}
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5, duration: 0.5 }}
                   className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6"
                 >
-                  <button 
+                  <button
                     type="button"
                     onClick={() => handleLoginWithProvider('google')}
                     className="flex items-center justify-center gap-2 md:gap-3 py-2.5 md:py-3 px-4 md:px-5 bg-dark-300/80 hover:bg-dark-400/80 text-white rounded-xl transition-all duration-300 shadow-dark border border-dark-400/30 hover:border-primary-600/50 hover:shadow-dark-lg group text-base md:text-lg hover:-translate-y-0.5 active:translate-y-0"
@@ -187,7 +185,7 @@ const Login = () => {
                     <FaGoogle className="text-primary-500 group-hover:text-primary-400 transition-colors text-2xl" />
                     <span>Google</span>
                   </button>
-                  <button 
+                  <button
                     type="button"
                     onClick={() => handleLoginWithProvider('facebook')}
                     className="flex items-center justify-center gap-2 md:gap-3 py-2.5 md:py-3 px-4 md:px-5 bg-dark-300/80 hover:bg-dark-400/80 text-white rounded-xl transition-all duration-300 shadow-dark border border-dark-400/30 hover:border-primary-600/50 hover:shadow-dark-lg group text-base md:text-lg hover:-translate-y-0.5 active:translate-y-0"
@@ -197,7 +195,7 @@ const Login = () => {
                   </button>
                 </motion.div>
 
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.6, duration: 0.5 }}
@@ -208,11 +206,11 @@ const Login = () => {
                   <div className="flex-1 border-t border-dark-400/50"></div>
                 </motion.div>
 
-                <motion.form 
+                <motion.form
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.7, duration: 0.5 }}
-                  onSubmit={handleSubmit} 
+                  onSubmit={handleSubmit}
                   className="space-y-5"
                 >
                   <div className="form-group relative">
@@ -271,15 +269,14 @@ const Login = () => {
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className={`w-full py-3 px-5 text-base bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-500 hover:to-primary-600 text-white rounded-xl transition-all duration-300 shadow-dark hover:shadow-dark-lg font-medium transform hover:-translate-y-0.5 ${
-                      isLoading ? 'opacity-75 cursor-not-allowed' : ''
-                    }`}
+                    className={`w-full py-3 px-5 text-base bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-500 hover:to-primary-600 text-white rounded-xl transition-all duration-300 shadow-dark hover:shadow-dark-lg font-medium transform hover:-translate-y-0.5 ${isLoading ? 'opacity-75 cursor-not-allowed' : ''
+                      }`}
                   >
                     {isLoading ? 'Signing in...' : 'Sign In'}
                   </button>
                 </motion.form>
 
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.8, duration: 0.5 }}

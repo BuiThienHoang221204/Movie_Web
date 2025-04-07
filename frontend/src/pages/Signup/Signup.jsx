@@ -153,10 +153,8 @@ const Signup = () => {
       </div>
 
       {/* Logo */}
-      <Link to="/" className="absolute top-8 left-8 md:left-16 z-20 no-underline">
-        <div className="text-3xl md:text-4xl font-bold text-red-500 cursor-pointer hover:text-red-400 transition-colors duration-300" style={{ textShadow: '0 0 10px rgba(229, 9, 20, 0.5)' }}>
-          CINEMA
-        </div>
+      <Link to="/" className="absolute top-4 left-2 md:left-9 z-20 logo text-decoration-none">
+          HMOVIE
       </Link>
 
       {/* Content */}

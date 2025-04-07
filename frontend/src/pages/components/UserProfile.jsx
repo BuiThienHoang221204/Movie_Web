@@ -4,9 +4,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaUserEdit, FaSearch, FaSignOutAlt, FaUser } from 'react-icons/fa';
 import WatchHistory from '../components/WatchHistory';
-import movieService from '../../services/movieService';
-import { clearAccessToken } from '../../redux/authSlice';
 import './UserProfile.css';
+import movieService from '../../services/movieService';
 
 // 1. Component Definition and Props
 function UserProfile({ user: propUser }) {
@@ -19,20 +18,20 @@ function UserProfile({ user: propUser }) {
     totalWatched: 0,
     hoursWatched: 0,
   });
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const dropdownRef = useRef(null);
 
   // 3. Fetch Watch Stats Effect
   useEffect(() => {
     const fetchWatchStats = async () => {
-      if (!user?.email) return;
       try {
         const data = await movieService.getWatchHistory(user.email);
         const totalWatched = data.length;
-        const hoursWatched = data.reduce((acc, item) => acc + (item.progress || 0) * 2, 0);
+        let favoriteGenre = 'N/A';
+
+        const hoursWatched = data.reduce((acc, item) => acc + (item.progress || 0) * 2, 0); // Assume 2 hours per movie
 
         setWatchStats({
           totalWatched,
+          favoriteGenre,
           hoursWatched: Math.round(hoursWatched),
         });
       } catch (err) {
@@ -178,7 +177,11 @@ function UserProfile({ user: propUser }) {
             <WatchHistory user={user} />
           </motion.div>
         </div>
-      </motion.div>
+      </div>
+
+      <div className="watch-history-section">
+        <WatchHistory user={user} />
+      </div>
     </div>
   );
 }

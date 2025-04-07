@@ -10,7 +10,7 @@ function Home() {
     const fetchTrailer = async () => {
       try {
         const data = await movieService.getNewMovies();
-        console.log("Dữ liệu phim từ API:", data);
+        // console.log("Dữ liệu phim từ API:", data);
         if (data && data.length > 0) { // Nếu có dữ liệu API, sử dụng nó
           //lấy 3 phim đầu tiên
           setTrailer(data.slice(0, 3));
@@ -55,8 +55,8 @@ function Home() {
               <h3>PANDA PLAN Official Trailer (2024)</h3>
               <p className="release-date">Coming in 2026</p>
               <p className="trailer-movie-description">
-                Huyền thoại võ thuật Jackie Chan trở lại trong PANDA PLAN, một bộ phim hành động - phiêu lưu đầy hấp dẫn!
-                Khi một tổ chức tội phạm quốc tế nhắm vào loài gấu trúc quý hiếm, một cựu đặc vụ (Jackie Chan) buộc phải tái xuất để bảo vệ chúng
+                Martial arts legend Jackie Chan returns in PANDA PLAN, an action-adventure packed with action!
+                When an international criminal organization preys on the rare pandas, a former agent (Jackie Chan) is forced to reincarnate to protect them.
               </p>
               <button className="add-watchlist-btn">
                 <i className="fa fa-plus"></i> Add to Watchlist

@@ -1,126 +1,125 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { FaPlay, FaStar } from 'react-icons/fa';
-import './RelatedMovies.css';
+import React, { useState, useEffect } from 'react'
+import images from '../../assets/img'
+import './RecommentMovie.css'
+import { FaPlay, FaArrowRight } from 'react-icons/fa';
+import movieService from '../../services/movieService';
+import { useNavigate } from 'react-router-dom';
+import { useMovies } from './MovieContext';
+import config from '../../config';
+import MovieCard from './MovieCard';
 
-const RelatedMovies = ({ currentMovieId }) => {
-  const [relatedMovies, setRelatedMovies] = useState([]);
-  const [loading, setLoading] = useState(true);
+const RelatedMovies = () => {
+  const { RecommentMovies, setRecommentMovies } = useMovies();
   const navigate = useNavigate();
+  const [currentIndex, setCurrentIndex] = useState(0);// hiển thị phim đề xuất
+  const [autoPlay, setAutoPlay] = useState(true);
+  const itemMovie = 4; // Số lượng phim hiển thị trên mỗi slide
+  const maxIndex = Math.max(0, RecommentMovies.length - itemMovie);// số lượng phim hiển thị
+  // Dữ liệu mẫu để sử dụng khi API không có dữ liệu
+  const fallbackMovies = [
+    {
+      id: 1, title: "Avengers: Endgame", year: "2019",
+      genre: "Hành động, Khoa học viễn tưởng", rating: 4.9, match: 98,
+      image: images.ImgMovie
+    },
+    {
+      id: 2, title: "Joker", year: "2019",
+      genre: "Tâm lý, Tội phạm", rating: 4.7, match: 95,
+      image: images.banner2
+    },
+
+  ];
 
   useEffect(() => {
-    // Giả lập việc lấy dữ liệu phim liên quan từ API
-    setTimeout(() => {
-      // Dữ liệu mẫu
-      const mockRelatedMovies = [
-        {
-          id: '1',
-          title: 'Avengers: Infinity War',
-          year: 2018,
-          poster: 'https://m.media-amazon.com/images/M/MV5BMjMxNjY2MDU1OV5BMl5BanBnXkFtZTgwNzY1MTUwNTM@._V1_.jpg',
-          rating: 8.4,
-          duration: '2h 29m',
-          genres: ['Hành động', 'Phiêu lưu']
-        },
-        {
-          id: '2',
-          title: 'Captain America: Civil War',
-          year: 2016,
-          poster: 'https://m.media-amazon.com/images/M/MV5BMjQ0MTgyNjAxMV5BMl5BanBnXkFtZTgwNjUzMDkyODE@._V1_.jpg',
-          rating: 7.8,
-          duration: '2h 27m',
-          genres: ['Hành động', 'Phiêu lưu']
-        },
-        {
-          id: '3',
-          title: 'Thor: Ragnarok',
-          year: 2017,
-          poster: 'https://m.media-amazon.com/images/M/MV5BMjMyNDkzMzI1OF5BMl5BanBnXkFtZTgwODcxODg5MjI@._V1_.jpg',
-          rating: 7.9,
-          duration: '2h 10m',
-          genres: ['Hành động', 'Hài hước']
-        },
-        {
-          id: '4',
-          title: 'Black Panther',
-          year: 2018,
-          poster: 'https://m.media-amazon.com/images/M/MV5BMTg1MTY2MjYzNV5BMl5BanBnXkFtZTgwMTc4NTMwNDI@._V1_.jpg',
-          rating: 7.3,
-          duration: '2h 14m',
-          genres: ['Hành động', 'Phiêu lưu']
-        },
-        {
-          id: '5',
-          title: 'Doctor Strange',
-          year: 2016,
-          poster: 'https://m.media-amazon.com/images/M/MV5BNjgwNzAzNjk1Nl5BMl5BanBnXkFtZTgwMzQ2NjI1OTE@._V1_.jpg',
-          rating: 7.5,
-          duration: '1h 55m',
-          genres: ['Hành động', 'Phiêu lưu']
-        }
-      ];
-      
-      // Lọc ra phim hiện tại nếu có trong danh sách
-      const filteredMovies = mockRelatedMovies.filter(movie => movie.id !== currentMovieId);
-      setRelatedMovies(filteredMovies);
-      setLoading(false);
-    }, 1000);
-  }, [currentMovieId]);
+    if (autoPlay && RecommentMovies.length > 0) {
+      const interval = setInterval(() => {
+        setCurrentIndex(prev => prev === maxIndex ? 0 : prev + 1);
+      }, 2000);
+      return () => clearInterval(interval);
+    }
+  }, [maxIndex, autoPlay, RecommentMovies]);
 
-  const handleWatchNow = (movieId, event) => {
-    event.preventDefault(); // Ngăn chặn hành vi mặc định của Link
-    navigate(`/watch/${movieId}`);
+  useEffect(() => {
+    const fetchRecommentMovies = async () => {
+      try {
+        const data = await movieService.getRecommendMovies();
+        console.log("Dữ liệu phim từ API:", data);
+        if (data && data.length > 0) {
+          setRecommentMovies(data);
+        } else {
+          // Nếu không có dữ liệu từ API, sử dụng dữ liệu mẫu
+          setRecommentMovies(fallbackMovies);
+        }
+      } catch (err) {
+        console.error('Lỗi khi lấy phim đề xuất (frontend):', err);
+        // Khi có lỗi, sử dụng dữ liệu mẫu
+        setRecommentMovies(fallbackMovies);
+      }
+    }
+
+    fetchRecommentMovies();
+  }, []);
+
+
+  // chuyển phim tiếp theo
+  const handleNext = () => {
+    setCurrentIndex(prev => prev === maxIndex ? 0 : prev + 1);
+  }
+  // chuyển phim trước
+  const handlePrev = () => {
+    setCurrentIndex((prev) => prev === 0 ? maxIndex : prev - 1);
+  }
+
+  const play = () => setAutoPlay(true);
+  const pause = () => setAutoPlay(false);
+
+  const handleViewAll = () => {
+    navigate(config.allRecomment);
   };
 
-  if (loading) {
+  // Nếu không có dữ liệu và đang tải, hiển thị "Đang tải..."
+  if (RecommentMovies.length === 0) {
     return (
-      <div className="related-movies-loading">
-        <div className="spinner-small"></div>
-        <p>Đang tải...</p>
+      <div className='container'>
+        <div className='loading-container'>
+          <div className='loading-spinner'></div>
+          <p>Đang tải dữ liệu phim...</p>
+        </div>
       </div>
     );
   }
 
-  if (relatedMovies.length === 0) {
-    return <p className="no-related">Không có phim liên quan</p>;
-  }
-
   return (
-    <div className="related-movies">
-      {relatedMovies.map(movie => (
-        <Link to={`/watch/${movie.id}`} key={movie.id} className="related-movie-card">
-          <div className="related-movie-poster">
-            <img src={movie.poster} alt={movie.title} loading="lazy" />
-            <div className="related-movie-rating">
-              <FaStar /> {movie.rating}
-            </div>
-            <div className="related-movie-overlay">
-              <button 
-                className="watch-now-button"
-                onClick={(e) => handleWatchNow(movie.id, e)}
-              >
-                <FaPlay /> Xem ngay
-              </button>
-            </div>
-          </div>
-          <div className="related-movie-info">
-            <h3 className="related-movie-title">{movie.title}</h3>
-            <div className="related-movie-meta">
-              <span className="related-movie-year">{movie.year}</span>
-              <span className="related-movie-duration">{movie.duration}</span>
-            </div>
-            {movie.genres && (
-              <div className="related-movie-genres">
-                {movie.genres.slice(0, 2).map((genre, index) => (
-                  <span key={index} className="related-genre-tag">{genre}</span>
-                ))}
-              </div>
-            )}
-          </div>
-        </Link>
-      ))}
+    <div className='container'>
+      <div className='title-container'>
+        <h1 className='section-title'>Phim đề xuất</h1>
+        <button className='view-all-btn' onClick={handleViewAll}>
+          Xem chi tiết <FaArrowRight className='arrow-icon' />
+        </button>
+      </div>
+
+      <div className='section-movie' onMouseEnter={pause} onMouseLeave={play}>
+        <div className='movie-track'
+          style={{
+            transform: window.innerWidth <= 768
+              ? `translateX(-${currentIndex * 105/2}%)`
+              : `translateX(-${currentIndex * (102 / itemMovie)}%)`,
+            transition: 'transform 0.3s ease-in-out'
+          }}
+        >
+          {RecommentMovies.map(movie => (
+            <MovieCard movie={movie} key={movie.id}></MovieCard>
+          ))}
+        </div>
+        <button className="prev" onClick={handlePrev}>
+          &#10094;
+        </button>
+        <button className="next" onClick={handleNext}>
+          &#10095;
+        </button>
+      </div>
     </div>
-  );
+  )
 };
 
 export default RelatedMovies; 

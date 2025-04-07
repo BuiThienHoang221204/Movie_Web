@@ -48,7 +48,7 @@ const UserInfo = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setError(null);
     setSuccess(null);
@@ -240,7 +240,7 @@ const UserInfo = () => {
           </Link>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 
