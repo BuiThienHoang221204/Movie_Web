@@ -75,7 +75,7 @@ const UserInfo = () => {
       }
 
       dispacth(updateUserField(updateUser));
-      console.log(user)
+      
       setSuccess('Cập nhật thông tin thành công!');
       setIsEditing(false);
     } catch (error) {
