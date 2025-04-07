@@ -71,7 +71,7 @@
   margin-bottom: 30px;
 }
 
-.movie-track {
+.movie-track-1 {
   display: flex;
   gap: 20px;
 }
@@ -207,7 +207,7 @@
 
 
 /* chỉnh nút trước và sau */
-.prev {
+.prev-1 {
   position: absolute;
   top: 45%;
   left: -40px;
@@ -223,13 +223,13 @@
   z-index: 10;
 }
 
-.prev:hover,
-.next:hover {
+.prev-1:hover,
+.next-1:hover {
   background-color: #e50914;
   opacity: 1;
 }
 
-.next {
+.next-1 {
   position: absolute;
   top: 45%;
   right: -40px;
@@ -267,6 +267,7 @@
   .section-movie{
     width: 100%;
     overflow: hidden;
+    
   }
   .movie-item {
     flex: 0 0 47%;
@@ -277,18 +278,19 @@
   }
 
   /* chỉnh nút trước và sau */
-.prev {
+.prev-1 {
   position: absolute;
   top: 55%;
   left: 6%;
 }
 
-.next {
+.next-1 {
   position: absolute;
   top: 55%;
   right: 5%;
 }
-}
+} 
+
 
 @media (max-width: 480px) {
   .all-movies-grid {
