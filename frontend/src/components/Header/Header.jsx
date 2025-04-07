@@ -157,7 +157,7 @@ function Header() {
             <div className={'movie-list ' + (search ? '' : 'd-none')}>
             {movieList.length > 0 ? (
                 searchMovies.map(movie => (
-                  <Link to={`watch/${movie.id}`} key={movie.id} className='s-movie' onClick={(e) => handleMovieClick(movie.id, e)}> 
+                  <Link to={`/watch/${movie.id}`} key={movie.id} className='s-movie' onClick={(e) => handleMovieClick(movie.id, e)}> 
                     <img src={movie.image} alt={movie.title} className='movie-img' />
                     <div className='s-movie-info'>
                       <h5>{movie.title}</h5>

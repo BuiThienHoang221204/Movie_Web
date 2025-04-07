@@ -32,8 +32,8 @@ const routes = [
         component: Blog,
     },
     {
-        // path: config.allRecomment,
-        path: config.watchDetail,
+        path: config.allRecomment,
+        // path: config.watchDetail,
         component: AllRecomment,
     },
     {
