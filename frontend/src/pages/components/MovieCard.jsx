@@ -12,7 +12,7 @@ const MovieCard = (props) => {
         return genre ? genre.name : ''
     }
 
-
+   
   return (
     <>
         <Link to={`/watch/${movie.id}`} className='movie-item'>
