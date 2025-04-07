@@ -9,7 +9,7 @@ import './UserInfo.css';
 
 const UserInfo = () => {
   const navigate = useNavigate();
-  const  user = useSelector((state) => state.auth.user);
+  const user = useSelector((state) => state.auth.user);
   const dispacth = useDispatch();
   const [isEditing, setIsEditing] = useState(false);
   const [error, setError] = useState(null);
@@ -75,7 +75,7 @@ const UserInfo = () => {
       }
 
       dispacth(updateUserField(updateUser));
-      
+
       setSuccess('Cập nhật thông tin thành công!');
       setIsEditing(false);
     } catch (error) {
@@ -240,7 +240,8 @@ const UserInfo = () => {
           </Link>
         </div>
       </div>
-    </div>
+
+    </motion.div> 
   );
 };
 

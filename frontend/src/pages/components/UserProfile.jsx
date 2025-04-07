@@ -96,93 +96,95 @@ function UserProfile({ user: propUser }) {
 
   // 7. Main Render
   return (
-    <div className="bg-black min-h-screen text-white">
-      
-      {/* 8. Main Content */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="p-6 pt-24"
-      >
-        <div className="max-w-5xl mx-auto space-y-8">
-          {/* 9. Profile Header */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
-            className="profile-header"
-          >
+    <>
+      <div className="bg-black min-h-screen text-white">
+
+        {/* 8. Main Content */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="p-6 pt-24"
+        >
+          <div className="max-w-5xl mx-auto space-y-8">
+            {/* 9. Profile Header */}
             <motion.div
-              whileHover={{ scale: 1.05 }}
-              className="avatar-container"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 }}
+              className="profile-header"
             >
-              <img
-                src={user.avatar || 'https://api.dicebear.com/9.x/fun-emoji/svg?seed=Leo&flip=true&radius=40'}
-                alt="User avatar"
-                className="avatar-image"
-              />
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                className="avatar-container"
+              >
+                <img
+                  src={user.avatar || 'https://api.dicebear.com/9.x/fun-emoji/svg?seed=Leo&flip=true&radius=40'}
+                  alt="User avatar"
+                  className="avatar-image"
+                />
+              </motion.div>
+              <div className="profile-info">
+                <h1 className="welcome-text">
+                  Chào mừng bạn, {user.name || 'User'}!
+                </h1>
+                <p className="email-text">{user.email || 'email@example.com'}</p>
+                <Link to="/user-info" state={{ user }}>
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="edit-profile-btn"
+                  >
+                    <FaUserEdit /> Chỉnh sửa hồ sơ
+                  </motion.button>
+                </Link>
+              </div>
             </motion.div>
-            <div className="profile-info">
-              <h1 className="welcome-text">
-                Chào mừng bạn, {user.name || 'User'}!
-              </h1>
-              <p className="email-text">{user.email || 'email@example.com'}</p>
-              <Link to="/user-info" state={{ user }}>
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="edit-profile-btn"
+
+            {/* 10. Watch Stats */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="watch-stats"
+            >
+              <h2 className="section-title">Số liệu của bạn</h2>
+              <div className="stats-grid">
+                <motion.div
+                  whileHover={{ scale: 1.03 }}
+                  className="stat-card"
                 >
-                  <FaUserEdit /> Chỉnh sửa hồ sơ
-                </motion.button>
-              </Link>
-            </div>
-          </motion.div>
+                  <span className="stat-number">{watchStats.totalWatched}</span>
+                  <p className="stat-label">Số phim đã xem</p>
+                </motion.div>
+                <motion.div
+                  whileHover={{ scale: 1.03 }}
+                  className="stat-card"
+                >
+                  <span className="stat-number">{watchStats.hoursWatched}</span>
+                  <p className="stat-label">Số giờ đã xem</p>
+                </motion.div>
+              </div>
+            </motion.div>
 
-          {/* 10. Watch Stats */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="watch-stats"
-          >
-            <h2 className="section-title">Số liệu của bạn</h2>
-            <div className="stats-grid">
-              <motion.div
-                whileHover={{ scale: 1.03 }}
-                className="stat-card"
-              >
-                <span className="stat-number">{watchStats.totalWatched}</span>
-                <p className="stat-label">Số phim đã xem</p>
-              </motion.div>
-              <motion.div
-                whileHover={{ scale: 1.03 }}
-                className="stat-card"
-              >
-                <span className="stat-number">{watchStats.hoursWatched}</span>
-                <p className="stat-label">Số giờ đã xem</p>
-              </motion.div>
-            </div>
-          </motion.div>
-
-          {/* 11. Watch History */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
-            className="watch-history"
-          >
-            <h2 className="section-title">Lịch sử xem</h2>
-            <WatchHistory user={user} />
-          </motion.div>
-        </div>
+            {/* 11. Watch History */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6 }}
+              className="watch-history"
+            >
+              <h2 className="section-title">Lịch sử xem</h2>
+              <WatchHistory user={user} />
+            </motion.div>
+          </div>
+        </motion.div>
       </div>
 
       <div className="watch-history-section">
         <WatchHistory user={user} />
       </div>
-    </div>
+    </>
   );
 }
 
