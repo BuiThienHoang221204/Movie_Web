@@ -98,7 +98,7 @@ function RecommentMovie() {
       </div>
 
       <div className='section-movie' onMouseEnter={pause} onMouseLeave={play}>
-        <div className='movie-track'
+        <div className='movie-track-1'
           style={{
             transform: window.innerWidth <= 768
               ? `translateX(-${currentIndex * 105 / 2}%)`
@@ -110,10 +110,10 @@ function RecommentMovie() {
             <MovieCard movie={movie} key={movie.id}></MovieCard>
           ))}
         </div>
-        <button className="prev" onClick={handlePrev}>
+        <button className="prev-1" onClick={handlePrev}>
           &#10094;
         </button>
-        <button className="next" onClick={handleNext}>
+        <button className="next-1" onClick={handleNext}>
           &#10095;
         </button>
       </div>

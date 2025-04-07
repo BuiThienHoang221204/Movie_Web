@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { server } from './index';
+import server from './server';
 
 const axiosInstance = axios.create({
   baseURL: server,

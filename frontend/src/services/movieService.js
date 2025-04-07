@@ -31,7 +31,6 @@ const movieService = {
     },
     getMovieDetail: async (id) => {//lấy chi tiết phim
         try{
-            // const response = await apiClient.get(`${server}/movies/${id}`)//gọi API để lấy chi tiết phim
             const response = await apiClient.get(`/movies/${id}`)//gọi API để lấy chi tiết phim
             return response.data; //trả về dữ liệu từ API
         }catch(error){
@@ -45,6 +44,51 @@ const movieService = {
             return response.data; //trả về dữ liệu từ API
         } catch (error) {
             console.error('Lỗi khi lấy danh sách thể loại:', error);
+            throw error;
+        }
+    },
+    getWatchHistory: async (email) => {//lấy lịch sử xem phim
+        try {
+            const response = await apiClient.get(`/movieHistories/${email}`);//sửa lại endpoint cho đúng
+            return response.data; //trả về dữ liệu từ API
+        } catch (error) {
+            console.error('Lỗi khi lấy lịch sử xem phim:', error);
+            throw error;
+        }
+    },
+    addWatchHistory: async (data) => {//thêm lịch sử xem phim
+        try {
+            const response = await apiClient.post('/movieHistories', data);//sửa lại endpoint cho đúng
+            return response.data; //trả về dữ liệu từ API
+        } catch (error) {
+            console.error('Lỗi khi thêm lịch sử xem phim:', error);
+            throw error;
+        }
+    },
+    deleteWatchHistory: async (email) => {//xóa lịch sử xem phim
+        try {
+            const response = await apiClient.delete(`/movieHistories/${email}`);//sửa lại endpoint cho đúng
+            return response.data; //trả về dữ liệu từ API
+        } catch (error) {
+            console.error('Lỗi khi xóa lịch sử xem phim:', error);
+            throw error;
+        }
+    },
+    updateWatchHistory: async (email, data) => {//cập nhật lịch sử xem phim
+        try {
+            const response = await apiClient.put(`/movieHistories/${email}`, data);//sửa lại endpoint cho đúng
+            return response.data; //trả về dữ liệu từ API
+        } catch (error) {
+            console.error('Lỗi khi cập nhật lịch sử xem phim:', error);
+            throw error;
+        }
+    },
+    getAllWatchHistories: async () => {//lấy tất cả lịch sử xem phim
+        try {
+            const response = await apiClient.get('/movieHistories');//sửa lại endpoint cho đúng
+            return response;
+        } catch (error) {
+            console.error('Lỗi khi lấy tất cả lịch sử xem phim:', error);
             throw error;
         }
     }

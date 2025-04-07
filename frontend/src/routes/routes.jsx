@@ -7,6 +7,8 @@ import WatchMovie from '../pages/WatchMovie/WatchMovie';
 import Blog from '../pages/Blog/Blog';
 import {AllRecomment} from '../pages/components';
 import Filter from '../pages/Filter/Filter';
+import UserProfile from '../pages/components/UserProfile';
+import UserInfo from '../pages/components/UserInfo';
 
 const routes = [
     {
@@ -38,6 +40,14 @@ const routes = [
     {
         path: config.filter,
         component: Filter,
+    },
+    {
+        path: '/profile',
+        component: UserProfile,
+    },
+    {
+        path: '/user-info',
+        component: UserInfo,
     },
 ];
 

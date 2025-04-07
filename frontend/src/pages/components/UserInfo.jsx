@@ -1,111 +1,252 @@
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FaUserEdit, FaSave, FaTimes } from 'react-icons/fa';
+import axiosInstance from '../../config/axios';
+import { setUser, updateUserField } from '../../redux/authSlice';
 import './UserInfo.css';
 
-const UserInfo = ({ user }) => {
-  // Fallback to an empty object if user is undefined
-  const safeUser = user || {};
-
+const UserInfo = () => {
+  const navigate = useNavigate();
+  const user = useSelector((state) => state.auth.user);
+  const dispatch = useDispatch();
   const [isEditing, setIsEditing] = useState(false);
-  const [name, setName] = useState(safeUser.name || '');
-  const [avatar, setAvatar] = useState(safeUser.avatar || '');
-  const [avatarPreview, setAvatarPreview] = useState(safeUser.avatar || '');
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
+  const [avatarPreview, setAvatarPreview] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const editRef = useRef(null);
+  const [name, setName] = useState('');
+  const [avatar, setAvatar] = useState('');
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (editRef.current && !editRef.current.contains(event.target)) {
+        setIsEditing(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    console.log(user)
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  useEffect(() => {
+    setName(user.name);
+    setAvatarPreview(user.avatar);
+  }, [user])
 
   const handleAvatarChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setAvatar(file);
-        setAvatarPreview(reader.result);
+        setAvatar(file); // Store the file object for upload
+        setAvatarPreview(reader.result); // Preview the image
       };
       reader.readAsDataURL(file);
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const updatedUser = {
-      ...safeUser,
-      name,
-      avatar: avatarPreview,
-    };
-    console.log('Updated User:', updatedUser);
-    setIsEditing(false);
+    setError(null);
+    setSuccess(null);
+
+    if (!name.trim()) {
+      setError('Tên không được để trống.');
+      return;
+    }
+
+    setIsLoading(true);
+
+    // Prepare form data for file upload
+    const formData = new FormData();
+    formData.append('name', name);
+    if (avatar instanceof File) {
+      formData.append('avatar', avatar); // Only append if it’s a new file
+    }
+
+    try {
+      const updateUser = {
+        ...user,
+        name: name,
+        avatar: avatarPreview,
+      };
+    
+      // Gửi request cập nhật thông tin người dùng
+      const response = await axiosInstance.post('/auth/update', updateUser);
+      
+      if (response.status === 200) {
+        dispatch(updateUserField(updateUser)); // Cập nhật trạng thái trong store
+    
+        setSuccess('Cập nhật thông tin thành công!');
+        setIsEditing(false);
+      }
+    } catch (error) {
+      console.error('Error updating user:', error);
+      if (error.response) {
+        setError(error.response.data?.message || 'Không thể cập nhật thông tin người dùng.');
+      } else if (error.request) {
+        setError('Không thể kết nối đến server. Vui lòng kiểm tra kết nối mạng.');
+      } else {
+        setError('Đã xảy ra lỗi. Vui lòng thử lại.');
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  // If user is undefined, show a loading or error message
-  if (!user) {
-    return (
-      <div className="user-info-container">
-        <h1 className="user-info-title">Hồ sơ người dùng</h1>
-        <p>Không tìm thấy thông tin người dùng. Vui lòng đăng nhập lại.</p>
-        <Link to="/profile">
-          <button className="back-btn">Quay lại</button>
-        </Link>
-      </div>
-    );
-  }
-
   return (
-    <div className="user-info-container">
-      <h1 className="user-info-title">Hồ sơ người dùng</h1>
-      <div className="user-info-content">
-        <div className="avatar-section">
-          <img src={avatarPreview || 'https://via.placeholder.com/150'} alt="Avatar" className="user-avatar" />
-          {isEditing && (
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleAvatarChange}
-              className="avatar-input"
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="min-h-screen bg-black p-6 flex items-start justify-center pt-24"
+    >
+      <div className="max-w-lg w-full bg-opacity-10 p-6 rounded-xl shadow-lg border border-gray-700 relative" ref={editRef}>
+        <h1 className="text-2xl font-bold text-red-400 mb-6 text-center">Hồ sơ người dùng</h1>
+
+        {/* Error/Success Messages */}
+        {error && <div className="text-red-500 text-center mb-4">{error}</div>}
+        {success && <div className="text-green-500 text-center mb-4">{success}</div>}
+
+        {/* Avatar and Basic Info */}
+        <div className="flex flex-col items-center gap-6">
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            className="w-32 h-32 rounded-full overflow-hidden border-2 border-red-500"
+          >
+            <img
+              src={avatarPreview || 'https://api.dicebear.com/9.x/fun-emoji/svg?seed=Leo&flip=true&radius=40'}
+              alt="Avatar"
+              className="w-full h-full object-cover"
             />
-          )}
+          </motion.div>
+
+          {
+            user && (
+              <div className="text-gray-300 text-center">
+                <p><strong className="text-white">Tên:</strong> {user.name || 'Chưa đặt tên'}</p>
+                <p><strong className="text-white">Email:</strong> {user.email || 'N/A'}</p>
+                <p><strong className="text-white">Vai trò:</strong> {user.role || 'N/A'}</p>
+              </div>
+            )
+          }
+
+          {/* Edit Button */}
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setIsEditing(!isEditing)}
+            className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+            disabled={isLoading}
+          >
+            <FaUserEdit /> Chỉnh sửa
+          </motion.button>
         </div>
-        <div className="info-section">
-          {isEditing ? (
-            <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label htmlFor="name">Tên:</label>
-                <input
-                  type="text"
-                  id="name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="form-input"
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="email">Email:</label>
-                <input
-                  type="email"
-                  id="email"
-                  value={safeUser.email || ''}
-                  disabled
-                  className="form-input disabled"
-                />
-              </div>
-              <div className="form-actions">
-                <button type="submit" className="save-btn">Lưu</button>
-                <button type="button" onClick={() => setIsEditing(false)} className="cancel-btn">Hủy</button>
-              </div>
-            </form>
-          ) : (
-            <>
-              <p><strong>Tên:</strong> {name}</p>
-              <p><strong>Email:</strong> {safeUser.email || ''}</p>
-              <p><strong>Nhà cung cấp:</strong> {safeUser.provider || ''}</p>
-              <p><strong>Vai trò:</strong> {safeUser.role || ''}</p>
-              <button onClick={() => setIsEditing(true)} className="edit-btn">Chỉnh sửa</button>
-              <Link to="/">
-                <button className="back-btn">Quay lại</button>
-              </Link>
-            </>
+
+        {/* Edit Form Dropdown */}
+        <AnimatePresence>
+          {isEditing && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2 }}
+              className="absolute top-full left-0 right-0 mt-2 bg-gray-700 rounded-xl shadow-lg border border-gray-600 p-4 z-10"
+            >
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="form-group">
+                  <label htmlFor="name" className="text-gray-300 font-medium">Tên:</label>
+                  <input
+                    type="text"
+                    id="name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="w-full mt-1 p-2 bg-gray-600 text-white rounded-lg border border-gray-500 focus:outline-none focus:border-red-500"
+                    disabled={isLoading}
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="avatar" className="text-gray-300 font-medium">Ảnh đại diện:</label>
+                  <input
+                    type="file"
+                    id="avatar"
+                    accept="image/*"
+                    onChange={handleAvatarChange}
+                    className="w-full mt-1 p-2 bg-gray-600 text-white rounded-lg border border-gray-500"
+                    disabled={isLoading}
+                  />
+                </div>
+                <div className="flex gap-4 justify-center">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    type="submit"
+                    className={`flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors ${isLoading ? 'opacity-50 cursor-not-allowed' : ''
+                      }`}
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <svg
+                        className="animate-spin h-5 w-5 mr-2 text-white"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                      </svg>
+                    ) : (
+                      <FaSave />
+                    )}
+                    {isLoading ? 'Đang lưu...' : 'Lưu'}
+                  </motion.button>
+
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    type="button"
+                    onClick={() => setIsEditing(false)}
+                    className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+                    disabled={isLoading}
+                  >
+                    <FaTimes /> Hủy
+                  </motion.button>
+                </div>
+              </form>
+            </motion.div>
           )}
+        </AnimatePresence>
+
+        {/* Back Button */}
+        <div className="mt-6 text-center">
+          <Link to="/profile">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+              disabled={isLoading}
+            >
+              Quay lại
+            </motion.button>
+          </Link>
         </div>
       </div>
-    </div>
+
+    </motion.div> 
   );
 };
 

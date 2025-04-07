@@ -57,12 +57,6 @@ const Chatbot = () => {
     'cao bồi': 'western'
   };
 
-  // Hàm chuyển đổi tên thể loại từ tiếng Việt sang tiếng Anh
-  const getEnglishGenreName = (vietnameseName) => {
-    const normalized = vietnameseName.toLowerCase().trim();
-    return genreMapping[normalized] || normalized;
-  };
-
   // Hàm lấy tên thể loại tiếng Việt từ ID
   const getGenreNameById = (genreId) => {
     const genre = genres.find(g => g.id === genreId);
@@ -461,21 +455,7 @@ const Chatbot = () => {
       };
       setTimeout(() => setMessages(prev => [...prev, botResponse]), 500);
       return;
-    } else {
-      // Thêm tìm kiếm trực tiếp nếu không phải là pattern đặc biệt
-      const searchResults = searchMoviesByKeyword(input);
-      
-      if (searchResults.length > 0) {
-        const botResponse = {
-          text: "Đây là các phim phù hợp với tìm kiếm của bạn:",
-          isUser: false,
-          timestamp: new Date(),
-          showMovies: searchResults
-        };
-        setTimeout(() => setMessages(prev => [...prev, botResponse]), 500);
-        return;
-      }
-    }
+    } 
 
     // Xử lý các từ khóa tìm kiếm chung
     const movieKeywords = ['phim', 'movie', 'xem phim', 'tìm phim', 'muốn xem'];
@@ -490,6 +470,7 @@ const Chatbot = () => {
     }
 
     // Xử lý lựa chọn phương thức tìm kiếm bằng số
+    
     if (input === '1' || input.includes('tên')) {
       const botResponse = {
         text: "Hãy nhập tên phim bạn muốn tìm:",
@@ -526,22 +507,6 @@ const Chatbot = () => {
     }
   };
 
-  // Hàm tìm kiếm phim theo từ khóa
-  const searchMoviesByKeyword = (keyword) => {
-    const searchTerm = keyword.toLowerCase().trim();
-    return movies
-      .filter(movie => {
-        const titleMatch = movie.title.toLowerCase().includes(searchTerm);
-        const genreMatch = movie.genre && movie.genre.some(genreId => {
-          const genre = genres.find(g => g.id === genreId);
-          return genre && genre.name.toLowerCase().includes(searchTerm);
-        });
-        const yearMatch = movie.year && movie.year.toString().includes(searchTerm);
-        return titleMatch || genreMatch || yearMatch;
-      })
-      .sort((a, b) => b.rating - a.rating)
-      .slice(0, 5);
-  };
 
   // Hiển thị danh sách phim tìm được
   const MovieSuggestionsList = ({ movies }) => {
