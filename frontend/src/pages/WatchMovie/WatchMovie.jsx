@@ -86,6 +86,32 @@ function WatchMovie() {
   return (
     <div className="watch-movie-container">
       <div className="movie-content">
+
+      
+        {/* Phần xem phim */}
+        <div className="movie-player-section">
+          <div className="section-header">
+            <h2>Xem Phim</h2>
+          </div>
+
+          <div className="movie-player">
+            {movie.video_url ?
+            (
+              <iframe
+                src={movie.video_url}
+                title={movie.title}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
+            ) : (
+              <div className="no-video">
+                <FaPlayCircle className="no-video-icon" />
+                <p>Không có video cho phim này</p>
+              </div>
+            )}
+          </div>
+        </div>
+        
         {/* Phần thông tin phim */}
         <div className="movie-info-section">
           {/* Phần poster và thông tin */}
@@ -103,7 +129,7 @@ function WatchMovie() {
 
             <div className="movie-details">
               <div className="movie-meta-info">
-                <h1 className="movie-title">{movie.title}</h1>
+                <h1 className="movie-titledhau">{movie.title}</h1>
 
                 <span
                   className="movie-badge quality-badge"
@@ -155,29 +181,6 @@ function WatchMovie() {
           </div>
         </div>
 
-        {/* Phần xem phim */}
-        <div className="movie-player-section">
-          <div className="section-header">
-            <h2>Xem Phim</h2>
-          </div>
-
-          <div className="movie-player">
-            {movie.video_url ?
-            (
-              <iframe
-                src={movie.video_url}
-                title={movie.title}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              ></iframe>
-            ) : (
-              <div className="no-video">
-                <FaPlayCircle className="no-video-icon" />
-                <p>Không có video cho phim này</p>
-              </div>
-            )}
-          </div>
-        </div>
         <RelatedMovies/>
       </div>
     </div>
