@@ -10,7 +10,7 @@ import './UserInfo.css';
 const UserInfo = () => {
   const navigate = useNavigate();
   const user = useSelector((state) => state.auth.user);
-  const dispacth = useDispatch();
+  const dispatch = useDispatch();
   const [isEditing, setIsEditing] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
@@ -48,7 +48,7 @@ const UserInfo = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
     setSuccess(null);
@@ -72,12 +72,17 @@ const UserInfo = () => {
         ...user,
         name: name,
         avatar: avatarPreview,
+      };
+    
+      // Gửi request cập nhật thông tin người dùng
+      const response = await axiosInstance.post('/auth/update', updateUser);
+      
+      if (response.status === 200) {
+        dispatch(updateUserField(updateUser)); // Cập nhật trạng thái trong store
+    
+        setSuccess('Cập nhật thông tin thành công!');
+        setIsEditing(false);
       }
-
-      dispacth(updateUserField(updateUser));
-
-      setSuccess('Cập nhật thông tin thành công!');
-      setIsEditing(false);
     } catch (error) {
       console.error('Error updating user:', error);
       if (error.response) {
