@@ -8,6 +8,7 @@ import { useMovies } from '../components/MovieContext';
 const Filter = () => {
     const [movies, setMovies] = useState([]);
     const { genres } = useMovies();
+    const [currentPage, setCurrentPage] = useState(1);
 
     const [filteredMovies, setFilteredMovies] = useState(movies);
     const [activeGenre, setActiveGenre] = useState('All');
@@ -67,6 +68,7 @@ const Filter = () => {
           result = result.filter((movie) => movie.match === Number(activeMatch));
         }
         setFilteredMovies(result);
+        setCurrentPage(1);
     };
 
     const filterByYear = (year) => {
@@ -82,6 +84,7 @@ const Filter = () => {
             result = result.filter(movie => movie.match === Number(activeMatch));
         }
         setFilteredMovies(result);
+        setCurrentPage(1);
     }
 
     const filterByMatch = (match) => {
@@ -97,74 +100,75 @@ const Filter = () => {
             result = result.filter(movie => movie.match === Number(match));
         }
         setFilteredMovies(result);
+        setCurrentPage(1);
     }
 
-  return (
+return (
     <div>
-        <div className='filter-header'> 
-            <h1>FILTER</h1>
-            <p>Nơi chọn lọc phim theo sở thích</p>
-        </div>
-        <div className='filter-props h-50 bg-dark border rounded-3 p-3 m-5 text-white'>
-            <div className='mb-3 genre-filter'>
-                <h4 className='m-3 ms-0 title bg-dark'>Genres</h4>
-                <span  className={`m-3 ms-0 ${activeGenre === 'All' ? 'active' : ''}`} onClick={() => filterByGenre('All')}>All</span>
-                {genres.map((genre) => (
-                        <span key={genre.id} className={`m-3 ${Number(activeGenre) === genre.id ? 'active' : ''}`} onClick={() => filterByGenre(genre.id)}>{genre.name}</span>
-                    ))}
-                {
-                    <form action="">
-                        <select name="genre" id="genre" className='genre-form text-danger' value={activeGenre} onChange={(e) => filterByGenre(e.target.value)}>
-                            <option value='All' onClick={() => filterByGenre('All')}>All</option>
+            <div className='filter-header'> 
+                    <h1>FILTER</h1>
+                    <p>Where you can filter movies based on your preferences</p>
+            </div>
+            <div className='filter-props h-50 bg-dark border rounded-3 p-3 text-white'>
+                    <div className='mb-3 genre-filter'>
+                            <h4 className='m-3 ms-0 title bg-dark'>Genres</h4>
+                            <span  className={`m-3 ms-0 ${activeGenre === 'All' ? 'active' : ''}`} onClick={() => filterByGenre('All')}>All</span>
                             {genres.map((genre) => (
-                                <option key={genre.id} value={genre.id} onClick={() => filterByGenre(genre.id)}>{genre.name}</option>
+                                            <span key={genre.id} className={`m-3 ${Number(activeGenre) === genre.id ? 'active' : ''}`} onClick={() => filterByGenre(genre.id)}>{genre.name}</span>
+                                    ))}
+                            {
+                                    <form action="">
+                                            <select name="genre" id="genre" className='genre-form text-danger bg-dark-400' value={activeGenre} onChange={(e) => filterByGenre(e.target.value)}>
+                                                    <option value='All' className='text-light' onClick={() => filterByGenre('All')}>All</option>
+                                                    {genres.map((genre) => (
+                                                            <option key={genre.id} className='text-light' value={genre.id} onClick={() => filterByGenre(genre.id)}>{genre.name}</option>
+                                                    ))}
+                                            </select>
+                                    </form>
+                            }
+                    </div>
+                    <div className='mb-3 year-filter'>
+                            <h4 className='m-3 ms-0 title bg-dark'>Year</h4>
+                            <span  className={`m-3 ms-0 ${activeYear === 'All' ? 'active' : ''}`} onClick={() => filterByYear('All')}>All</span>
+                            {
+                            [...new Set(movies.map((movie) => movie.year))].map((year) => (
+                                    year &&
+                                    <span key={year} className={`m-3 ${activeYear === year ? 'active' : ''}`} onClick={() => {filterByYear(year)}}>{year}</span>
                             ))}
-                        </select>
-                    </form>
-                }
-            </div>
-            <div className='mb-3 year-filter'>
-                <h4 className='m-3 ms-0 title bg-dark'>Year</h4>
-                <span  className={`m-3 ms-0 ${activeYear === 'All' ? 'active' : ''}`} onClick={() => filterByYear('All')}>All</span>
-                {
-                [...new Set(movies.map((movie) => movie.year))].map((year) => (
-                    year &&
-                    <span key={year} className={`m-3 ${activeYear === year ? 'active' : ''}`} onClick={() => {filterByYear(year)}}>{year}</span>
-                ))}
 
-                {
-                    <form action="">
-                        <select name="year" id="year" className='year-form text-danger' value={activeYear} onChange={(e) => filterByYear(e.target.value)}>
-                            <option value='All' onClick={() => filterByYear('All')}>All</option>
-                            {[...new Set(movies.map((movie) => movie.year))].map((year) => (
-                                <option key={year} value={year} onClick={() => filterByYear(year)}>{year}</option>
-                            ))}
-                        </select>
-                    </form>
-                }
-            </div>
-            <div className='mb-1 match-filter'>
-                <h4 className='m-3 ms-0 title bg-dark'>Match</h4>
-                <span  className={`m-3 ms-0 ${activeMatch === 'All' ? 'active' : ''}`} onClick={() => filterByMatch('All')}>All</span>
-                {[...new Set(movies.map((movie) => movie.match))].sort((a, b) => b - a).map((match) => (
-                    <span key={match} className={`m-3 ${Number(activeMatch) === match ? 'active' : ''}`} onClick={() => {filterByMatch(match)}}>{match}%</span>
-                ))}
-
-                {
-                    <form action="">
-                        <select name="match" id="match" className='match-form text-danger' value={activeMatch} onChange={(e) => filterByMatch(e.target.value)}>
-                            <option value='All' onClick={() => filterByMatch('All')}>All</option>
+                            {
+                                    <form action="">
+                                            <select name="year" id="year" className='year-form text-danger bg-dark-400' value={activeYear} onChange={(e) => filterByYear(e.target.value)}>
+                                                    <option value='All' className='text-light' onClick={() => filterByYear('All')}>All</option>
+                                                    {[...new Set(movies.map((movie) => movie.year))].map((year) => (
+                                                            <option key={year} value={year} className='text-light' onClick={() => filterByYear(year)}>{year}</option>
+                                                    ))}
+                                            </select>
+                                    </form>
+                            }
+                    </div>
+                    <div className='mb-1 match-filter'>
+                            <h4 className='m-3 ms-0 title bg-dark'>Match</h4>
+                            <span  className={`m-3 ms-0 ${activeMatch === 'All' ? 'active' : ''}`} onClick={() => filterByMatch('All')}>All</span>
                             {[...new Set(movies.map((movie) => movie.match))].sort((a, b) => b - a).map((match) => (
-                                <option key={match} value={match} onClick={() => filterByMatch(match)}>{match}%</option>
+                                    <span key={match} className={`m-3 ${Number(activeMatch) === match ? 'active' : ''}`} onClick={() => {filterByMatch(match)}}>{match}%</span>
                             ))}
-                        </select>
-                    </form>
-                }
+
+                            {
+                                    <form action="">
+                                            <select name="match" id="match" className='match-form text-danger bg-dark-400' value={activeMatch} onChange={(e) => filterByMatch(e.target.value)}>
+                                                    <option value='All' className='text-light' onClick={() => filterByMatch('All')}>All</option>
+                                                    {[...new Set(movies.map((movie) => movie.match))].sort((a, b) => b - a).map((match) => (
+                                                            <option key={match} value={match} className='text-light' onClick={() => filterByMatch(match)}>{match}%</option>
+                                                    ))}
+                                            </select>
+                                    </form>
+                            }
+                    </div>
             </div>
-        </div>
-        <MovieList filteredMovies={filteredMovies}></MovieList>
+            <MovieList filteredMovies={filteredMovies} currentPage={currentPage} setCurrentPage={setCurrentPage}></MovieList>
     </div>
-  )
+)
 }
 
 export default Filter;
