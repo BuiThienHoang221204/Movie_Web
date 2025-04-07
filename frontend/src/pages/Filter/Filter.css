@@ -57,6 +57,7 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  margin: 2rem;
 }
 
 .filter-props .mb-3,
@@ -94,7 +95,7 @@
   grid-gap: 1.2rem;
   justify-content: center;
   margin-top: 1rem;
-  margin: 0 3rem;
+  margin: 0 2rem;
 }
 
 .list-movie > * {
@@ -261,7 +262,7 @@
 
 @media screen and (max-width: 768px) {
   .list-movie {
-    margin: 0 1rem;
+    margin: 0 auto;
   }
   .filter-title {
     padding: 2em 0;
@@ -293,5 +294,19 @@
   .year-form,
   .match-form {
     display: block;
+    width: 25em;
+  }
+
+  .genre-filter,
+  .year-filter,
+  .match-filter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .filter-props {
+    margin: 2rem 0.5rem;
   }
 }

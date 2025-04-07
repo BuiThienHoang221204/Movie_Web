@@ -17,8 +17,8 @@ const getAllWatchHistories = async (req, res) => {
 // Get watch history for a specific user
 const getWatchHistory = async (req, res) => {
   try {
-    const userId = req.params.userId;
-    const watchHistory = await watchHistories.find({ userId: userId });
+    const userId = req.params.email;
+    const watchHistory = await watchHistories.find({ email: userId });
     console.log(watchHistory);
     res.status(200).json(watchHistory);
   }

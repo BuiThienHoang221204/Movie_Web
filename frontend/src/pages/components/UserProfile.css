@@ -1,140 +1,169 @@
-/* src/pages/UserProfile.css */
-html, body {
-  margin: 0; /* Reset default margins on html and body */
-  padding: 0; /* Reset default padding */
-  background-color: #1A1A1A; /* Ensure the body matches the container background */
+/* Reset and Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.user-profile-container {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 20px;
-  background: #1A1A1A; /* Same dark gray background */
+body {
+  background-color: #000;
   color: #fff;
-  min-height: 100vh; /* Ensure it spans the full viewport height */
-  margin-top: 60px; /* Adjusted to match the approximate header height */
+  font-family: 'Arial', sans-serif;
 }
 
+/* Profile Header */
 .profile-header {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 1.5rem;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 30px;
-  padding: 20px;
-  background: #2A2A2A; /* Lighter gray for contrast */
-  border-radius: 8px;
-  margin-bottom: 30px;
+  gap: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+@media (min-width: 768px) {
+  .profile-header {
+    flex-direction: row;
+  }
+}
+
+.avatar-container {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid #ef4444;
+  transition: transform 0.2s ease;
 }
 
 .avatar-image {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  border: 3px solid #FFFFFF;
 }
 
 .profile-info {
-  flex: 1;
+  text-align: center;
 }
 
-.profile-title {
-  margin: 0;
-  font-size: 2rem;
-  color: #FFFFFF;
+@media (min-width: 768px) {
+  .profile-info {
+    text-align: left;
+  }
 }
 
-.profile-email {
-  color: #B0B0B0;
-  margin: 5px 0;
+.welcome-text {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: #f87171;
+  line-height: 1.2;
 }
 
-.profile-member-since {
-  color: #B0B0B0;
-  font-size: 0.9rem;
+.email-text {
+  color: #9ca3af;
+  margin-top: 0.25rem;
+  font-size: 1rem;
 }
 
 .edit-profile-btn {
-  margin-top: 10px;
-  padding: 8px 20px;
-  background: #FF4444;
-  color: white;
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #ef4444;
+  color: #fff;
+  border-radius: 8px;
   border: none;
-  border-radius: 5px;
+  font-size: 1rem;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: background-color 0.2s ease;
 }
 
 .edit-profile-btn:hover {
-  background: #E03333;
+  background-color: #dc2626;
 }
 
+/* Watch Stats */
 .watch-stats {
-  margin: 30px 0;
+  background: rgba(183, 29, 29, 0.05);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(178, 54, 54, 0.3);
 }
 
 .section-title {
   font-size: 1.5rem;
-  color: #FFFFFF;
-  margin-bottom: 20px;
-  position: relative;
-}
-
-.section-title::after {
-  content: '';
-  position: absolute;
-  bottom: -5px;
-  left: 0;
-  width: 50px;
-  height: 3px;
-  background: #FF4444;
+  font-weight: 600;
+  color: #f87171;
+  margin-bottom: 1rem;
 }
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 .stat-card {
-  background: #2A2A2A;
-  padding: 20px;
+  background: #211f24;
+  padding: 1rem;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
   text-align: center;
+  transition: transform 0.2s ease;
 }
 
 .stat-number {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: #ef4444;
   display: block;
-  font-size: 2rem;
-  color: #00D4FF;
-  font-weight: bold;
 }
 
 .stat-label {
-  display: block;
-  color: #B0B0B0;
-  margin-top: 5px;
+  color: #d1d5db;
+  margin-top: 0.5rem;
+  font-size: 1rem;
 }
 
-.watch-history-section {
-  margin: 30px 0;
+/* Watch History */
+.watch-history {
+  background: rgba(184, 26, 26, 0.05);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
-.watch-history-section .view-all-btn {
-  background: #FF4444;
-  color: #FFFFFF;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-.watch-history-section .view-all-btn:hover {
-  background: #E03333;
-}
-
-.app {
-  background: #1A1A1A;
+/* Utility Classes */
+.min-h-screen {
   min-height: 100vh;
+}
+
+.p-6 {
+  padding: 1.5rem;
+}
+
+.pt-24 {
+  padding-top: 6rem;
+}
+
+.max-w-5xl {
+  max-width: 64rem;
+}
+
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.space-y-8 > * + * {
+  margin-top: 2rem;
 }

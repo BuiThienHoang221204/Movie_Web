@@ -1,11 +1,14 @@
 import React from 'react';
 import './Footer.css';
 import { Link } from 'react-router-dom';
-import { FaFacebookF, FaTwitter, FaInstagram, FaYoutube, FaTiktok, FaEnvelope, FaPhone, FaMapMarkerAlt, FaPlay } from 'react-icons/fa';
-
+import {
+  FaFacebookF, FaTwitter, FaInstagram, FaYoutube,
+  FaTiktok, FaEnvelope, FaPhone, FaMapMarkerAlt, FaPlay
+} from 'react-icons/fa';
+import config from '../../config' 
 function Footer() {
   const currentYear = new Date().getFullYear();
-  
+
   return (
     <footer className="footer">
       <div className="footer-top">
@@ -15,7 +18,7 @@ function Footer() {
             <FaPlay className="logo-icon" />
           </div>
           <p className="footer-description">
-            Khám phá thế giới điện ảnh với những bộ phim mới nhất và hay nhất. Trải nghiệm xem phim tuyệt vời với chất lượng cao và đa dạng thể loại.
+            Discover the world of cinema with the latest and greatest movies. Enjoy an amazing movie-watching experience with high quality and diverse genres.
           </p>
           <div className="contact-info">
             <div className="contact-item">
@@ -28,43 +31,43 @@ function Footer() {
             </div>
             <div className="contact-item">
               <FaMapMarkerAlt className="contact-icon" />
-              <span>123 Đường Phim, Quận 1, TP.HCM</span>
+              <span>123 Cinema Street, District 1, Ho Chi Minh City</span>
             </div>
           </div>
         </div>
-        
+
         <div className="footer-section categories">
-          <h3 className="footer-heading">Thể loại</h3>
+          <h3 className="footer-heading">Genres</h3>
           <ul className="footer-links">
-            <li><Link to="/">Hành động</Link></li>
-            <li><Link to="/">Tình cảm</Link></li>
-            <li><Link to="/">Kinh dị</Link></li>
-            <li><Link to="/">Khoa học viễn tưởng</Link></li>
-            <li><Link to="/">Hoạt hình</Link></li>
-            <li><Link to="/">Phiêu lưu</Link></li>
-            <li><Link to="/">Gia Đình</Link></li>
+            <li><Link to="/">Action</Link></li>
+            <li><Link to="/">Romance</Link></li>
+            <li><Link to="/">Horror</Link></li>
+            <li><Link to="/">Sci-Fi</Link></li>
+            <li><Link to="/">Animation</Link></li>
+            <li><Link to="/">Adventure</Link></li>
+            <li><Link to="/">Family</Link></li>
           </ul>
         </div>
-        
+
         <div className="footer-section quick-links">
-          <h3 className="footer-heading">Liên kết nhanh</h3>
+          <h3 className="footer-heading">Quick Links</h3>
           <ul className="footer-links">
-            <li><Link to="/">Trang chủ</Link></li>
-            <li><Link to="/">Phim mới</Link></li>
-            <li><Link to="/">Phim hot</Link></li>
-            <li><Link to="/">Lịch chiếu</Link></li>
-            <li><Link to="/">Tin tức</Link></li>
-            <li><Link to="/">Liên hệ</Link></li>
-            <li><Link to="/">Giới thiệu</Link></li>
+            <li><Link to="/">Home</Link></li>
+            <li><Link to="/">New Releases</Link></li>
+            <li><Link to="/">Trending Movies</Link></li>
+            <li><Link to="/">Showtimes</Link></li>
+            <li><Link to="/">News</Link></li>
+            <li><Link to="/">Contact</Link></li>
+            <li><Link to="/">About Us</Link></li>
           </ul>
         </div>
-        
+
         <div className="footer-section newsletter">
-          <h3 className="footer-heading">Đăng ký nhận tin</h3>
-          <p>Nhận thông báo về phim mới và ưu đãi đặc biệt</p>
+          <h3 className="footer-heading">Subscribe to Our Newsletter</h3>
+          <p>Get updates on new movies and special offers</p>
           <div className="newsletter-form">
-            <input type="email" placeholder="Email của bạn" />
-            <button className="subscribe-btn">Đăng ký</button>
+            <input type="email" placeholder="Your email" />
+            <button as={Link} to={config.signup} className="subscribe-btn">Subscribe</button>
           </div>
           <div className="social-media">
             <a href="#" className="social-icon"><FaFacebookF /></a>
@@ -75,14 +78,14 @@ function Footer() {
           </div>
         </div>
       </div>
-      
+
       <div className="footer-bottom">
         <div className="copyright">
-          &copy; {currentYear} CINEMA. Tất cả quyền được bảo lưu.
+          &copy; {currentYear} CINEMA. All rights reserved.
         </div>
         <div className="footer-bottom-links">
-          <Link to="/">Điều khoản sử dụng</Link>
-          <Link to="/">Chính sách bảo mật</Link>
+          <Link to="/">Terms of Use</Link>
+          <Link to="/">Privacy Policy</Link>
           <Link to="/">FAQ</Link>
         </div>
       </div>

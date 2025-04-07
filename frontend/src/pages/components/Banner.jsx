@@ -15,7 +15,7 @@ function Banner() {
             genres: "Action, Thriller, Sci-Fi",
             rating: "9.5",
             ageRating: "14+",
-            description: "Trong một thế giới mà công nghệ gặp bản năng nguyên thủy, một con vượn phải đối mặt với thách thức lớn nhất của mình: một phiên bản cơ giới hóa của chính mình. Một trận chiến cho tương lai của cả hai loài bắt đầu.",
+            description: "In a world where technology meets primal instinct, an ape must face its greatest challenge: a mechanized version of itself. A battle for the future of both species begins.",
             image: images.banner
         },
         {
@@ -26,7 +26,7 @@ function Banner() {
             genres: "Sci-Fi, Adventure",
             rating: "9.2",
             ageRating: "12+",
-            description: "Một nhóm phi hành gia dũng cảm khám phá một lỗ đen bí ẩn, dẫn họ đến một chiều không gian mới đầy nguy hiểm và kỳ diệu. Liệu họ có thể tìm đường về nhà?",
+            description: "A group of brave astronauts explores a mysterious black hole, leading them to a new dimension full of danger and wonder. Can they find their way back home?",
             image: images.banner2
         },
         {
@@ -37,10 +37,11 @@ function Banner() {
             genres: "Horror, Mystery",
             rating: "8.7",
             ageRating: "18+",
-            description: "nhóm siêu anh hùng mạnh nhất trong Vũ trụ Điện ảnh Marvel (MCU), được tập hợp bởi Nick Fury nhằm bảo vệ Trái Đất trước các mối đe dọa nguy hiểm",
+            description: "The most powerful superhero team in the Marvel Cinematic Universe (MCU), assembled by Nick Fury to protect Earth from dangerous threats.",
             image: images.banner3
         }
     ];
+    
 
     const [currentMovie, setCurrentMovie] = useState(0);
     const [autoPlay, setAutoPlay] = useState(true);

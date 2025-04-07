@@ -22,6 +22,7 @@ const WatchHistory = (props) => {
         const data = await movieService.getWatchHistory(user.email);
         if (data && data.length > 0) {
           setWatchHistory(data);
+          console.log('Lịch sử xem phim:', data);
         }
       } catch (err) {
         console.error('Lỗi khi lấy lịch sử xem phim (frontend):', err);
@@ -104,33 +105,32 @@ const WatchHistory = (props) => {
         <>
           <div className="history-grid">
             <div className="movie-track">
-              {watchHistory.slice(currentIndex, currentIndex + 4).map((item) => (
-                <Link key={`${item.userId}-${item.movieId}`}  to={`/watch/${item.movieId}`} className="history-item text-decoration-none">
-                  {
-                    movies.map((movie) => {
-                      if (movie.id === item.movieId) {
-                        return (
-                          <div key={`${item.userId}-${item.movieId}`} >
-                            <img
-                            src={movie.image || 'https://via.placeholder.com/350x500'}
-                            alt={movie.title}
-                            className="history-image"
-                            />
-                            <div className="history-info">
-                              <div className="history-rating">★ {normalizeRating(movie.rating) || 0}/5</div>
-                              <h2 className="history-title">
-                                {item.title}
-                              </h2>
-                              <div className="history-genre">{item.genre || 'Unknown Genre'}</div>
-                              <div className="history-match">Match: {Math.round(item.progress * 100) || 0}%</div>
-                            </div>
-                          </div>
-                        );
-                      }
-                    })
-                  }
-                </Link>
-              ))}
+              {watchHistory.slice(currentIndex, currentIndex + 4).map((item) => {
+                const movie = movies.find((m) => m.id === item.movieId);
+                if (!movie) return null;
+                return (
+                  <div
+                    key={`${item.userId}-${item.movieId}`}
+                    className="history-item"
+                    onClick={() => handleMovieClick(item.movieId, item._id)}
+                  >
+                    <img
+                      src={movie.image || 'https://via.placeholder.com/350x500'}
+                      alt={movie.title}
+                      className="history-image"
+                    />
+                    <div className="history-info">
+                      <div className="history-rating">
+                        ★ {normalizeRating(movie.rating) || 0}/5
+                      </div>
+                      <h2 className="history-title">{movie.title}</h2>
+                      <div className="history-match">
+                        Progress: {(item.progress * 100) || 0}%
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
             <button
               className="prev"
@@ -151,34 +151,32 @@ const WatchHistory = (props) => {
             <div className="all-movies-section">
               <h2 className="all-movies-title">Toàn bộ phim đã xem</h2>
               <div className="all-movies-grid">
-                {watchHistory.map((item) => (               
-
-                  <Link key={`${item.userId}-${item.movieId}`} to={`/watch/${item.movieId}`} className="history-item text-decoration-none">
-                    {
-                      movies.map((movie) => {
-                        if (movie.id === item.movieId) {
-                          return (
-                            <div key={`${item.userId}-${item.movieId}`} >
-                              <img
-                              src={movie.image || 'https://via.placeholder.com/350x500'}
-                              alt={movie.title}
-                              className="history-image"
-                              />
-                              <div className="history-info">
-                                <div className="history-rating">★ {normalizeRating(movie.rating) || 0}/5</div>
-                                <h2 className="history-title">
-                                  {item.title}
-                                </h2>
-                                <div className="history-genre">{item.genre || 'Unknown Genre'}</div>
-                                <div className="history-match">Match: {Math.round(item.progress * 100) || 0}%</div>
-                              </div>
-                            </div>
-                          );
-                        }
-                      })
-                    }
-                  </Link>
-                ))}
+                {watchHistory.map((item) => {
+                  const movie = movies.find((m) => m.id === item.movieId);
+                  if (!movie) return null;
+                  return (
+                    <div
+                      key={`${item.userId}-${item.movieId}`}
+                      className="history-item"
+                      onClick={() => handleMovieClick(item.movieId, item._id)}
+                    >
+                      <img
+                        src={movie.image || 'https://via.placeholder.com/350x500'}
+                        alt={movie.title}
+                        className="history-image"
+                      />
+                      <div className="history-info">
+                        <div className="history-rating">
+                          ★ {normalizeRating(movie.rating) || 0}/5
+                        </div>
+                        <h2 className="history-title">{movie.title}</h2>
+                        <div className="history-match">
+                          Progress: {(item.progress * 100) || 0}%
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           )}
