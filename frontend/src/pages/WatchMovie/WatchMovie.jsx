@@ -16,7 +16,7 @@ function WatchMovie() {
 
   const getGenreName = (genreId) => {
     const genre = genres.find(g => g.id === genreId);
-    return genre ? genre.name : "Không xác định";
+    return genre ? genre.name : "Updating";
   };
 
   useEffect(() => {
@@ -33,7 +33,7 @@ function WatchMovie() {
         setLoading(false);
       } catch (err) {
         console.error("Lỗi khi tải dữ liệu:", err);
-        setError("Không thể tải thông tin phim. Vui lòng thử lại sau.");
+        setError("Không thể tải thông tin phim.");
         setLoading(false);
       }
     };
@@ -70,7 +70,7 @@ function WatchMovie() {
     return (
       <div className="loading">
         <div className="loading-spinner"></div>
-        <p>Đang tải phim...</p>
+        <p>Loading movie...</p>
       </div>
     );
   }
@@ -80,7 +80,7 @@ function WatchMovie() {
   }
 
   if (!movie) {
-    return <div className="not-found">Không tìm thấy phim</div>;
+    return <div className="not-found">Movie not found</div>;
   }
 
   return (
@@ -91,7 +91,7 @@ function WatchMovie() {
         {/* Phần xem phim */}
         <div className="movie-player-section">
           <div className="section-header">
-            <h2>Xem Phim</h2>
+            <h2>Watch Movie</h2>
           </div>
 
           <div className="movie-player">
@@ -106,7 +106,7 @@ function WatchMovie() {
             ) : (
               <div className="no-video">
                 <FaPlayCircle className="no-video-icon" />
-                <p>Không có video cho phim này</p>
+                <p>Movie will be updated soon</p>
               </div>
             )}
           </div>
@@ -140,22 +140,22 @@ function WatchMovie() {
 
                 <div className="meta-item">
                   <FaCalendarAlt className="meta-icon" />
-                  <span>Ngày phát hành: {movie.release_date}</span>
+                  <span>Release date: {movie.release_date}</span>
                 </div>
                 <div className="meta-item">
                   <FaStar className="meta-icon star-icon" />
-                  <span>Đánh giá: {movie.vote_average?.toFixed(1)}/10</span>
+                  <span>Rating: {movie.vote_average?.toFixed(1)}/10</span>
                 </div>
                 <div className="meta-item">
                   <FaUsers className="meta-icon" />
-                  <span>{movie.vote_count} lượt đánh giá</span>
+                  <span>{movie.vote_count} votes</span>
                 </div>
               </div>
 
               {/* Chỉ hiển thị thể loại khi có genre_ids và có ít nhất một thể loại */}
               {movie.genre_ids && movie.genre_ids.length > 0 && (
                 <div className="movie-genres">
-                  <h3>Thể loại:</h3>
+                  <h3>Genres:</h3>
                   <div className="genre-tags">
                     {movie.genre_ids.map((genreId, index) => {
                       const genreName = getGenreName(genreId);
@@ -174,8 +174,8 @@ function WatchMovie() {
               )}
 
               <div className="movie-description">
-                <h3>Tóm tắt phim:</h3>
-                <p>{movie.overview || "Chưa có mô tả cho phim này."}</p>
+                <h3>Overview:</h3>
+                <p>{movie.overview || "No description available for this movie."}</p>
               </div>
             </div>
           </div>
