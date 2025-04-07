@@ -5,7 +5,7 @@ import {
   FaFacebookF, FaTwitter, FaInstagram, FaYoutube,
   FaTiktok, FaEnvelope, FaPhone, FaMapMarkerAlt, FaPlay
 } from 'react-icons/fa';
-
+import config from '../../config' 
 function Footer() {
   const currentYear = new Date().getFullYear();
 
@@ -67,7 +67,7 @@ function Footer() {
           <p>Get updates on new movies and special offers</p>
           <div className="newsletter-form">
             <input type="email" placeholder="Your email" />
-            <button className="subscribe-btn">Subscribe</button>
+            <button as={Link} to={config.signup} className="subscribe-btn">Subscribe</button>
           </div>
           <div className="social-media">
             <a href="#" className="social-icon"><FaFacebookF /></a>
