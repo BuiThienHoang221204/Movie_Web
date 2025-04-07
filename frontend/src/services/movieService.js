@@ -31,7 +31,6 @@ const movieService = {
     },
     getMovieDetail: async (id) => {//lấy chi tiết phim
         try{
-            // const response = await apiClient.get(`${server}/movies/${id}`)//gọi API để lấy chi tiết phim
             const response = await apiClient.get(`/movies/${id}`)//gọi API để lấy chi tiết phim
             return response.data; //trả về dữ liệu từ API
         }catch(error){
