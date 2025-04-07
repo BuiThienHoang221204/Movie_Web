@@ -92,10 +92,9 @@
 .list-movie {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 2fr));
-  grid-gap: 1.2rem;
+  grid-gap: 1.5rem;
   justify-content: center;
   margin-top: 1rem;
-  margin: 0 2rem;
 }
 
 .list-movie > * {

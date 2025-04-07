@@ -3,7 +3,7 @@ import MovieCard from '../components/MovieCard';
 
 const MovieList = (props) => {
     const {filteredMovies, currentPage, setCurrentPage} = props;
-    const moviesPerPage = 12; //số phim hiển thị trên mỗi trang
+    const moviesPerPage = 10; //số phim hiển thị trên mỗi trang
 
     //tính toán phim hiển thị trên mỗi trang
     const indexOfLastMovie = currentPage * moviesPerPage; //phim cuối cùng trên trang hiện tại
@@ -14,7 +14,7 @@ const MovieList = (props) => {
     const totalPages = Math.ceil(filteredMovies.length / moviesPerPage);
   return (
     <div>
-      <div className='container-fluid'>
+      <div className='container'>
         <div className='list-movie'>
           {currentMovies.length === 0 ? <h3 className='text-white text-center'>No results</h3> : currentMovies.map((movie) => (
             <MovieCard movie={movie} />
