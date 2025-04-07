@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import movieService from "../../services/movieService";
 import "./WatchMovie.css";
@@ -13,6 +13,7 @@ function WatchMovie() {
   const [genres, setGenres] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const moviePlayerRef = useRef(null); // Tạo một ref cho phần xem phim
 
   const getGenreName = (genreId) => {
     const genre = genres.find(g => g.id === genreId);
@@ -48,7 +49,7 @@ function WatchMovie() {
       try {
         const response = await axiosInstance.get(`/api/drive/films/${movie.title}`);
 
-        if (response.data.success) {//Kiểm tra xem API trả về dữ liệu thành công hay không
+        if (response.data.success) {
           setMovie(prevMovie => ({
             ...prevMovie,
             video_url: response.data.data[0].webViewLink.replace("view?usp=drivesdk", "preview"),
@@ -66,11 +67,18 @@ function WatchMovie() {
     fetchVideo();
   }, [movie]);
 
+  // Cuộn đến phần xem phim khi component được mount hoặc dữ liệu phim được tải
+  useEffect(() => {
+    if (moviePlayerRef.current) {
+      moviePlayerRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [movie]); // Kích hoạt khi dữ liệu phim có sẵn
+
   if (loading) {
     return (
       <div className="loading">
         <div className="loading-spinner"></div>
-        <p>Loading movie...</p>
+        <p>Loading movie</p>
       </div>
     );
   }
@@ -87,16 +95,10 @@ function WatchMovie() {
     <div className="watch-movie-container">
       <div className="movie-content">
 
-      
-        {/* Phần xem phim */}
-        <div className="movie-player-section">
-          {/* <div className="section-header">
-            <h2>Watch Movie</h2>
-          </div> */}
-
+        {/* Phần xem phim với ref */}
+        <div className="movie-player-section" ref={moviePlayerRef}>
           <div className="movie-player">
-            {movie.video_url ?
-            (
+            {movie.video_url ? (
               <iframe
                 src={movie.video_url}
                 title={movie.title}
@@ -111,7 +113,7 @@ function WatchMovie() {
             )}
           </div>
         </div>
-        
+
         {/* Phần thông tin phim */}
         <div className="movie-info-section">
           {/* Phần poster và thông tin */}
@@ -148,7 +150,7 @@ function WatchMovie() {
                 </div>
                 <div className="meta-item">
                   <FaUsers className="meta-icon" />
-                  <span>{movie.vote_count} votes</span>
+                  <span>{movie.vote_count} votes </span>
                 </div>
               </div>
 
@@ -159,7 +161,6 @@ function WatchMovie() {
                   <div className="genre-tags">
                     {movie.genre_ids.map((genreId, index) => {
                       const genreName = getGenreName(genreId);
-                      // Chỉ hiển thị thể loại nếu tìm thấy tên
                       if (genreName !== "Không xác định") {
                         return (
                           <span key={index} className="genre-tag">
@@ -168,7 +169,7 @@ function WatchMovie() {
                         );
                       }
                       return null;
-                    }).filter(Boolean)} {/* Lọc bỏ các giá trị null */}
+                    }).filter(Boolean)}
                   </div>
                 </div>
               )}
@@ -181,7 +182,7 @@ function WatchMovie() {
           </div>
         </div>
 
-        <RelatedMovies/>
+        <RelatedMovies />
       </div>
     </div>
   );
