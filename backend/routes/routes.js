@@ -1,7 +1,7 @@
 const express = require("express")
 const googleAuthController = require("../controller/google.controller")
 const facebookAuthController = require("../controller/facebook.controller")
-const {signup, login, getAuthStatus, logout} = require("../controller/access.controller")
+const {signup, login, getAuthStatus, logout, updateUser} = require("../controller/access.controller")
 const passport = require("../config/passport.config")
 const { getFilms } = require("../controller/drive.controller")
 const router = express()
@@ -18,6 +18,7 @@ router.get("/auth/facebook/account", facebookAuthController.failureRedirect, fac
 router.post("/auth/signup", signup)
 router.post("/auth/login", login)
 router.post("/auth/logout", logout)
+router.post('/auth/update', updateUser)
 router.get("/auth/status", getAuthStatus)
 
 // Drive API routes
@@ -62,7 +63,4 @@ router.post(`${API_VERSION}/movieHistories`, historyController.addWatchHistory)
 router.put(`${API_VERSION}/movieHistories/:id`, historyController.updateWatchHistory)
 router.delete(`${API_VERSION}/movieHistories/:id`, historyController.deleteWatchHistory)
 
-router.get(`${API_VERSION}/auth/status`, userController.getUser);
-router.put(`${API_VERSION}/auth/status`, userController.updateUser);
-router.delete(`${API_VERSION}/auth/status`, userController.deleteUser);
 module.exports = router
