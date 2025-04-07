@@ -344,7 +344,12 @@
 
   .movie-poster-wrapper {
     max-width: 400px;
+    max-height: 500px;
     margin: 0 auto;
+  }
+  
+  .movie-player {
+    padding-bottom: 60%;
   }
 }
 
@@ -356,9 +361,41 @@
   .movie-title {
     font-size: 2rem;
   }
+  
+  .movie-titledhau {
+    font-size: 2.4rem;
+  }
 
   .movie-details {
     padding: 20px;
+  }
+  
+  .movie-poster-wrapper {
+    max-width: 320px;
+  }
+  
+  .movie-player {
+    padding-bottom: 65%;
+  }
+}
+
+@media (max-width: 576px) {
+  .movie-poster-wrapper {
+    max-width: 280px;
+    max-height: 400px;
+  }
+  
+  .movie-titledhau {
+    font-size: 2rem;
+  }
+  
+  .meta-item {
+    font-size: 1rem;
+  }
+  
+  .movie-poster {
+    height: 100%;
+    object-fit: cover;
   }
 }
 
@@ -370,9 +407,39 @@
   .movie-title {
     font-size: 1.8rem;
   }
+  
+  .movie-titledhau {
+    font-size: 1.8rem;
+  }
 
   .genre-tag {
     padding: 8px 16px;
     font-size: 0.9rem;
+  }
+  
+  .movie-poster-wrapper {
+    max-width: 240px;
+    max-height: 350px;
+  }
+  
+  .movie-player {
+    padding-bottom: 70%;
+    border-radius: 10px;
+  }
+  
+  .quality-badge {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .movie-poster-wrapper {
+    max-width: 200px;
+    max-height: 300px;
+  }
+  
+  .movie-titledhau {
+    font-size: 1.6rem;
   }
 }
