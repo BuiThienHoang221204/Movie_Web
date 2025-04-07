@@ -161,7 +161,7 @@ function WatchMovie() {
                   <div className="genre-tags">
                     {movie.genre_ids.map((genreId, index) => {
                       const genreName = getGenreName(genreId);
-                      if (genreName !== "Không xác định") {
+                      if (genreName !== "Updating") {
                         return (
                           <span key={index} className="genre-tag">
                             {genreName}
