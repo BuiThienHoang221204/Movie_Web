@@ -381,6 +381,7 @@
 @media (max-width: 576px) {
   .movie-poster-wrapper {
     max-width: 280px;
+    max-height: 400px;
   }
   
   .movie-titledhau {
@@ -389,6 +390,11 @@
   
   .meta-item {
     font-size: 1rem;
+  }
+  
+  .movie-poster {
+    height: 100%;
+    object-fit: cover;
   }
 }
 
@@ -412,6 +418,7 @@
   
   .movie-poster-wrapper {
     max-width: 240px;
+    max-height: 350px;
   }
   
   .movie-player {
@@ -428,6 +435,7 @@
 @media (max-width: 400px) {
   .movie-poster-wrapper {
     max-width: 200px;
+    max-height: 300px;
   }
   
   .movie-titledhau {
