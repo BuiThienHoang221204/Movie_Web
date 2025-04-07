@@ -17,7 +17,7 @@ function WatchMovie() {
 
   const getGenreName = (genreId) => {
     const genre = genres.find(g => g.id === genreId);
-    return genre ? genre.name : "Đang cập nhật";
+    return genre ? genre.name : "Updating";
   };
 
   useEffect(() => {
@@ -78,7 +78,7 @@ function WatchMovie() {
     return (
       <div className="loading">
         <div className="loading-spinner"></div>
-        <p>Đang tải phim...</p>
+        <p>Loading movie</p>
       </div>
     );
   }
@@ -88,7 +88,7 @@ function WatchMovie() {
   }
 
   if (!movie) {
-    return <div className="not-found">Không tìm thấy phim</div>;
+    return <div className="not-found">Movie not found</div>;
   }
 
   return (
@@ -108,7 +108,7 @@ function WatchMovie() {
             ) : (
               <div className="no-video">
                 <FaPlayCircle className="no-video-icon" />
-                <p>Phim sẽ được cập nhật sớm</p>
+                <p>Movie will be updated soon</p>
               </div>
             )}
           </div>
@@ -142,22 +142,22 @@ function WatchMovie() {
 
                 <div className="meta-item">
                   <FaCalendarAlt className="meta-icon" />
-                  <span>Ngày phát hành: {movie.release_date}</span>
+                  <span>Release date: {movie.release_date}</span>
                 </div>
                 <div className="meta-item">
                   <FaStar className="meta-icon star-icon" />
-                  <span>Đánh giá: {movie.vote_average?.toFixed(1)}/10</span>
+                  <span>Rating: {movie.vote_average?.toFixed(1)}/10</span>
                 </div>
                 <div className="meta-item">
                   <FaUsers className="meta-icon" />
-                  <span>{movie.vote_count} lượt đánh giá</span>
+                  <span>{movie.vote_count} votes </span>
                 </div>
               </div>
 
               {/* Chỉ hiển thị thể loại khi có genre_ids và có ít nhất một thể loại */}
               {movie.genre_ids && movie.genre_ids.length > 0 && (
                 <div className="movie-genres">
-                  <h3>Thể loại:</h3>
+                  <h3>Genres:</h3>
                   <div className="genre-tags">
                     {movie.genre_ids.map((genreId, index) => {
                       const genreName = getGenreName(genreId);
@@ -175,8 +175,8 @@ function WatchMovie() {
               )}
 
               <div className="movie-description">
-                <h3>Tóm tắt:</h3>
-                <p>{movie.overview || "Không có mô tả cho phim này."}</p>
+                <h3>Overview:</h3>
+                <p>{movie.overview || "No description available for this movie."}</p>
               </div>
             </div>
           </div>
