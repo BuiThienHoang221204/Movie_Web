@@ -4,42 +4,21 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaUserEdit, FaSave, FaTimes } from 'react-icons/fa';
 import axiosInstance from '../../config/axios';
-import { setUser } from '../../redux/authSlice';
+import { setUser, updateUserField } from '../../redux/authSlice';
 import './UserInfo.css';
 
-const UserInfo = ({ user: propUser }) => {
-  const reduxUser = useSelector((state) => state.auth.user);
-  const dispatch = useDispatch();
+const UserInfo = () => {
   const navigate = useNavigate();
-  const user = reduxUser || propUser || {};
+  const  user = useSelector((state) => state.auth.user);
+  const dispacth = useDispatch();
   const [isEditing, setIsEditing] = useState(false);
-  const [name, setName] = useState(user.name || '');
-  const [avatar, setAvatar] = useState(user.avatar || '');
-  const [avatarPreview, setAvatarPreview] = useState(user.avatar || '');
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [avatarPreview, setAvatarPreview] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const editRef = useRef(null);
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await axiosInstance.get('/auth/status');
-        const fetchedUser = response.data;
-        setName(fetchedUser.name || '');
-        setAvatar(fetchedUser.avatar || '');
-        setAvatarPreview(fetchedUser.avatar || '');
-        dispatch(setUser(fetchedUser));
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-        setError(error.response?.data?.message || 'Không thể lấy thông tin người dùng.');
-      }
-    };
-
-    if (!user.name && !user.email) {
-      fetchUserData();
-    }
-  }, [user, dispatch]);
+  const [name, setName] = useState('');
+  const [avatar, setAvatar] = useState('');
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -48,8 +27,14 @@ const UserInfo = ({ user: propUser }) => {
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
+    console.log(user)
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  useEffect(() => {
+    setName(user.name);
+    setAvatarPreview(user.avatar);
+  }, [user])
 
   const handleAvatarChange = (e) => {
     const file = e.target.files[0];
@@ -83,14 +68,15 @@ const UserInfo = ({ user: propUser }) => {
     }
 
     try {
-      const response = await axiosInstance.get('/auth/status', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
-      dispatch(setUser(response.data));
+      const updateUser = {
+        ...user,
+        name: name,
+        avatar: avatarPreview,
+      }
+
+      dispacth(updateUserField(updateUser));
+      console.log(user)
       setSuccess('Cập nhật thông tin thành công!');
-      setName(response.data.name);
-      setAvatar(response.data.avatar || '');
-      setAvatarPreview(response.data.avatar || '');
       setIsEditing(false);
     } catch (error) {
       console.error('Error updating user:', error);
@@ -105,30 +91,6 @@ const UserInfo = ({ user: propUser }) => {
       setIsLoading(false);
     }
   };
-
-  if (!user.email) {
-    return (
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        className="min-h-screen flex items-center justify-center bg-black p-6"
-      >
-        <div className="text-center text-white">
-          <h1 className="text-3xl font-bold mb-4">Hồ sơ người dùng</h1>
-          <p className="text-gray-400 mb-6">Không tìm thấy thông tin người dùng. Vui lòng đăng nhập lại.</p>
-          <Link to="/login">
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
-            >
-              Đăng nhập
-            </motion.button>
-          </Link>
-        </div>
-      </motion.div>
-    );
-  }
 
   return (
     <motion.div
@@ -157,11 +119,15 @@ const UserInfo = ({ user: propUser }) => {
             />
           </motion.div>
 
-          <div className="text-gray-300 text-center">
-            <p><strong className="text-white">Tên:</strong> {name || 'Chưa đặt tên'}</p>
-            <p><strong className="text-white">Email:</strong> {user.email || 'N/A'}</p>
-            <p><strong className="text-white">Vai trò:</strong> {user.role || 'N/A'}</p>
-          </div>
+          {
+            user && (
+              <div className="text-gray-300 text-center">
+                <p><strong className="text-white">Tên:</strong> {user.name || 'Chưa đặt tên'}</p>
+                <p><strong className="text-white">Email:</strong> {user.email || 'N/A'}</p>
+                <p><strong className="text-white">Vai trò:</strong> {user.role || 'N/A'}</p>
+              </div>
+            )
+          }
 
           {/* Edit Button */}
           <motion.button
@@ -213,9 +179,8 @@ const UserInfo = ({ user: propUser }) => {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     type="submit"
-                    className={`flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors ${
-                      isLoading ? 'opacity-50 cursor-not-allowed' : ''
-                    }`}
+                    className={`flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors ${isLoading ? 'opacity-50 cursor-not-allowed' : ''
+                      }`}
                     disabled={isLoading}
                   >
                     {isLoading ? (
