@@ -5,7 +5,7 @@ const mongoose = require('mongoose'); // For database interaction
 const getUser = async (req, res) => {
     try {
         // Assuming the user email is available in req.user (set by authentication middleware)
-        const userEmail = req.user?.gmail; // Adjust based on your authentication setup
+        const userEmail = req.user?.email; // Adjust based on your authentication setup
         if (!userEmail) {
             return res.status(401).json({ message: "Không tìm thấy người dùng. Vui lòng đăng nhập." });
         }
@@ -35,7 +35,7 @@ const getUser = async (req, res) => {
 const updateUser = async (req, res) => {
     try {
         // Assuming the user email is available in req.user (set by authentication middleware)
-        const userEmail = req.user?.gmail;
+        const userEmail = req.user?.email;
         if (!userEmail) {
             return res.status(401).json({ message: "Không tìm thấy người dùng. Vui lòng đăng nhập." });
         }
@@ -46,7 +46,7 @@ const updateUser = async (req, res) => {
         }
 
         // Find and update the user by email
-        const updatedUser = await User.findOneAndUpdate(
+        const updatedUser = await User.updateOne(
             { email: userEmail },
             { name, avatar },
             { new: true, runValidators: true } // Return the updated document and run validators
@@ -75,7 +75,7 @@ const updateUser = async (req, res) => {
 // Delete user
 const deleteUser = async (req, res) => {
     try {
-        const userEmail = req.user?.gmail;
+        const userEmail = req.user?.email;
         if (!userEmail) {
             return res.status(401).json({ message: "Không tìm thấy người dùng. Vui lòng đăng nhập." });
         }

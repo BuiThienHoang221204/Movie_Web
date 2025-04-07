@@ -47,9 +47,9 @@ const movieService = {
             throw error;
         }
     },
-    getWatchHistory: async (userId) => {//lấy lịch sử xem phim
+    getWatchHistory: async (email) => {//lấy lịch sử xem phim
         try {
-            const response = await apiClient.get(`/movieHistories/${userId}`);//sửa lại endpoint cho đúng
+            const response = await apiClient.get(`/movieHistories/${email}`);//sửa lại endpoint cho đúng
             return response.data; //trả về dữ liệu từ API
         } catch (error) {
             console.error('Lỗi khi lấy lịch sử xem phim:', error);
@@ -65,18 +65,18 @@ const movieService = {
             throw error;
         }
     },
-    deleteWatchHistory: async (id) => {//xóa lịch sử xem phim
+    deleteWatchHistory: async (email) => {//xóa lịch sử xem phim
         try {
-            const response = await apiClient.delete(`/movieHistories/${id}`);//sửa lại endpoint cho đúng
+            const response = await apiClient.delete(`/movieHistories/${email}`);//sửa lại endpoint cho đúng
             return response.data; //trả về dữ liệu từ API
         } catch (error) {
             console.error('Lỗi khi xóa lịch sử xem phim:', error);
             throw error;
         }
     },
-    updateWatchHistory: async (id, data) => {//cập nhật lịch sử xem phim
+    updateWatchHistory: async (email, data) => {//cập nhật lịch sử xem phim
         try {
-            const response = await apiClient.put(`/movieHistories/${id}`, data);//sửa lại endpoint cho đúng
+            const response = await apiClient.put(`/movieHistories/${email}`, data);//sửa lại endpoint cho đúng
             return response.data; //trả về dữ liệu từ API
         } catch (error) {
             console.error('Lỗi khi cập nhật lịch sử xem phim:', error);

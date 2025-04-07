@@ -18,13 +18,13 @@ const UserInfo = ({ user: propUser }) => {
   const [avatarPreview, setAvatarPreview] = useState(user.avatar || '');
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
-  const [isLoading, setIsLoading] = useState(false); // Add loading state
+  const [isLoading, setIsLoading] = useState(false);
   const editRef = useRef(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axiosInstance.get('/auth/user');
+        const response = await axiosInstance.get('/auth/status');
         const fetchedUser = response.data;
         setName(fetchedUser.name || '');
         setAvatar(fetchedUser.avatar || '');
@@ -56,8 +56,8 @@ const UserInfo = ({ user: propUser }) => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setAvatar(file);
-        setAvatarPreview(reader.result);
+        setAvatar(file); // Store the file object for upload
+        setAvatarPreview(reader.result); // Preview the image
       };
       reader.readAsDataURL(file);
     }
@@ -68,25 +68,26 @@ const UserInfo = ({ user: propUser }) => {
     setError(null);
     setSuccess(null);
 
-    // Validation: Ensure name is not empty
     if (!name.trim()) {
       setError('Tên không được để trống.');
       return;
     }
 
-    setIsLoading(true); // Set loading state
+    setIsLoading(true);
 
-    const updatedUser = {
-      name,
-      avatar: avatarPreview,
-    };
+    // Prepare form data for file upload
+    const formData = new FormData();
+    formData.append('name', name);
+    if (avatar instanceof File) {
+      formData.append('avatar', avatar); // Only append if it’s a new file
+    }
 
     try {
-      const response = await axiosInstance.put('/auth/user', updatedUser);
+      const response = await axiosInstance.get('/auth/status', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
       dispatch(setUser(response.data));
       setSuccess('Cập nhật thông tin thành công!');
-
-      // Reset form state to reflect the updated data
       setName(response.data.name);
       setAvatar(response.data.avatar || '');
       setAvatarPreview(response.data.avatar || '');
@@ -101,7 +102,7 @@ const UserInfo = ({ user: propUser }) => {
         setError('Đã xảy ra lỗi. Vui lòng thử lại.');
       }
     } finally {
-      setIsLoading(false); // Reset loading state
+      setIsLoading(false);
     }
   };
 
@@ -140,12 +141,8 @@ const UserInfo = ({ user: propUser }) => {
         <h1 className="text-2xl font-bold text-red-400 mb-6 text-center">Hồ sơ người dùng</h1>
 
         {/* Error/Success Messages */}
-        {error && (
-          <div className="text-red-500 text-center mb-4">{error}</div>
-        )}
-        {success && (
-          <div className="text-green-500 text-center mb-4">{success}</div>
-        )}
+        {error && <div className="text-red-500 text-center mb-4">{error}</div>}
+        {success && <div className="text-green-500 text-center mb-4">{success}</div>}
 
         {/* Avatar and Basic Info */}
         <div className="flex flex-col items-center gap-6">
@@ -247,6 +244,7 @@ const UserInfo = ({ user: propUser }) => {
                     )}
                     {isLoading ? 'Đang lưu...' : 'Lưu'}
                   </motion.button>
+
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
