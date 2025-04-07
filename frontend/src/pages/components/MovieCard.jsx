@@ -12,10 +12,10 @@ const MovieCard = (props) => {
         return genre ? genre.name : ''
     }
 
-
+   
   return (
     <>
-        <Link to={`watch/${movie.id}`} className='movie-item'>
+        <Link to={`/watch/${movie.id}`} className='movie-item'>
             <img src={movie.image} alt={movie.title} className='movie-image' />
             <FaPlay className="play-icon-2" />
             <div className='movie-info'>
