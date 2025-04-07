@@ -90,7 +90,9 @@ function WatchMovie() {
       
         {/* Phần xem phim */}
         <div className="movie-player-section">
+          {/* <div className="section-header">
             <h2>Watch Movie</h2>
+          </div> */}
 
           <div className="movie-player">
             {movie.video_url ?
