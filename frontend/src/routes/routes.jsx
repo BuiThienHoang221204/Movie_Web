@@ -33,7 +33,6 @@ const routes = [
     },
     {
         path: config.allRecomment,
-        // path: config.watchDetail,
         component: AllRecomment,
     },
     {
