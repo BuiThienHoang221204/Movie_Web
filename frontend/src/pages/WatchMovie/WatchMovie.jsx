@@ -80,6 +80,7 @@ function WatchMovie() {
   // Reset initialRender khi id thay đổi (tức là khi chọn phim khác)
   useEffect(() => {
     initialRender.current = true;
+    // aaa
   }, [id]);
 
   if (loading) {
