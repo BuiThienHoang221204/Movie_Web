@@ -109,7 +109,7 @@ return (
                     <h1>FILTER</h1>
                     <p>Where you can filter movies based on your preferences</p>
             </div>
-            <div className='filter-props h-50 bg-dark border rounded-3 p-3 text-white'>
+            <div className='container filter-props h-50 bg-dark border rounded-3 p-3 text-white'>
                     <div className='mb-3 genre-filter'>
                             <h4 className='m-3 ms-0 title bg-dark'>Genres</h4>
                             <span  className={`m-3 ms-0 ${activeGenre === 'All' ? 'active' : ''}`} onClick={() => filterByGenre('All')}>All</span>
