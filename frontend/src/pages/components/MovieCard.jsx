@@ -2,7 +2,7 @@ import React from 'react';
 import { FaPlay } from 'react-icons/fa';
 import { useMovies } from './MovieContext';
 import { Link } from 'react-router-dom';
-
+import { useEffect } from 'react';
 const MovieCard = (props) => {
     const movie = props.movie;
     const { genres } = useMovies();
