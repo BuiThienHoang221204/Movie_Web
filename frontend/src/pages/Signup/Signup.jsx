@@ -165,7 +165,7 @@ const Signup = () => {
               initial={{ opacity: 0, y: 20, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ delay: 0.3, duration: 0.5, ease: "easeOut" }}
-              className="bg-black/40 backdrop-blur-md rounded-3xl p-6 md:p-8 shadow-2xl border border-white/5 relative overflow-hidden"
+              className="bg-black/40 backdrop-blur-md rounded-3xl px-6 py-3 shadow-2xl border border-white/5 relative overflow-hidden"
             >
               {/* Glass effect overlay */}
               <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent opacity-30"></div>
@@ -178,8 +178,8 @@ const Signup = () => {
                   transition={{ delay: 0.4, duration: 0.5 }}
                   className="text-center mb-8"
                 >
-                  <h2 className="text-4xl md:text-5xl font-bold text-red-500 mb-4 drop-shadow-lg tracking-wide">Create Account</h2>
-                  <p className="text-gray-300 text-lg md:text-xl">Join us to start watching movies</p>
+                  <h2 className="sm:text-3xl md:text-5xl font-bold text-red-500 drop-shadow-lg tracking-wide">Create Account</h2>
+                  <p className="text-gray-300 sm:text-sm md:text-lg">Join us to start watching movies</p>
                 </motion.div>
 
                 {/* Social Signup Buttons */}
@@ -187,22 +187,22 @@ const Signup = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5, duration: 0.5 }}
-                  className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6"
+                  className="grid grid-cols-2 gap-3 mb-3"
                 >
                   <button 
                     type="button"
                     onClick={() => handleLoginWithProvider('google')}
-                    className="flex items-center justify-center gap-2 md:gap-3 py-2.5 md:py-3 px-4 md:px-5 bg-dark-300/80 hover:bg-dark-400/80 text-white rounded-xl transition-all duration-300 shadow-dark border border-dark-400/30 hover:border-primary-600/50 hover:shadow-dark-lg group text-base md:text-lg hover:-translate-y-0.5 active:translate-y-0"
+                    className="flex items-center justify-center gap-2 md:gap-3 py-2 px-4 md:px-5 bg-dark-300/80 hover:bg-dark-400/80 text-white rounded-xl transition-all duration-300 shadow-dark border border-dark-400/30 hover:border-primary-600/50 hover:shadow-dark-lg group text-base md:text-lg hover:-translate-y-0.5 active:translate-y-0"
                   >
-                    <FaGoogle className="text-primary-500 group-hover:text-primary-400 transition-colors text-2xl" />
+                    <FaGoogle className="text-primary-500 group-hover:text-primary-400 transition-colors text-xl" />
                     <span>Google</span>
                   </button>
                   <button 
                     type="button"
                     onClick={() => handleLoginWithProvider('facebook')}
-                    className="flex items-center justify-center gap-2 md:gap-3 py-2.5 md:py-3 px-4 md:px-5 bg-dark-300/80 hover:bg-dark-400/80 text-white rounded-xl transition-all duration-300 shadow-dark border border-dark-400/30 hover:border-primary-600/50 hover:shadow-dark-lg group text-base md:text-lg hover:-translate-y-0.5 active:translate-y-0"
+                    className="flex items-center justify-center gap-2 md:gap-3 py-2 px-4 md:px-5 bg-dark-300/80 hover:bg-dark-400/80 text-white rounded-xl transition-all duration-300 shadow-dark border border-dark-400/30 hover:border-primary-600/50 hover:shadow-dark-lg group text-base md:text-lg hover:-translate-y-0.5 active:translate-y-0"
                   >
-                    <FaFacebook className="text-blue-500 group-hover:text-blue-400 transition-colors text-2xl" />
+                    <FaFacebook className="text-blue-500 group-hover:text-blue-400 transition-colors text-xl" />
                     <span>Facebook</span>
                   </button>
                 </motion.div>
@@ -211,11 +211,11 @@ const Signup = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.6, duration: 0.5 }}
-                  className="flex items-center gap-4 mb-6"
+                  className="flex items-center gap-1 mb-3"
                 >
-                  <div className="flex-1 border-t border-dark-400/50"></div>
+                  <div className="flex-1 border-t border-dark-900/50"></div>
                   <span className="text-gray-500 text-base font-medium px-4">or continue with</span>
-                  <div className="flex-1 border-t border-dark-400/50"></div>
+                  <div className="flex-1 border-t border-dark-900/50"></div>
                 </motion.div>
 
                 <motion.form 
@@ -231,8 +231,8 @@ const Signup = () => {
                       name="name"
                       value={formData.name}
                       onChange={handleChange}
-                      className={`w-full px-5 py-3 text-base rounded-xl bg-dark-400/50 border ${errors.name ? 'border-red-500' : 'border-dark-500/50'} text-white placeholder-gray-400 focus:outline-none focus:border-primary-500/70 focus:ring-2 focus:ring-primary-500/20 transition-all duration-300 focus:scale-[1.02] focus:shadow-lg`}
-                      placeholder="Full Name"
+                      className={`w-full px-5 py-2 text-base rounded-xl bg-dark-400/50 border ${errors.name ? 'border-red-500' : 'border-dark-500/50'} text-white placeholder-gray-400 focus:outline-none focus:border-primary-500/70 focus:ring-2 focus:ring-primary-500/20 transition-all duration-300 focus:scale-[1.01] focus:shadow-lg`}
+                      placeholder="User Name"
                       required
                     />
                     {errors.name && (
@@ -246,7 +246,7 @@ const Signup = () => {
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
-                      className={`w-full px-5 py-3 text-base rounded-xl bg-dark-400/50 border ${errors.email ? 'border-red-500' : 'border-dark-500/50'} text-white placeholder-gray-400 focus:outline-none focus:border-primary-500/70 focus:ring-2 focus:ring-primary-500/20 transition-all duration-300 focus:scale-[1.02] focus:shadow-lg`}
+                      className={`w-full px-5 py-2 text-base rounded-xl bg-dark-400/50 border ${errors.email ? 'border-red-500' : 'border-dark-500/50'} text-white placeholder-gray-400 focus:outline-none focus:border-primary-500/70 focus:ring-2 focus:ring-primary-500/20 transition-all duration-300 focus:scale-[1.01] focus:shadow-lg`}
                       placeholder="Email address"
                       required
                     />
@@ -261,7 +261,7 @@ const Signup = () => {
                       name="password"
                       value={formData.password}
                       onChange={handleChange}
-                      className={`w-full px-5 py-3 text-base rounded-xl bg-dark-400/50 border ${errors.password ? 'border-red-500' : 'border-dark-500/50'} text-white placeholder-gray-400 focus:outline-none focus:border-primary-500/70 focus:ring-2 focus:ring-primary-500/20 transition-all duration-300 focus:scale-[1.02] focus:shadow-lg pr-12`}
+                      className={`w-full px-5 py-2 text-base rounded-xl bg-dark-400/50 border ${errors.password ? 'border-red-500' : 'border-dark-500/50'} text-white placeholder-gray-400 focus:outline-none focus:border-primary-500/70 focus:ring-2 focus:ring-primary-500/20 transition-all duration-300 focus:scale-[1.01] focus:shadow-lg pr-12`}
                       placeholder="Password"
                       required
                     />
@@ -283,7 +283,7 @@ const Signup = () => {
                       name="confirmPassword"
                       value={formData.confirmPassword}
                       onChange={handleChange}
-                      className={`w-full px-5 py-3 text-base rounded-xl bg-dark-400/50 border ${errors.confirmPassword ? 'border-red-500' : 'border-dark-500/50'} text-white placeholder-gray-400 focus:outline-none focus:border-primary-500/70 focus:ring-2 focus:ring-primary-500/20 transition-all duration-300 focus:scale-[1.02] focus:shadow-lg pr-12`}
+                      className={`w-full px-5 py-2 text-base rounded-xl bg-dark-400/50 border ${errors.confirmPassword ? 'border-red-500' : 'border-dark-500/50'} text-white placeholder-gray-400 focus:outline-none focus:border-primary-500/70 focus:ring-2 focus:ring-primary-500/20 transition-all duration-300 focus:scale-[1.01] focus:shadow-lg pr-12`}
                       placeholder="Confirm Password"
                       required
                     />
@@ -306,7 +306,7 @@ const Signup = () => {
                       className="w-5 h-5 rounded border-dark-400 text-primary-600 focus:ring-4 focus:ring-primary-500/30 bg-dark-300 cursor-pointer transition-all duration-300 focus:scale-110 checked:scale-105"
                       required
                     />
-                    <label htmlFor="terms" className="ml-2 text-base text-gray-300">
+                    <label htmlFor="terms" className="ml-2 text-sm md:text-base text-gray-300">
                       I agree to the{' '}
                       <a href="#" className="text-primary-400 hover:text-primary-300 transition-colors no-underline">
                         Terms of Service
@@ -321,11 +321,11 @@ const Signup = () => {
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className={`w-full py-3 px-5 text-base bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-500 hover:to-primary-600 text-white rounded-xl transition-all duration-300 shadow-dark hover:shadow-dark-lg font-medium transform hover:-translate-y-0.5 ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
+                    className={`w-full py-2 px-5 text-base bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-500 hover:to-primary-600 text-white rounded-xl transition-all duration-300 shadow-dark hover:shadow-dark-lg font-medium transform hover:-translate-y-0.5 ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
                   >
                     {isLoading ? (
                       <div className="flex items-center justify-center">
-                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                         Creating Account...
                       </div>
                     ) : (
@@ -338,9 +338,9 @@ const Signup = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.8, duration: 0.5 }}
-                  className="text-center mt-6"
+                  className="text-center mt-3"
                 >
-                  <p className="text-gray-400 text-lg">
+                  <p className="text-gray-400 text-sm md:text-lg mb-0">
                     Already have an account?{' '}
                     <Link to="/login" className="text-primary-400 hover:text-primary-300 font-medium transition-colors no-underline hover:underline">
                       Sign in
