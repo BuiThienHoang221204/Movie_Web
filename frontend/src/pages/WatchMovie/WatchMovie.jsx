@@ -14,6 +14,7 @@ function WatchMovie() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const moviePlayerRef = useRef(null); // Tạo một ref cho phần xem phim
+  const initialRender = useRef(true); // Xác định lần render đầu tiên
 
   const getGenreName = (genreId) => {
     const genre = genres.find(g => g.id === genreId);
@@ -69,10 +70,17 @@ function WatchMovie() {
 
   // Cuộn đến phần xem phim khi component được mount hoặc dữ liệu phim được tải
   useEffect(() => {
-    if (moviePlayerRef.current) {
+    // Chỉ cuộn khi phim đã được tải và đây là lần render đầu tiên sau khi tải phim
+    if (moviePlayerRef.current && !loading && movie && initialRender.current) {
       moviePlayerRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+      initialRender.current = false;
     }
-  }, [movie]); // Kích hoạt khi dữ liệu phim có sẵn
+  }, [loading, movie]); // Kích hoạt khi dữ liệu phim có sẵn và khi hết loading
+
+  // Reset initialRender khi id thay đổi (tức là khi chọn phim khác)
+  useEffect(() => {
+    initialRender.current = true;
+  }, [id]);
 
   if (loading) {
     return (
