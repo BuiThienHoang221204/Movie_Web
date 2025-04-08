@@ -30,7 +30,7 @@ export const MovieProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    const fetchGenres = async () => {
+    const fetchMovies = async () => {
       try {
         const data = await movieService.getAllMovies();
         // console.log("Dữ liệu thể loại từ API:", data);
@@ -44,7 +44,7 @@ export const MovieProvider = ({ children }) => {
       }
     }
 
-    fetchGenres();
+    fetchMovies();
   }, []);
 
   return (
