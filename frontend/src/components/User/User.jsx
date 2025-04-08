@@ -45,9 +45,9 @@ const User = () => {
   };
 
   const menuItems = [
-    { icon: <FaUser className="w-5 h-5" />, label: 'Thông tin', path: '/profile' },
-    { icon: <FaCog className="w-5 h-5" />, label: 'Cài đặt', path: '/settings' },
-    { icon: <FaSignOutAlt className="w-5 h-5" />, label: 'Đăng xuất', onClick: handleLogout },
+    { icon: <FaUser className="w-5 h-5" />, label: 'User profile', path: '/profile' },
+    { icon: <FaCog className="w-5 h-5" />, label: 'Settings', path: '/settings' },
+    { icon: <FaSignOutAlt className="w-5 h-5" />, label: 'Logout', onClick: handleLogout },
   ];
 
   return (
