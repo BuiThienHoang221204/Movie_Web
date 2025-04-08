@@ -6,6 +6,7 @@ import { FaUserEdit, FaSearch, FaSignOutAlt, FaUser } from 'react-icons/fa';
 import WatchHistory from '../components/WatchHistory';
 import './UserProfile.css';
 import movieService from '../../services/movieService';
+import { RecommentMovie } from '../components';
 
 // 1. Component Definition and Props
 function UserProfile({ user: propUser }) {
@@ -78,15 +79,15 @@ function UserProfile({ user: propUser }) {
         className="min-h-screen flex items-center justify-center bg-black text-white p-6"
       >
         <div className="text-center">
-          <h1 className="text-3xl font-bold mb-4">Không tìm thấy thông tin người dùng</h1>
-          <p className="text-gray-400 mb-6">Vui lòng đăng nhập để xem hồ sơ của bạn.</p>
+          <h1 className="text-3xl font-bold mb-4">Can't fetch User information</h1>
+          <p className="text-gray-400 mb-6">Please Login to see your information</p>
           <Link to="/login">
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="px-6 py-3 bg-red-600 rounded-lg hover:bg-red-700 transition-colors duration-200"
             >
-              Đăng nhập
+              Login
             </motion.button>
           </Link>
         </div>
@@ -126,7 +127,7 @@ function UserProfile({ user: propUser }) {
               </motion.div>
               <div className="profile-info">
                 <h1 className="welcome-text">
-                  Chào mừng bạn, {user.name || 'User'}!
+                  Welcome back, {user.name || 'User'}!
                 </h1>
                 <p className="email-text">{user.email || 'email@example.com'}</p>
                 <Link to="/user-info" state={{ user }}>
@@ -135,7 +136,7 @@ function UserProfile({ user: propUser }) {
                     whileTap={{ scale: 0.95 }}
                     className="edit-profile-btn"
                   >
-                    <FaUserEdit /> Chỉnh sửa hồ sơ
+                    <FaUserEdit /> Edit profile
                   </motion.button>
                 </Link>
               </div>
@@ -148,21 +149,21 @@ function UserProfile({ user: propUser }) {
               transition={{ delay: 0.4 }}
               className="watch-stats"
             >
-              <h2 className="section-title">Số liệu của bạn</h2>
+              <h2 className="section-title">Your data</h2>
               <div className="stats-grid">
                 <motion.div
                   whileHover={{ scale: 1.03 }}
                   className="stat-card"
                 >
                   <span className="stat-number">{watchStats.totalWatched}</span>
-                  <p className="stat-label">Số phim đã xem</p>
+                  <p className="stat-label">Movies Watched</p>
                 </motion.div>
                 <motion.div
                   whileHover={{ scale: 1.03 }}
                   className="stat-card"
                 >
                   <span className="stat-number">{watchStats.hoursWatched}</span>
-                  <p className="stat-label">Số giờ đã xem</p>
+                  <p className="stat-label">Hours Watched</p>
                 </motion.div>
               </div>
             </motion.div>
@@ -174,15 +175,11 @@ function UserProfile({ user: propUser }) {
               transition={{ delay: 0.6 }}
               className="watch-history"
             >
-              <h2 className="section-title">Lịch sử xem</h2>
+              <h2 className="section-title">Your Watch History</h2>
               <WatchHistory user={user} />
             </motion.div>
           </div>
         </motion.div>
-      </div>
-
-      <div className="watch-history-section">
-        <WatchHistory user={user} />
       </div>
     </>
   );

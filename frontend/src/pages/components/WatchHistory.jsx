@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FaArrowRight, FaArrowDown } from 'react-icons/fa';
 import './WatchHistory.css';
 import movieService from '../../services/movieService';
-import {useMovies} from '../components/MovieContext';
-import { Link } from 'react-router-dom';
+import { useMovies } from '../components/MovieContext';
 
 const WatchHistory = (props) => {
   const { user } = props;
@@ -13,7 +12,6 @@ const WatchHistory = (props) => {
   const [watchHistory, setWatchHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [currentIndex, setCurrentIndex] = useState(0); // For navigation
 
   // Fetch watch history of user
   useEffect(() => {
@@ -22,33 +20,32 @@ const WatchHistory = (props) => {
         const data = await movieService.getWatchHistory(user.email);
         if (data && data.length > 0) {
           setWatchHistory(data);
-          console.log('Lịch sử xem phim:', data);
+          console.log('Watch History:', data);
         }
       } catch (err) {
-        console.error('Lỗi khi lấy lịch sử xem phim (frontend):', err);
-        setError('Lỗi khi lấy lịch sử xem phim.');
+        console.error('Error (frontend):', err);
+        setError('Failed to fetch watch history. Please try again later.');
       } finally {
         setLoading(false);
       }
-    }
+    };
 
     fetchWatchHistory();
   }, []);
 
   useEffect(() => {
-    const fetchRecommentMovies = async () => {
+    const fetchRecommendMovies = async () => {
       try {
         const data = await movieService.getAllMovies();
         if (data && data.length > 0) {
-            setMovies(data);
-
+          setMovies(data);
         }
       } catch (err) {
-        console.error('Lỗi khi lấy phim đề xuất (frontend):', err);
+        console.error('Error:', err);
       }
-    }
+    };
 
-    fetchRecommentMovies();
+    fetchRecommendMovies();
   }, []);
 
   // Toggle show all movies
@@ -56,19 +53,13 @@ const WatchHistory = (props) => {
     setShowAllMovies((prev) => !prev);
   };
 
-  // Navigation handlers
-  const handlePrev = () => {
-    setCurrentIndex((prev) => Math.max(prev - 4, 0));
-  };
-
-  const handleNext = () => {
-    setCurrentIndex((prev) => Math.min(prev + 4, watchHistory.length - 4));
-  };
+  // Adjust rating to a 5-star scale if backend uses 10-star scale
+  const normalizeRating = (rating) => (rating / 2).toFixed(1);
 
   if (loading) {
     return (
       <div className="watch-history-container">
-        <div className="loading-message">Đang tải lịch sử xem phim...</div>
+        <div className="loading-message">Loading...</div>
       </div>
     );
   }
@@ -77,79 +68,58 @@ const WatchHistory = (props) => {
     return (
       <div className="watch-history-container">
         <div className="error-message">{error}</div>
-      </div>    );
+      </div>
+    );
   }
-
-
-  // Adjust rating to a 5-star scale if backend uses 10-star scale
-  const normalizeRating = (rating) => (rating / 2).toFixed(1);
 
   return (
     <div className="watch-history-container">
       {watchHistory.length > 0 && (
         <div className="title-container">
-          <h1 className="watch-history-title">Xem gần đây</h1>
           <button
             className="view-all-btn"
             onClick={toggleShowAllMovies}
             disabled={watchHistory.length <= 4}
           >
-            {showAllMovies ? 'Ẩn' : 'Xem tất cả'}{' '}
+            {showAllMovies ? 'Hide' : 'View all'}{' '}
             {showAllMovies ? <FaArrowDown className="arrow-icon" /> : <FaArrowRight className="arrow-icon" />}
           </button>
         </div>
       )}
       {watchHistory.length === 0 ? (
-        <div className="no-history-message">Bạn chưa xem bộ phim nào.</div>
+        <div className="no-history-message">You haven't watched any movie.</div>
       ) : (
         <>
           <div className="history-grid">
-            <div className="movie-track">
-              {watchHistory.slice(currentIndex, currentIndex + 4).map((item) => {
-                const movie = movies.find((m) => m.id === item.movieId);
-                if (!movie) return null;
-                return (
-                  <div
-                    key={`${item.userId}-${item.movieId}`}
-                    className="history-item"
-                    onClick={() => handleMovieClick(item.movieId, item._id)}
-                  >
-                    <img
-                      src={movie.image || 'https://via.placeholder.com/350x500'}
-                      alt={movie.title}
-                      className="history-image"
-                    />
-                    <div className="history-info">
-                      <div className="history-rating">
-                        ★ {normalizeRating(movie.rating) || 0}/5
-                      </div>
-                      <h2 className="history-title">{movie.title}</h2>
-                      <div className="history-match">
-                        Progress: {(item.progress * 100) || 0}%
-                      </div>
+            {watchHistory.slice(0, 4).map((item) => {
+              const movie = movies.find((m) => m.id === item.movieId);
+              if (!movie) return null;
+              return (
+                <div
+                  key={`${item.userId}-${item.movieId}`}
+                  className="history-item"
+                >
+                  <img
+                    src={movie.image || 'https://via.placeholder.com/350x500'}
+                    alt={movie.title}
+                    className="history-image"
+                  />
+                  <div className="history-info">
+                    <div className="history-rating">
+                      ★ {normalizeRating(movie.rating) || 0}/10
+                    </div>
+                    <h2 className="history-title">{movie.title}</h2>
+                    <div className="history-progress">
+                      Progress: {(item.progress * 100) || 0}%
                     </div>
                   </div>
-                );
-              })}
-            </div>
-            <button
-              className="prev"
-              onClick={handlePrev}
-              disabled={currentIndex === 0}
-            >
-              ◄
-            </button>
-            <button
-              className="next"
-              onClick={handleNext}
-              disabled={currentIndex + 4 >= watchHistory.length}
-            >
-              ►
-            </button>
+                </div>
+              );
+            })}
           </div>
           {showAllMovies && watchHistory.length > 4 && (
             <div className="all-movies-section">
-              <h2 className="all-movies-title">Toàn bộ phim đã xem</h2>
+              <h2 className="all-movies-title">Total movies watched</h2>
               <div className="all-movies-grid">
                 {watchHistory.map((item) => {
                   const movie = movies.find((m) => m.id === item.movieId);
@@ -158,7 +128,6 @@ const WatchHistory = (props) => {
                     <div
                       key={`${item.userId}-${item.movieId}`}
                       className="history-item"
-                      onClick={() => handleMovieClick(item.movieId, item._id)}
                     >
                       <img
                         src={movie.image || 'https://via.placeholder.com/350x500'}
@@ -167,10 +136,10 @@ const WatchHistory = (props) => {
                       />
                       <div className="history-info">
                         <div className="history-rating">
-                          ★ {normalizeRating(movie.rating) || 0}/5
+                          ★ {normalizeRating(movie.rating) || 0}/10
                         </div>
                         <h2 className="history-title">{movie.title}</h2>
-                        <div className="history-match">
+                        <div className="history-progress">
                           Progress: {(item.progress * 100) || 0}%
                         </div>
                       </div>
