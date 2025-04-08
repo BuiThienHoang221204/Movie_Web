@@ -5,7 +5,7 @@ import "./WatchMovie.css";
 import { FaStar, FaCalendarAlt, FaUsers, FaPlayCircle } from "react-icons/fa";
 import images from "../../assets/img";
 import axiosInstance from "../../config/axios";
-import RelatedMovies from "../components/RelatedMovies";
+import MovieUpdate from "../components/MovieUpdate";
 
 function WatchMovie() {
   const { id } = useParams();
@@ -191,7 +191,7 @@ function WatchMovie() {
           </div>
         </div>
 
-        <RelatedMovies />
+        <MovieUpdate />
       </div>
     </div>
   );
