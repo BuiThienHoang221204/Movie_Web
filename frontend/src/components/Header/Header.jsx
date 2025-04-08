@@ -134,49 +134,47 @@ function Header() {
 
     const searchTerm = search.toLowerCase().trim();
 
-    // Tìm kiếm theo năm
-    if (searchTerm.match(/[0-9]{4}/)) {
-      const filteredMovies = movieList.filter(movie =>
-        movie.year === searchTerm
-      );
-      setSearchMovies(filteredMovies);
-      return;
-    }
-
+    // Tìm kiếm kết hợp thể loại và năm
+    const yearMatch = searchTerm.match(/(\d{4})/);
+    const year = yearMatch ? yearMatch[1] : null;
+    
+    // Tách các từ khóa tìm kiếm
+    const searchWords = searchTerm.split(' ').filter(word => word !== year);
+    
     // Tìm kiếm theo thể loại
-    const isGenreSearch = Object.entries(genreMapping).some(([viet, eng]) => {
-      return searchTerm.includes(viet) || searchTerm.includes(eng);
+    const genreMatches = Object.entries(genreMapping).filter(([viet, eng]) => {
+      return searchWords.some(word => viet.includes(word) || eng.includes(word));
     });
 
-    if (isGenreSearch) {
-      const filteredMovies = movieList.filter(movie => {
-        if (!movie.genre) return false;
-        
-        return movie.genre.some(genreId => {
+    const filteredMovies = movieList.filter(movie => {
+      let matches = true;
+
+      // Kiểm tra năm nếu có
+      if (year) {
+        matches = matches && movie.year === year;
+      }
+
+      // Kiểm tra thể loại nếu có
+      if (genreMatches.length > 0) {
+        matches = matches && movie.genre.some(genreId => {
           const genre = genres.find(g => g.id === genreId);
           if (!genre) return false;
           
           const genreName = genre.name.toLowerCase();
-          // Kiểm tra xem tên thể loại có khớp với từ khóa tìm kiếm không
-          const matchesEnglish = genreName.includes(searchTerm);
-          
-          // Kiểm tra tên tiếng Việt
-          const matchesVietnamese = Object.entries(genreMapping).some(([viet, eng]) => {
-            return viet.includes(searchTerm) && eng === genreName;
-          });
-          
-          return matchesEnglish || matchesVietnamese;
+          return genreMatches.some(([viet, eng]) => 
+            genreName.includes(eng) || viet.includes(genreName)
+          );
         });
-      });
-      
-      setSearchMovies(filteredMovies);
-      return;
-    }
+      }
 
-    // Tìm kiếm theo tên phim
-    const filteredMovies = movieList.filter(movie =>
-      movie.title.toLowerCase().trim().includes(searchTerm)
-    );
+      // Kiểm tra tên phim nếu không có năm và thể loại
+      if (!year && genreMatches.length === 0) {
+        matches = movie.title.toLowerCase().trim().includes(searchTerm);
+      }
+
+      return matches;
+    });
+    
     setSearchMovies(filteredMovies);
   }, [search, movieList, genres, genreMapping]);
 
