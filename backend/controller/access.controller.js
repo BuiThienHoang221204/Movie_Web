@@ -186,4 +186,45 @@ const getAuthStatus = async (req, res) => {
     }
 };
 
-module.exports = { signup, login, logout, getAuthStatus }
+const updateUser = async (req, res) => {
+    try {
+        const { email, name, avatar } = req.body;
+
+        // Kiểm tra nếu thiếu email hoặc thông tin quan trọng khác
+        if (!email || !name || !avatar) {
+            return res.status(400).json({ message: "Missing required fields" });
+        }
+
+        // Cập nhật thông tin người dùng theo email
+        const result = await User.updateOne(
+            { email: email },
+            { $set: { name: name, avatar: avatar }}
+        );
+
+        // Kiểm tra nếu không có thay đổi (modifiedCount = 0 có thể có nếu dữ liệu không thay đổi)
+        if (result.modifiedCount === 0) {
+            return res.status(404).json({ message: "No user found or no changes were made" });
+        }
+
+        // Trả về kết quả cập nhật thành công
+        return res.status(200).json({
+            message: "User updated successfully",
+            result,
+        });
+    } catch (error) {
+        // Xử lý lỗi từ MongoDB (ví dụ trùng email)
+        if (error.name === 'MongoServerError' && error.code === 11000) {
+            return res.status(400).json({
+                message: "Email already exists",
+                details: error.message,
+            });
+        }
+
+        // Các lỗi khác (internal server error)
+        return res.status(500).json({
+            message: "Internal Server Error",
+            error: error.message,
+        });
+    }
+};
+module.exports = { signup, login, logout, getAuthStatus, updateUser}
