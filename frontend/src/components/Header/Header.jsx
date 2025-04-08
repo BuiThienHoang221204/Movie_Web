@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import User from '../User/User';
 import { FaSearch, FaFilter, FaList } from 'react-icons/fa';
 import movieService from '../../services/movieService';
+import { useMovies } from '../../pages/components/MovieContext';
 
 function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -19,6 +20,7 @@ function Header() {
   const [searchMovies, setSearchMovies] = useState([]);
   const navigate = useNavigate();
   const [showMenu, setShowMenu] = useState(false);
+  const { genres } = useMovies();
 
   useEffect(() => {
     const fetchAllMovies = async () => {
@@ -77,6 +79,32 @@ function Header() {
     },
   ];
 
+  const [genreMapping, setGenreMapping] = useState({
+    'hành động': 'action',
+    'phiêu lưu': 'adventure',
+    'hoạt hình': 'animation',
+    'hài': 'comedy',
+    'hài hước': 'comedy',
+    'tội phạm': 'crime',
+    'tài liệu': 'documentary',
+    'chính kịch': 'drama',
+    'gia đình': 'family',
+    'giả tưởng': 'fantasy',
+    'lịch sử': 'history',
+    'kinh dị': 'horror',
+    'nhạc': 'music',
+    'âm nhạc': 'music',
+    'bí ẩn': 'mystery',
+    'lãng mạn': 'romance',
+    'tình cảm': 'romance',
+    'khoa học viễn tưởng': 'science fiction',
+    'viễn tưởng': 'science fiction',
+    'khoa học': 'science fiction',
+    'tv movie': 'tv movie',
+    'kinh điển': 'thriller',
+    'chiến tranh': 'war',
+    'cao bồi': 'western'
+  });
 
   // Thêm effect để theo dõi sự kiện cuộn
   useEffect(() => {
@@ -103,11 +131,54 @@ function Header() {
       setSearchMovies([]);
       return;
     }
+
+    const searchTerm = search.toLowerCase().trim();
+
+    // Tìm kiếm theo năm
+    if (searchTerm.match(/[0-9]{4}/)) {
+      const filteredMovies = movieList.filter(movie =>
+        movie.year === searchTerm
+      );
+      setSearchMovies(filteredMovies);
+      return;
+    }
+
+    // Tìm kiếm theo thể loại
+    const isGenreSearch = Object.entries(genreMapping).some(([viet, eng]) => {
+      return searchTerm.includes(viet) || searchTerm.includes(eng);
+    });
+
+    if (isGenreSearch) {
+      const filteredMovies = movieList.filter(movie => {
+        if (!movie.genre) return false;
+        
+        return movie.genre.some(genreId => {
+          const genre = genres.find(g => g.id === genreId);
+          if (!genre) return false;
+          
+          const genreName = genre.name.toLowerCase();
+          // Kiểm tra xem tên thể loại có khớp với từ khóa tìm kiếm không
+          const matchesEnglish = genreName.includes(searchTerm);
+          
+          // Kiểm tra tên tiếng Việt
+          const matchesVietnamese = Object.entries(genreMapping).some(([viet, eng]) => {
+            return viet.includes(searchTerm) && eng === genreName;
+          });
+          
+          return matchesEnglish || matchesVietnamese;
+        });
+      });
+      
+      setSearchMovies(filteredMovies);
+      return;
+    }
+
+    // Tìm kiếm theo tên phim
     const filteredMovies = movieList.filter(movie =>
-      movie.title.toLowerCase().trim().includes(search.trim().toLowerCase())
+      movie.title.toLowerCase().trim().includes(searchTerm)
     );
     setSearchMovies(filteredMovies);
-  }, [search]);
+  }, [search, movieList, genres, genreMapping]);
 
   const handleMovieClick = (movieId, e) => {
     e.preventDefault();
@@ -157,7 +228,7 @@ function Header() {
             <input type="text" placeholder="Search" className="search-input" value={search} onFocus={() => setShowMenu(false)} onChange={(e) => setSearch(e.target.value)} />
             <div className={'movie-list ' + (search ? '' : 'd-none')}>
               {movieList.length > 0 ? (
-                searchMovies.map(movie => (
+                searchMovies.sort((a, b) => b.year - a.year).map(movie => (
                   <Link to={`/watch/${movie.id}`} key={movie.id} className='s-movie' onClick={(e) => handleMovieClick(movie.id, e)}>
                     <img src={movie.image} alt={movie.title} className='movie-img' />
                     <div className='s-movie-info'>

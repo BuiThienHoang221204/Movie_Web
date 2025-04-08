@@ -1,14 +1,17 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useRef} from 'react'
 import images from '../../assets/img';
 import './Filter.css';
 import MovieList from './MovieList';
 import movieService from '../../services/movieService';
 import { useMovies } from '../components/MovieContext';
+import { FaUndo } from 'react-icons/fa';
 
 const Filter = () => {
     const [movies, setMovies] = useState([]);
     const { genres } = useMovies();
     const [currentPage, setCurrentPage] = useState(1);
+    const filterPropsRef = useRef(null);
+    const movieListRef = useRef(null);
 
     const [filteredMovies, setFilteredMovies] = useState(movies);
     const [activeGenre, setActiveGenre] = useState('All');
@@ -19,26 +22,28 @@ const Filter = () => {
         const fetchRecommentMovies = async () => {
           try {
             const data = await movieService.getAllMovies();
-            console.log("Dữ liệu phim từ API:", data);
             if (data && data.length > 0) {
                 setMovies(data);
                 setFilteredMovies(data);
-
-            //   setMovies(data);
-            //   setFilteredMovies(data);
-            } else {// Nếu không có dữ liệu từ API, sử dụng dữ liệu mẫu
+            } else {
               setMovies(fallbackMovies);
               setFilteredMovies(fallbackMovies);
             }
           } catch (err) {
             console.error('Lỗi khi lấy phim đề xuất (frontend):', err);
-            // Khi có lỗi, sử dụng dữ liệu mẫu
             setMovies(fallbackMovies);
             setFilteredMovies(fallbackMovies);
           }
         }
     
         fetchRecommentMovies();
+    }, []);
+
+    // Thêm useEffect để focus vào filter-props khi component mount
+    useEffect(() => {
+        if (filterPropsRef.current) {
+            filterPropsRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
     }, []);
 
     const fallbackMovies = [
@@ -53,6 +58,13 @@ const Filter = () => {
             image: images.banner2
         },
     ];
+
+    // Hàm scroll đến phần list-movie
+    const scrollToMovieList = () => {
+        if (movieListRef.current) {
+            movieListRef.current.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
+        }
+    };
 
     const filterByGenre = (genre) => {
         let result = movies;
@@ -69,6 +81,7 @@ const Filter = () => {
         }
         setFilteredMovies(result);
         setCurrentPage(1);
+        scrollToMovieList();
     };
 
     const filterByYear = (year) => {
@@ -85,6 +98,7 @@ const Filter = () => {
         }
         setFilteredMovies(result);
         setCurrentPage(1);
+        scrollToMovieList();
     }
 
     const filterByMatch = (match) => {
@@ -101,15 +115,35 @@ const Filter = () => {
         }
         setFilteredMovies(result);
         setCurrentPage(1);
+        scrollToMovieList();
+    }
+
+    const resetFilters = () => {
+        setActiveGenre('All');
+        setActiveYear('All');
+        setActiveMatch('All');
+        setFilteredMovies(movies);
+        setCurrentPage(1);
+        scrollToMovieList();
     }
 
 return (
     <div>
             <div className='filter-header'> 
-                    <h1>FILTER</h1>
+                    <h1 ref={filterPropsRef}>FILTER</h1>
                     <p>Where you can filter movies based on your preferences</p>
             </div>
             <div className='container filter-props h-50 bg-dark border rounded-3 p-3 text-white'>
+                    <div className='d-flex justify-content-between align-items-center mb-3'>
+                        <h4 className='m-0'>Filter Options</h4>
+                        <button 
+                            className='btn btn-outline-light refresh-btn d-flex'
+                            onClick={resetFilters}
+                            title="Reset all filters"
+                        >
+                            <FaUndo></FaUndo> Refresh
+                        </button>
+                    </div>
                     <div className='mb-3 genre-filter'>
                             <h4 className='m-3 ms-0 title bg-dark'>Genres</h4>
                             <span  className={`m-3 ms-0 ${activeGenre === 'All' ? 'active' : ''}`} onClick={() => filterByGenre('All')}>All</span>
@@ -166,7 +200,9 @@ return (
                             }
                     </div>
             </div>
-            <MovieList filteredMovies={filteredMovies} currentPage={currentPage} setCurrentPage={setCurrentPage}></MovieList>
+            <div ref={movieListRef}>
+                <MovieList scrollToMovieList={scrollToMovieList} filteredMovies={filteredMovies} currentPage={currentPage} setCurrentPage={setCurrentPage}></MovieList>
+            </div>
     </div>
 )
 }
