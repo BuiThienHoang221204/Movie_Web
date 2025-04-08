@@ -105,7 +105,7 @@ const UserInfo = () => {
       className="min-h-screen bg-black p-6 flex items-start justify-center pt-24"
     >
       <div className="max-w-lg w-full bg-opacity-10 p-6 rounded-xl shadow-lg border border-gray-700 relative" ref={editRef}>
-        <h1 className="text-2xl font-bold text-red-400 mb-6 text-center">Hồ sơ người dùng</h1>
+        <h1 className="text-2xl font-bold text-red-400 mb-6 text-center">Your Profile</h1>
 
         {/* Error/Success Messages */}
         {error && <div className="text-red-500 text-center mb-4">{error}</div>}
@@ -127,9 +127,9 @@ const UserInfo = () => {
           {
             user && (
               <div className="text-gray-300 text-center">
-                <p><strong className="text-white">Tên:</strong> {user.name || 'Chưa đặt tên'}</p>
+                <p><strong className="text-white">Username:</strong> {user.name || 'No-name'}</p>
                 <p><strong className="text-white">Email:</strong> {user.email || 'N/A'}</p>
-                <p><strong className="text-white">Vai trò:</strong> {user.role || 'N/A'}</p>
+                <p><strong className="text-white">Role:</strong> {user.role || 'N/A'}</p>
               </div>
             )
           }
@@ -142,7 +142,7 @@ const UserInfo = () => {
             className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
             disabled={isLoading}
           >
-            <FaUserEdit /> Chỉnh sửa
+            <FaUserEdit /> Edit
           </motion.button>
         </div>
 
@@ -158,7 +158,7 @@ const UserInfo = () => {
             >
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="form-group">
-                  <label htmlFor="name" className="text-gray-300 font-medium">Tên:</label>
+                  <label htmlFor="name" className="text-gray-300 font-medium">Username:</label>
                   <input
                     type="text"
                     id="name"
@@ -169,7 +169,7 @@ const UserInfo = () => {
                   />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="avatar" className="text-gray-300 font-medium">Ảnh đại diện:</label>
+                  <label htmlFor="avatar" className="text-gray-300 font-medium">Profile picture:</label>
                   <input
                     type="file"
                     id="avatar"
@@ -212,7 +212,7 @@ const UserInfo = () => {
                     ) : (
                       <FaSave />
                     )}
-                    {isLoading ? 'Đang lưu...' : 'Lưu'}
+                    {isLoading ? 'Saving...' : 'Saved'}
                   </motion.button>
 
                   <motion.button
@@ -223,7 +223,7 @@ const UserInfo = () => {
                     className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
                     disabled={isLoading}
                   >
-                    <FaTimes /> Hủy
+                    <FaTimes /> Cancel
                   </motion.button>
                 </div>
               </form>
@@ -240,7 +240,7 @@ const UserInfo = () => {
               className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
               disabled={isLoading}
             >
-              Quay lại
+              Cancel
             </motion.button>
           </Link>
         </div>
