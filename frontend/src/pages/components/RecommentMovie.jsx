@@ -90,7 +90,7 @@ function RecommentMovie() {
 
   return (
     <div className='container'>
-      <div className='title-container'>
+      <div className='title-container-1'>
         <h1 className='section-title'>Recommended Movies</h1>
         <button className='view-all-btn' onClick={handleViewAll}>
           View All <FaArrowRight className='arrow-icon' />
