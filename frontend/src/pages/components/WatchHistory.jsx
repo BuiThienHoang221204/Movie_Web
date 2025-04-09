@@ -120,7 +120,7 @@ const WatchHistory = (props) => {
           {showAllMovies && watchHistory.length > 4 && (
             <div className="all-movies-section">
               <h2 className="all-movies-title">Total movies watched</h2>
-              <div className="all-movies-grid">
+              <div className="all-movies-grid-1">
                 {watchHistory.map((item) => {
                   const movie = movies.find((m) => m.id === item.movieId);
                   if (!movie) return null;

@@ -128,7 +128,7 @@
 }
 
 /* Grid hiển thị tất cả phim */
-.all-movies-grid {
+.all-movies-grid-1 {
   display: grid;
   grid-template-columns: repeat(4, 1fr); /* Exactly 4 columns */
   gap: 1.5rem;
@@ -137,7 +137,7 @@
 
 /* Media queries */
 @media (max-width: 768px) {
-  .all-movies-grid {
+  .all-movies-grid-1 {
     grid-template-columns: repeat(2, 1fr); /* 2 columns on tablets */
   }
 
@@ -156,7 +156,7 @@
 }
 
 @media (max-width: 480px) {
-  .all-movies-grid {
+  .all-movies-grid-1 {
     grid-template-columns: repeat(1, 1fr); /* 1 column on mobile */
     gap: 1rem;
   }
