@@ -150,10 +150,10 @@ const Login = () => {
         <div className="row justify-content-end">
           <div className="col-12 col-md-8 col-lg-6 offset-lg-1 px-4 md:px-6">
             <motion.div
-              initial={{ opacity: 0, y: 20, scale: 0.95 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ delay: 0.3, duration: 0.5, ease: "easeOut" }}
-              className="bg-black/40 backdrop-blur-md rounded-3xl p-6 md:p-8 shadow-2xl border border-white/5 relative overflow-hidden"
+              className="bg-black/50 backdrop-blur-md rounded-3xl p-6 border border-gray-700 relative overflow-hidden"
             >
               {/* Glass effect overlay */}
               <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent opacity-30"></div>
@@ -166,8 +166,8 @@ const Login = () => {
                   transition={{ delay: 0.4, duration: 0.5 }}
                   className="text-center mb-8"
                 >
-                  <h2 className="text-5xl md:text-7xl font-bold text-red-500 mb-4 drop-shadow-lg tracking-wide">Welcome</h2>
-                  <p className="text-gray-300 text-lg md:text-xl">Sign in to continue watching movies</p>
+                  <h2 className="sm:text-3xl md:text-5xl font-bold text-red-500 sm:mb-2 md:mb-4 drop-shadow-lg tracking-wide">Welcome</h2>
+                  <p className="text-gray-300 md:text-lg">Sign in to continue watching movies</p>
                 </motion.div>
 
                 {/* Social Login Buttons */}
@@ -175,22 +175,22 @@ const Login = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5, duration: 0.5 }}
-                  className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6"
+                  className="grid grid-cols-2 gap-3 mb-6"
                 >
                   <button
                     type="button"
                     onClick={() => handleLoginWithProvider('google')}
-                    className="flex items-center justify-center gap-2 md:gap-3 py-2.5 md:py-3 px-4 md:px-5 bg-dark-300/80 hover:bg-dark-400/80 text-white rounded-xl transition-all duration-300 shadow-dark border border-dark-400/30 hover:border-primary-600/50 hover:shadow-dark-lg group text-base md:text-lg hover:-translate-y-0.5 active:translate-y-0"
+                    className="flex items-center justify-center gap-2 md:gap-3 py-2.5 sm:py-0 sm:px-0 md:py-3 px-4 md:px-5 bg-dark-300/80 hover:bg-dark-400/80 text-white rounded-xl transition-all duration-300 shadow-dark border border-dark-400/30 hover:border-primary-600/50 hover:shadow-dark-lg group text-base md:text-lg hover:-translate-y-0.5 active:translate-y-0"
                   >
-                    <FaGoogle className="text-primary-500 group-hover:text-primary-400 transition-colors text-2xl" />
+                    <FaGoogle className="text-primary-500 group-hover:text-primary-400 transition-colors sm:text-xl md:text-2xl" />
                     <span>Google</span>
                   </button>
                   <button
                     type="button"
                     onClick={() => handleLoginWithProvider('facebook')}
-                    className="flex items-center justify-center gap-2 md:gap-3 py-2.5 md:py-3 px-4 md:px-5 bg-dark-300/80 hover:bg-dark-400/80 text-white rounded-xl transition-all duration-300 shadow-dark border border-dark-400/30 hover:border-primary-600/50 hover:shadow-dark-lg group text-base md:text-lg hover:-translate-y-0.5 active:translate-y-0"
+                    className="flex items-center justify-center gap-2 md:gap-3 py-2.5 sm:py-0 sm:px-0 md:py-3 px-4 md:px-5 bg-dark-300/80 hover:bg-dark-400/80 text-white rounded-xl transition-all duration-300 shadow-dark border border-dark-400/30 hover:border-primary-600/50 hover:shadow-dark-lg group text-base md:text-lg hover:-translate-y-0.5 active:translate-y-0"
                   >
-                    <FaFacebook className="text-blue-500 group-hover:text-blue-400 transition-colors text-2xl" />
+                    <FaFacebook className="text-blue-500 group-hover:text-blue-400 transition-colors sm:text-xl md:text-2xl" />
                     <span>Facebook</span>
                   </button>
                 </motion.div>
@@ -199,11 +199,11 @@ const Login = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.6, duration: 0.5 }}
-                  className="flex items-center gap-4 mb-6"
+                  className="flex items-center gap-1 mb-6"
                 >
-                  <div className="flex-1 border-t border-dark-400/50"></div>
+                  <div className="flex-1 border-t border-dark-900/50"></div>
                   <span className="text-gray-500 text-base font-medium px-4">or continue with</span>
-                  <div className="flex-1 border-t border-dark-400/50"></div>
+                  <div className="flex-1 border-t border-dark-900/50"></div>
                 </motion.div>
 
                 <motion.form
@@ -219,12 +219,12 @@ const Login = () => {
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
-                      className={`w-full px-5 py-3 text-base rounded-xl bg-dark-400/50 border border-dark-500/50 text-white placeholder-gray-400 focus:outline-none focus:border-primary-500/70 focus:ring-2 focus:ring-primary-500/20 transition-all duration-300 focus:scale-[1.02] focus:shadow-lg pl-12`}
+                      className={`w-full px-5 py-3 text-base rounded-xl bg-dark-400/50 border border-dark-500/50 text-white placeholder-gray-400 focus:outline-none focus:border-primary-500/70 focus:ring-2 focus:ring-primary-500/20 transition-all duration-300 focus:scale-[1.01] focus:shadow-lg`}
                       placeholder="Email address"
                       required
                     />
                     <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
-                      <FaEnvelope size={20} />
+                      <FaEnvelope size={18} />
                     </div>
                   </div>
 
@@ -234,7 +234,7 @@ const Login = () => {
                       name="password"
                       value={formData.password}
                       onChange={handleChange}
-                      className={`w-full px-5 py-3 text-base rounded-xl bg-dark-400/50 border border-dark-500/50 text-white placeholder-gray-400 focus:outline-none focus:border-primary-500/70 focus:ring-2 focus:ring-primary-500/20 transition-all duration-300 focus:scale-[1.02] focus:shadow-lg pl-12 pr-12`}
+                      className={`w-full px-5 py-3 text-base rounded-xl bg-dark-400/50 border border-dark-500/50 text-white placeholder-gray-400 focus:outline-none focus:border-primary-500/70 focus:ring-2 focus:ring-primary-500/20 transition-all duration-300 focus:scale-[1.01] focus:shadow-lg`}
                       placeholder="Password"
                       required
                     />
@@ -246,7 +246,7 @@ const Login = () => {
                       onClick={togglePasswordVisibility}
                       className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-300 transition-colors"
                     >
-                      {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+                      {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
                     </button>
                   </div>
 
@@ -269,7 +269,7 @@ const Login = () => {
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className={`w-full py-3 px-5 text-base bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-500 hover:to-primary-600 text-white rounded-xl transition-all duration-300 shadow-dark hover:shadow-dark-lg font-medium transform hover:-translate-y-0.5 ${isLoading ? 'opacity-75 cursor-not-allowed' : ''
+                    className={`w-full py-2 text-base bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-500 hover:to-primary-600 text-white rounded-xl transition-all duration-300 shadow-dark hover:shadow-dark-lg font-medium transform hover:-translate-y-0.5 ${isLoading ? 'opacity-75 cursor-not-allowed' : ''
                       }`}
                   >
                     {isLoading ? 'Signing in...' : 'Sign In'}
@@ -282,7 +282,7 @@ const Login = () => {
                   transition={{ delay: 0.8, duration: 0.5 }}
                   className="text-center mt-6"
                 >
-                  <p className="text-gray-400 text-lg">
+                  <p className="text-gray-400 sm:text-sm md:text-lg">
                     Don't have an account?{' '}
                     <Link to="/signup" className="text-primary-400 hover:text-primary-300 font-medium transition-colors no-underline hover:underline">
                       Sign up
