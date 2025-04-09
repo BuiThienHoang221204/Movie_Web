@@ -149,7 +149,7 @@ function UserProfile({ user: propUser }) {
               transition={{ delay: 0.4 }}
               className="watch-stats"
             >
-              <h2 className="section-title">Your data</h2>
+              <h2 className="section-title-1">Your data</h2>
               <div className="stats-grid">
                 <motion.div
                   whileHover={{ scale: 1.03 }}
@@ -175,7 +175,7 @@ function UserProfile({ user: propUser }) {
               transition={{ delay: 0.6 }}
               className="watch-history"
             >
-              <h2 className="section-title">Your Watch History</h2>
+              <h2 className="section-title-1">Your Watch History</h2>
               <WatchHistory user={user} />
             </motion.div>
           </div>

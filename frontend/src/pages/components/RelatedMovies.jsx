@@ -92,7 +92,7 @@ const RelatedMovies = () => {
   return (
     <div className='container'>
       <div className='title-container'>
-        <h1 className='section-title'>Recommended Movies</h1>
+        <h1 className='section-title-1'>Recommended Movies</h1>
         <button className='view-all-btn' onClick={handleViewAll}>
         View Details <FaArrowRight className='arrow-icon' />
         </button>

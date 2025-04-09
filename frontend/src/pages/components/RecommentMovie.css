@@ -5,8 +5,8 @@
 }
 
 /* Định dạng cho phần tiêu đề và nút xem tất cả */
-.title-container {
-  display: flex;
+.title-container-1 {
+  display: flex; 
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
